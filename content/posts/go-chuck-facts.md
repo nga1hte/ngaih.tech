@@ -50,7 +50,7 @@ go-chuck-facts
     |      |-- fact.go
     |-- client
     |      |-- client.go
-    |-- gcf.go
+    |-- gocf.go
 
 ```
 
@@ -58,7 +58,7 @@ go-chuck-facts
 
 ```client/client.go``` contains functions that will fetch and make http requests using the ```net/http``` package
 
-```gcf.go``` is contains ```main()``` and is the entry point to the program. It utilise the ```flag``` package to parse arguments from the ```stdin``` of the terminal.
+```gocf.go``` is contains ```main()``` and is the entry point to the program. It utilise the ```flag``` package to parse arguments from the ```stdin``` of the terminal.
 
 > This project heavily relies on the blog post [Diving into go by building a cli application](https://dev.to/erybz/diving-into-go-by-building-a-cli-application-28k9).
 
@@ -172,8 +172,8 @@ func (c *CNClient) Fetch(category string) (model.Fact, error) {
 ...
 ```
 
-## gcf.go
-In our ```gcf.go``` file we utilise the ```flag``` package to capture the  flags and then we compare the option givens with our categories map which we create before. We use the ```strings``` package to join our string array into a long string and print it out to the ```stdout```.
+## gocf.go
+In our ```gocf.go``` file we utilise the ```flag``` package to capture the  flags and then we compare the option givens with our categories map which we create before. We use the ```strings``` package to join our string array into a long string and print it out to the ```stdout```.
 
 ```
 func main() {
