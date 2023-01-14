@@ -22,14 +22,14 @@ Usage of the api endpoint is simple and provides a simple json of facts. The jso
 
 The endpoint can be accessed using:
 
-```
+```sh
 $ curl https://api.chucknorris.io/jokes/random 
 
 ```
 
 The response from the endpoint:
 
-```
+```json
 {
   "categories": [],
   "created_at": "2020-01-05 13:42:29.296379",
@@ -67,7 +67,7 @@ go-chuck-facts
 Since we are only interested in three fields of the ```json``` we create a new datatype ```Fact``` that will contain categories, URL and Value.
 
 We also create a new struct which will contain an array of strings which we will later use to validate the options that are provided in the arguments.
-```
+```go
 //fact.go
 ...
 type Fact struct {
@@ -94,7 +94,7 @@ curl https://api.chucknorris.io/jokes/categories
 
 Since categories are unlikely to change, it is a waste to fetch categories from the endpoint everytime. So we populate the categories struct with the values.
 We also create some helper methods that we will use to print the categories and also create a map which we will later use to validate the options.
-```
+```go
 //fact.go
 ...
 var Categories = categories{
@@ -121,7 +121,7 @@ We create a const to store the base url as well as use the time package to store
 
 The ```net/http``` package provides us with client and servers. We first create a ```http.Client``` which will serve as a way to send http request with different parameters and headers. 
 
-```
+```go
 // client.go
 ...
 const (
@@ -150,7 +150,7 @@ func (c *CNClient) SetTimeout(d time.Duration) {
 ```
 
 The Fetch method utilises the client to create a new get request, we use ```json/encoding``` package to decode the ```json``` response and store in our struct created from ```model/Fact.go``` and return the datatype.
-```
+```go
 // client.go
 ...
 func (c *CNClient) Fetch(category string) (model.Fact, error) {
@@ -175,7 +175,7 @@ func (c *CNClient) Fetch(category string) (model.Fact, error) {
 ## gocf.go
 In our ```gocf.go``` file we utilise the ```flag``` package to capture the  flags and then we compare the option givens with our categories map which we create before. We use the ```strings``` package to join our string array into a long string and print it out to the ```stdout```.
 
-```
+```go
 func main() {
 	categories := model.Categories
 	cat := categories.MapValues()
