@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "[HTB] BabyEcryption writeup"
+title: "[HTB] BabyEncryption writeup"
 slug: "babyenryption"
 date: "2023-02-14"
 comments: false
