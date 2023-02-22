@@ -14,7 +14,7 @@ tags:
   - encryption/decryption
 ---
 
-This is my write up for [Baby Ecryption](https://app.hackthebox.com/challenges/babyencryption) challenge in hackthebox. This challenge was fairly easy and just tested our our scripting skill and logical thinking. 
+This is my write up for [Baby Encryption](https://app.hackthebox.com/challenges/babyencryption) challenge in hackthebox. This challenge was fairly easy and just tested our our scripting skill and logical thinking. 
 
 # Initial analysis
 
