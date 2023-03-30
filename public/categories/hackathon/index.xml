@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>hackathon on ngaih.tech</title>
+    <link>/categories/hackathon/</link>
+    <description>Recent content in hackathon on ngaih.tech</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Wed, 22 Feb 2023 00:00:00 +0000</lastBuildDate><atom:link href="/categories/hackathon/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Hacktoberfest 2022</title>
+      <link>/posts/hacktoberfest2022/</link>
+      <pubDate>Wed, 22 Feb 2023 00:00:00 +0000</pubDate>
+      
+      <guid>/posts/hacktoberfest2022/</guid>
+      <description>Hacktoberfest 2022 was an annual event that took place in October 2022, and was designed to encourage people to contribute to open source projects. The event was sponsored by DigitalOcean, GitHub and many more notable tech companies, and aimed to promote collaboration and community involvement in the world of software development. This year&amp;rsquo;s event was the biggest yet, with a record-breaking number of developers participating from all over the world.</description>
+      <content>&lt;p&gt;&lt;img src=&#34;/images/hacktoberfest2022/holopins.png&#34; alt=&#34;digitalpins&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://hacktoberfest.com&#34;&gt;Hacktoberfest&lt;/a&gt; 2022 was an annual event that took place in October 2022, and was designed to encourage people to contribute to open source projects. The event was sponsored by &lt;a href=&#34;https://digitalocean.com&#34;&gt;DigitalOcean&lt;/a&gt;, &lt;a href=&#34;https://github.com&#34;&gt;GitHub&lt;/a&gt; and many more notable tech companies, and aimed to promote collaboration and community involvement in the world of software development. This year&amp;rsquo;s event was the biggest yet, with a record-breaking number of developers participating from all over the world.&lt;/p&gt;
+&lt;p&gt;One of the new exciting aspects of Hacktoberfest 2022 was the addition of planting trees as a reward. In collaboration with the nonprofit organization &lt;a href=&#34;https://tree-nation.com&#34;&gt;tree-nation&lt;/a&gt;, participants who completed the challenge of submitting four pull requests to any participating open source project on GitHub had the option of planting a tree in one of several locations around the world. This was a great way to give back to the environment and help combat climate change.&lt;/p&gt;
+&lt;p&gt;To participate in Hacktoberfest 2022, participants had to register on the official Hacktoberfest website, and submit four pull requests to any participating open source project on GitHub. A pull request was a proposal to merge changes to an open source project, and it could be as simple as fixing a typo or as complex as adding a new feature. Participants had the entire month of October to complete the challenge and earn the rewards.&lt;/p&gt;
+&lt;p&gt;As in previous years, participants who completed the challenge were eligible for some great rewards, including a limited edition Hacktoberfest t-shirt, stickers, and the option to plant a tree. The t-shirt and stickers were a great way to show off your participation in the event and promote open source development, while the tree-planting option provided a meaningful way to give back to the environment.&lt;/p&gt;
+&lt;p&gt;In 2022 all participants whose pull requests were merge also received &lt;a href=&#34;https://holopin.io&#34;&gt;holopin&lt;/a&gt; which is a digital badge that can be use to showcase skill and achievements. The image at the top of the page are the digital pins I have received duing hacktoberfest 2023. I have also received by hacktoberfest 2022 swags in the form of t-shirt and stickers, that was sent to me through DHL partnered with Indian post.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/images/hacktoberfest2022/swag.jpg&#34; alt=&#34;swag1&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;tshirt with stickers&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/images/hacktoberfest2022/swag2.jpg&#34; alt=&#34;swag2&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;stickers&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;Hacktoberfest 2022 was also an excellent opportunity to learn new skills and gain experience working on real-world projects. It provided a chance to connect with other developers from around the world and collaborate on open source projects that were making a difference in the world. Many open source projects had issues tagged as &amp;ldquo;Hacktoberfest&amp;rdquo; to make it easier for participants to find projects to contribute to.&lt;/p&gt;
+&lt;p&gt;In conclusion, Hacktoberfest 2022 was an exciting event that encouraged collaboration and community involvement in the world of software development. The addition of planting trees as a reward was a great way to give back to the environment and help combat climate change. The event provided an excellent opportunity for developers of all levels to learn new skills, gain experience working on real-world projects, and connect with other developers from around the world. We look forward to seeing what Hacktoberfest 2023 has in store!&lt;/p&gt;
+</content>
+    </item>
+    
+  </channel>
+</rss>

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>webapps on ngaih.tech</title>
+    <link>/categories/webapps/</link>
+    <description>Recent content in webapps on ngaih.tech</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Fri, 13 Jan 2023 00:00:00 +0000</lastBuildDate><atom:link href="/categories/webapps/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Wayback Machine</title>
+      <link>/posts/waybackmachine/</link>
+      <pubDate>Fri, 13 Jan 2023 00:00:00 +0000</pubDate>
+      
+      <guid>/posts/waybackmachine/</guid>
+      <description>The Wayback Machine is a digital archive of the World Wide Web founded by the Internet Archive in the 1990s. The Internet Archive is a non profit organisation dedicated to preserving digital information for future generations.
+One of the most interesting things about the Wayback Machine is that it offers a glimpse into the past of the internet. By browsing through old versions of websites, we can see how they have evolved over time and observe how technology, design, and content have changed.</description>
+      <content>&lt;p&gt;The &lt;a href=&#34;https://web.archive.org/&#34;&gt;Wayback Machine&lt;/a&gt; is a digital archive of the World Wide Web founded by the &lt;a href=&#34;https://en.wikipedia.org/wiki/Internet_Archive&#34;&gt;Internet Archive&lt;/a&gt; in the 1990s. The Internet Archive is a non profit organisation dedicated to preserving digital information for future generations.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/images/wayback/wayback5.png&#34; alt=&#34;Wayback banner&#34;&gt;&lt;/p&gt;
+&lt;p&gt;One of the most interesting things about the Wayback Machine is that it offers a glimpse into the past of the internet. By browsing through old versions of websites, we can see how they have evolved over time and observe how technology, design, and content have changed. For example, you can see how a website like Google looked in the late 1990s and how it has changed since then. This is a valuable resource for anyone interested in the history of the internet, as it allows us to see how far we&amp;rsquo;ve come in terms of technology and design.&lt;/p&gt;
+&lt;p&gt;For example, there is a site &lt;a href=&#34;https://gangte.net&#34;&gt;gangte.net&lt;/a&gt; which is no longer active and the content is unaccessible at the moment. Since I want to read the contents that have been published in the site, I can utilise the wayback machine to see previous snapshots of the site taken.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Snapshots taken from May 7, 2013 to May 11, 2021&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/images/wayback/wayback1.png&#34; alt=&#34;Snapshots&#34;&gt;&lt;/p&gt;
+&lt;hr&gt;
+&lt;p&gt;&lt;strong&gt;Let&amp;rsquo;s look at snapshot of the site on February 24, 2021&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/images/wayback/wayback2.png&#34; alt=&#34;FEB 24&#34;&gt;&lt;/p&gt;
+&lt;hr&gt;
+&lt;p&gt;&lt;strong&gt;Home page of the site on February 24, 2021. We can see some interesting articles written on hacking.&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/images/wayback/wayback3.png&#34; alt=&#34;Homepage&#34;&gt;&lt;/p&gt;
+&lt;hr&gt;
+&lt;p&gt;&lt;strong&gt;If it weren&amp;rsquo;t for the wayback machine, the content would have been lost to the world. Yet we are able to read the content.&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/images/wayback/wayback4.png&#34; alt=&#34;How to become a hacker&#34;&gt;&lt;/p&gt;
+&lt;hr&gt;
+&lt;p&gt;Another great use of the Wayback Machine is for research purposes. It can be incredibly helpful for historians, journalists, and other researchers looking to gain insight into the past. By being able to access old versions of websites, they can get a better understanding of how events and information were reported at the time. This can be particularly useful for understanding how different perspectives and narratives have changed over time.&lt;/p&gt;
+&lt;p&gt;Additionally, the Wayback Machine can also be useful for small business owners or other individuals who may have lost important information from a website. By using the Wayback Machine, they can access archived versions of the site and retrieve any lost information. This can be incredibly valuable for businesses that may have lost important data or content, as it allows them to retrieve it and continue operating as normal.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;It&amp;rsquo;s worth noting that the Wayback Machine is not just limited to websites, it also archive other forms of digital media, such as image, audio, and video. This allows users to access a wide range of digital materials from the past, providing an even more comprehensive view of the history of the internet.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;The Wayback Machine is also a valuable resource for those who are looking to improve their digital presence. By studying the design and content of older websites, businesses and individuals can learn from the mistakes and successes of the past in order to create a more effective online presence.&lt;/p&gt;
+&lt;p&gt;The Internet Archive, the organization that runs the Wayback Machine, is a non-profit organizatclion that relies on donations to operate. The organization&amp;rsquo;s mission is to archive the internet and to make it accessible to everyone. The Wayback Machine is just one of the many tools that the Internet Archive has created to achieve this goal. By preserving the internet&amp;rsquo;s history, the Internet Archive is helping to ensure that the digital information of the past is not lost forever.&lt;/p&gt;
+&lt;p&gt;Overall, the Wayback Machine is a valuable resource for anyone interested in the history of the internet. It offers a glimpse into the past and can be used for both personal and professional purposes. It&amp;rsquo;s a great tool for anyone looking to research, learn, or simply reminisce about the good old days of the web. Whether you&amp;rsquo;re a historian, journalist, business owner, or just someone who is curious about the past, the Wayback Machine is a valuable resource that is worth exploring.&lt;/p&gt;
+</content>
+    </item>
+    
+  </channel>
+</rss>

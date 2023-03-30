@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>software on ngaih.tech</title>
+    <link>/categories/software/</link>
+    <description>Recent content in software on ngaih.tech</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sat, 31 Dec 2022 18:00:04 +1100</lastBuildDate><atom:link href="/categories/software/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Photopea - A photoshop alternative</title>
+      <link>/posts/photopea/</link>
+      <pubDate>Sat, 31 Dec 2022 18:00:04 +1100</pubDate>
+      
+      <guid>/posts/photopea/</guid>
+      <description>Photopea is a free online image editor that allows users to edit and create graphics and designs using a range of tools and features. It is a powerful and versatile alternative to software such as Adobe Photoshop, and can be used by individuals and businesses alike.
+One of the key features of Photopea is its ability to edit a wide range of file types, including PSD, XCF, and SVG. This means that users can edit and create graphics using the same tools and features that they would with a more expensive, proprietary software.</description>
+      <content>&lt;p&gt;&lt;a href=&#34;https://photopea.com&#34;&gt;Photopea&lt;/a&gt; is a free online image editor that allows users to edit and create graphics and designs using a range of tools and features. It is a powerful and versatile alternative to software such as Adobe Photoshop, and can be used by individuals and businesses alike.&lt;/p&gt;
+&lt;p&gt;One of the key features of Photopea is its ability to edit a wide range of file types, including PSD, XCF, and SVG. This means that users can edit and create graphics using the same tools and features that they would with a more expensive, proprietary software.&lt;/p&gt;
+&lt;p&gt;In addition to basic editing tools such as cropping, resizing, and rotating, Photopea offers a range of advanced features including layers, masks, and filters. Users can also add text and shapes, adjust the color and tone of their images, and apply effects such as blur and distortion.&lt;/p&gt;
+&lt;p&gt;Another useful feature of Photopea is its integration with Google Drive, which allows users to save their work directly to the cloud and access it from anywhere. This is particularly useful for those who work on multiple devices or need to collaborate with others on projects.&lt;/p&gt;
+&lt;p&gt;Unless you are editing images which consists of lots of layer, complex effects and layer style, photopea will most likely meet your requirements. Open your browser, enter &lt;a href=&#34;https://photopea.com&#34;&gt;photopea.com&lt;/a&gt; in the url bar and you are good to go on your editing&lt;/p&gt;
+</content>
+    </item>
+    
+  </channel>
+</rss>

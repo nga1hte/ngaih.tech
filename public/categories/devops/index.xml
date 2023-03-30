@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>devops on ngaih.tech</title>
+    <link>/categories/devops/</link>
+    <description>Recent content in devops on ngaih.tech</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Fri, 06 Jan 2023 00:00:00 +0000</lastBuildDate><atom:link href="/categories/devops/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Github Webhooks</title>
+      <link>/posts/githubwebhooks/</link>
+      <pubDate>Fri, 06 Jan 2023 00:00:00 +0000</pubDate>
+      
+      <guid>/posts/githubwebhooks/</guid>
+      <description>Github webhooks is a feature that allows you to send HTTP POST payload to certain events that occurs in your repository hosted on github. Events like pushing to a branch or merge are good examples for using webhooks.
+Read more about webhooks
+Webhooks can be used for triggering builds or deployments and allows us to integrate devOps principles even if you don&amp;rsquo;t use any Platform as a Service(PaaS).
+Here is a really good blog post of setting up webhook for continuous deployment in your VPS.</description>
+      <content>&lt;p&gt;Github webhooks is a feature that allows you to send HTTP POST payload to certain events that occurs in your repository hosted on &lt;a href=&#34;https://github.com&#34;&gt;github.&lt;/a&gt; Events like pushing to a branch or merge are good examples for using webhooks.&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://https://docs.github.com/en/developers/webhooks-and-events/webhooks/about-webhooks&#34;&gt;Read more about webhooks&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;Webhooks can be used for triggering builds or deployments and allows us to integrate devOps principles even if you don&amp;rsquo;t use any Platform as a Service(PaaS).&lt;/p&gt;
+&lt;p&gt;Here is a really good blog post of setting up webhook for continuous deployment in your VPS.&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://maximorlov.com/automated-deployments-from-github-with-webhook/&#34;&gt;Setting up Github Webhook&lt;/a&gt;&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;I use webhooks to trigger a hugo build on my server and move the contents of the static site generated to my nginx root folder.&lt;/p&gt;
+&lt;/blockquote&gt;
+</content>
+    </item>
+    
+  </channel>
+</rss>

@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  
+    <title>Go Chuck Facts :: ngaih.tech</title>
+  
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Go Chuck Facts is a Command Line Interface (CLI) created using the golang to fetch facts. Facts about the legend Mr. Chuck Norris are fetch from the api endpoint chucknorris.io.
+The CLI is created using only the standard libraries provided by the go language and is useful for fundamental understanding of how the language operates. The standard package is well documented and provides good information of how code are tied together and abstracted." />
+<meta name="keywords" content="" />
+<meta name="robots" content="noodp" />
+<link rel="canonical" href="/posts/gochuckfacts/" />
+
+
+
+
+
+
+  
+  
+  
+  
+  
+  <link rel="stylesheet" href="/styles.css">
+
+
+
+
+
+
+
+  <link rel="shortcut icon" href="/android-chrome-512x512.png">
+
+
+
+<meta name="twitter:card" content="summary" />
+
+  
+    <meta name="twitter:site" content="ngaih.tech" />
+  
+    <meta name="twitter:creator" content="" />
+
+
+
+<meta property="og:locale" content="en" />
+<meta property="og:type" content="article" />
+<meta property="og:title" content="Go Chuck Facts">
+<meta property="og:description" content="Go Chuck Facts is a Command Line Interface (CLI) created using the golang to fetch facts. Facts about the legend Mr. Chuck Norris are fetch from the api endpoint chucknorris.io.
+The CLI is created using only the standard libraries provided by the go language and is useful for fundamental understanding of how the language operates. The standard package is well documented and provides good information of how code are tied together and abstracted." />
+<meta property="og:url" content="/posts/gochuckfacts/" />
+<meta property="og:site_name" content="ngaih.tech" />
+
+  
+    <meta property="og:image" content="/android-chrome-512x512.png">
+  
+
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="627">
+
+  <meta property="article:section" content="project" />
+
+
+  <meta property="article:published_time" content="2023-01-10 00:00:00 &#43;0000 UTC" />
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+<body class="green">
+
+
+<div class="container center headings--one-size">
+
+  <header class="header">
+  <div class="header__inner">
+    <div class="header__logo">
+      <a href="/">
+  <div class="logo">
+    ngaih.tech
+  </div>
+</a>
+
+    </div>
+    
+      <ul class="menu menu--mobile">
+  <li class="menu__trigger">Menu&nbsp;▾</li>
+  <li>
+    <ul class="menu__dropdown">
+      
+        
+          <li><a href="/">Home</a></li>
+        
+      
+        
+          <li><a href="/about">About</a></li>
+        
+      
+        
+          <li><a href="/categories">Categories</a></li>
+        
+      
+      
+    </ul>
+  </li>
+</ul>
+
+    
+    
+  </div>
+  
+    <nav class="navigation-menu">
+  <ul class="navigation-menu__inner menu--desktop">
+    
+      
+        
+          <li><a href="/">Home</a></li>
+        
+      
+        
+          <li><a href="/about">About</a></li>
+        
+      
+        
+          <li><a href="/categories">Categories</a></li>
+        
+      
+    
+  </ul>
+</nav>
+
+  
+</header>
+
+
+  <div class="content">
+    
+<article class="post">
+  <h1 class="post-title">
+    <a href="/posts/gochuckfacts/">Go Chuck Facts</a>
+  </h1>
+  <div class="post-meta">
+    
+      <time class="post-date">
+        2023-01-10 ::
+        
+      </time>
+    
+    
+    
+  </div>
+
+  
+    <span class="post-tags">
+      
+      #<a href="/tags/rest-api/">rest api</a>&nbsp;
+      
+      #<a href="/tags/golang/">golang</a>&nbsp;
+      
+      #<a href="/tags/binary/">binary</a>&nbsp;
+      
+    </span>
+  
+  
+
+
+  
+
+  <div class="post-content"><div>
+        <p><a href="https://github.com/nga1hte/go-chuck-facts">Go Chuck Facts</a> is a Command Line Interface (CLI) created using the golang to fetch facts. Facts about the legend Mr. Chuck Norris are fetch from the api endpoint <a href="https://api.chucknorris.io">chucknorris.io</a>.</p>
+<p>The CLI is created using only the standard libraries provided by the go language and is useful for fundamental understanding of how the language operates. The standard package is well documented and provides good information of how code are tied together and abstracted.</p>
+<h2 id="how-it-works">How it Works<a href="#how-it-works" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h2>
+<p>Usage of the api endpoint is simple and provides a simple json of facts. The json can be easily parsed using <code>json/encoding</code> package of go.</p>
+<p>The endpoint can be accessed using:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>$ curl https://api.chucknorris.io/jokes/random 
+</span></span></code></pre></div><p>The response from the endpoint:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;categories&#34;</span>: [],
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;created_at&#34;</span>: <span style="color:#e6db74">&#34;2020-01-05 13:42:29.296379&#34;</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;icon_url&#34;</span>: <span style="color:#e6db74">&#34;https://assets.chucknorris.host/img/avatar/chuck-norris.png&#34;</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;id&#34;</span>: <span style="color:#e6db74">&#34;Gg-KPU6qTgqlS7Mpk2feFg&#34;</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;updated_at&#34;</span>: <span style="color:#e6db74">&#34;2020-01-05 13:42:29.296379&#34;</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;url&#34;</span>: <span style="color:#e6db74">&#34;https://api.chucknorris.io/jokes/Gg-KPU6qTgqlS7Mpk2feFg&#34;</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;value&#34;</span>: <span style="color:#e6db74">&#34;Camels have a hump because Chuck Norris needed a place to store his kills.&#34;</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>The CLI basically sends a <code>http:GET</code> request to the endpoint and parses the <code>json</code> to extract the value field and then displays it to the standard output.</p>
+<h2 id="the-project-structure">The Project Structure<a href="#the-project-structure" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h2>
+<pre tabindex="0"><code>go-chuck-facts
+    |-- model
+    |      |-- fact.go
+    |-- client
+    |      |-- client.go
+    |-- gocf.go
+</code></pre><p><code>model/fact.go</code> contains the struct that will help parse the <code>json</code> and extract value.</p>
+<p><code>client/client.go</code> contains functions that will fetch and make http requests using the <code>net/http</code> package</p>
+<p><code>gocf.go</code> is contains <code>main()</code> and is the entry point to the program. It utilise the <code>flag</code> package to parse arguments from the <code>stdin</code> of the terminal.</p>
+<blockquote>
+<p>This project heavily relies on the blog post <a href="https://dev.to/erybz/diving-into-go-by-building-a-cli-application-28k9">Diving into go by building a cli application</a>.</p>
+</blockquote>
+<h2 id="modelfactgo">model/fact.go:<a href="#modelfactgo" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h2>
+<p>Since we are only interested in three fields of the <code>json</code> we create a new datatype <code>Fact</code> that will contain categories, URL and Value.</p>
+<p>We also create a new struct which will contain an array of strings which we will later use to validate the options that are provided in the arguments.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#75715e">//fact.go
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#f92672">...</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">Fact</span> <span style="color:#66d9ef">struct</span> {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">Categories</span> []<span style="color:#66d9ef">string</span> <span style="color:#e6db74">`json:&#34;categories&#34;`</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">URL</span>        <span style="color:#66d9ef">string</span>   <span style="color:#e6db74">`json:&#34;url&#34;`</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">Value</span>      <span style="color:#66d9ef">string</span>   <span style="color:#e6db74">`json:&#34;value&#34;`</span>
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">categories</span> <span style="color:#66d9ef">struct</span> {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">Values</span> []<span style="color:#66d9ef">string</span>
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span><span style="color:#f92672">...</span>
+</span></span></code></pre></div><p><strong>The categories can be obtained from this endpoint.</strong></p>
+<pre tabindex="0"><code>curl https://api.chucknorris.io/jokes/categories
+</code></pre><p><strong>Response:</strong></p>
+<pre tabindex="0"><code>[&#34;animal&#34;,&#34;career&#34;,&#34;celebrity&#34;,&#34;dev&#34;,&#34;explicit&#34;,&#34;fashion&#34;,&#34;food&#34;,&#34;history&#34;,&#34;money&#34;,&#34;movie&#34;,&#34;music&#34;,&#34;political&#34;,&#34;religion&#34;,&#34;science&#34;,&#34;sport&#34;,&#34;travel&#34;]
+</code></pre><p>Since categories are unlikely to change, it is a waste to fetch categories from the endpoint everytime. So we populate the categories struct with the values.
+We also create some helper methods that we will use to print the categories and also create a map which we will later use to validate the options.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#75715e">//fact.go
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#f92672">...</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">Categories</span> = <span style="color:#a6e22e">categories</span>{
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">Values</span>: []<span style="color:#66d9ef">string</span>{<span style="color:#e6db74">&#34;animal&#34;</span>, <span style="color:#e6db74">&#34;career&#34;</span>, <span style="color:#e6db74">&#34;celebrity&#34;</span>, <span style="color:#e6db74">&#34;dev&#34;</span>, <span style="color:#e6db74">&#34;explicit&#34;</span>, <span style="color:#e6db74">&#34;fashion&#34;</span>, <span style="color:#e6db74">&#34;food&#34;</span>, <span style="color:#e6db74">&#34;history&#34;</span>, <span style="color:#e6db74">&#34;money&#34;</span>, <span style="color:#e6db74">&#34;movie&#34;</span>, <span style="color:#e6db74">&#34;music&#34;</span>, <span style="color:#e6db74">&#34;political&#34;</span>, <span style="color:#e6db74">&#34;religion&#34;</span>, <span style="color:#e6db74">&#34;science&#34;</span>, <span style="color:#e6db74">&#34;sport&#34;</span>, <span style="color:#e6db74">&#34;travel&#34;</span>},
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">c</span> <span style="color:#a6e22e">categories</span>) <span style="color:#a6e22e">PrintCategories</span>() <span style="color:#66d9ef">string</span> {
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">strings</span>.<span style="color:#a6e22e">Join</span>(<span style="color:#a6e22e">c</span>.<span style="color:#a6e22e">Values</span>, <span style="color:#e6db74">&#34;, &#34;</span>)
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">c</span> <span style="color:#a6e22e">categories</span>) <span style="color:#a6e22e">MapValues</span>() <span style="color:#66d9ef">map</span>[<span style="color:#66d9ef">string</span>]<span style="color:#66d9ef">bool</span> {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">cat</span> <span style="color:#f92672">:=</span> make(<span style="color:#66d9ef">map</span>[<span style="color:#66d9ef">string</span>]<span style="color:#66d9ef">bool</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">for</span> <span style="color:#a6e22e">_</span>, <span style="color:#a6e22e">val</span> <span style="color:#f92672">:=</span> <span style="color:#66d9ef">range</span> <span style="color:#a6e22e">c</span>.<span style="color:#a6e22e">Values</span> {
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">cat</span>[<span style="color:#a6e22e">val</span>] = <span style="color:#66d9ef">true</span>
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">cat</span>
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span><span style="color:#f92672">...</span>
+</span></span></code></pre></div><h2 id="clientclientgo">client/client.go<a href="#clientclientgo" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h2>
+<p>We create a const to store the base url as well as use the time package to store a default timeout. We probably don&rsquo;t want the client to keep waiting for slow response so a default timeout is required. We can request a new connection after the timeout.</p>
+<p>The <code>net/http</code> package provides us with client and servers. We first create a <code>http.Client</code> which will serve as a way to send http request with different parameters and headers.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#75715e">// client.go
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#f92672">...</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">const</span> (
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">BaseURL</span>              <span style="color:#66d9ef">string</span>        = <span style="color:#e6db74">&#34;https://api.chucknorris.io/jokes/random&#34;</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">DefaultClientTimeout</span> <span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Duration</span> = <span style="color:#ae81ff">30</span> <span style="color:#f92672">*</span> <span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Second</span>
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">CNClient</span> <span style="color:#66d9ef">struct</span> {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">client</span>  <span style="color:#f92672">*</span><span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">Client</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">baseURL</span> <span style="color:#66d9ef">string</span>
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">NewCNClient</span>() <span style="color:#f92672">*</span><span style="color:#a6e22e">CNClient</span> {
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">return</span> <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">CNClient</span>{
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">client</span>: <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">http</span>.<span style="color:#a6e22e">Client</span>{
+</span></span><span style="display:flex;"><span>			<span style="color:#a6e22e">Timeout</span>: <span style="color:#a6e22e">DefaultClientTimeout</span>,
+</span></span><span style="display:flex;"><span>		},
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">baseURL</span>: <span style="color:#a6e22e">BaseURL</span>,
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">c</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">CNClient</span>) <span style="color:#a6e22e">SetTimeout</span>(<span style="color:#a6e22e">d</span> <span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Duration</span>) {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">c</span>.<span style="color:#a6e22e">client</span>.<span style="color:#a6e22e">Timeout</span> = <span style="color:#a6e22e">d</span>
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span><span style="color:#f92672">...</span>
+</span></span></code></pre></div><p>The Fetch method utilises the client to create a new get request, we use <code>json/encoding</code> package to decode the <code>json</code> response and store in our struct created from <code>model/Fact.go</code> and return the datatype.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#75715e">// client.go
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#f92672">...</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> (<span style="color:#a6e22e">c</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">CNClient</span>) <span style="color:#a6e22e">Fetch</span>(<span style="color:#a6e22e">category</span> <span style="color:#66d9ef">string</span>) (<span style="color:#a6e22e">model</span>.<span style="color:#a6e22e">Fact</span>, <span style="color:#66d9ef">error</span>) {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">url</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">BaseURL</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">category</span> <span style="color:#f92672">!=</span> <span style="color:#e6db74">&#34;&#34;</span> {
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">url</span> = <span style="color:#a6e22e">BaseURL</span> <span style="color:#f92672">+</span> <span style="color:#e6db74">&#34;?category=&#34;</span> <span style="color:#f92672">+</span> <span style="color:#a6e22e">category</span>
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">resp</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">c</span>.<span style="color:#a6e22e">client</span>.<span style="color:#a6e22e">Get</span>(<span style="color:#a6e22e">url</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">model</span>.<span style="color:#a6e22e">Fact</span>{}, <span style="color:#a6e22e">err</span>
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">defer</span> <span style="color:#a6e22e">resp</span>.<span style="color:#a6e22e">Body</span>.<span style="color:#a6e22e">Close</span>()
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">factResp</span> <span style="color:#a6e22e">model</span>.<span style="color:#a6e22e">Fact</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">json</span>.<span style="color:#a6e22e">NewDecoder</span>(<span style="color:#a6e22e">resp</span>.<span style="color:#a6e22e">Body</span>).<span style="color:#a6e22e">Decode</span>(<span style="color:#f92672">&amp;</span><span style="color:#a6e22e">factResp</span>); <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">model</span>.<span style="color:#a6e22e">Fact</span>{}, <span style="color:#a6e22e">err</span>
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">factResp</span>, <span style="color:#a6e22e">err</span>
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span><span style="color:#f92672">...</span>
+</span></span></code></pre></div><h2 id="gocfgo">gocf.go<a href="#gocfgo" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h2>
+<p>In our <code>gocf.go</code> file we utilise the <code>flag</code> package to capture the  flags and then we compare the option givens with our categories map which we create before. We use the <code>strings</code> package to join our string array into a long string and print it out to the <code>stdout</code>.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">categories</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">model</span>.<span style="color:#a6e22e">Categories</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">cat</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">categories</span>.<span style="color:#a6e22e">MapValues</span>()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">factAmt</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">flag</span>.<span style="color:#a6e22e">Int</span>(<span style="color:#e6db74">&#34;n&#34;</span>, <span style="color:#ae81ff">1</span>, <span style="color:#e6db74">&#34;Number of facts to fetch&#34;</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">category</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">flag</span>.<span style="color:#a6e22e">String</span>(<span style="color:#e6db74">&#34;c&#34;</span>, <span style="color:#e6db74">&#34;&#34;</span>, <span style="color:#e6db74">&#34;categories: &#34;</span><span style="color:#f92672">+</span><span style="color:#a6e22e">categories</span>.<span style="color:#a6e22e">PrintCategories</span>())
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">flag</span>.<span style="color:#a6e22e">Parse</span>()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">_</span>, <span style="color:#a6e22e">ok</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">cat</span>[<span style="color:#f92672">*</span><span style="color:#a6e22e">category</span>]; !<span style="color:#a6e22e">ok</span> {
+</span></span><span style="display:flex;"><span>		<span style="color:#f92672">*</span><span style="color:#a6e22e">category</span> = <span style="color:#e6db74">&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">cnClient</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">client</span>.<span style="color:#a6e22e">NewCNClient</span>()
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">cnClient</span>.<span style="color:#a6e22e">SetTimeout</span>(<span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Duration</span>(<span style="color:#ae81ff">30</span>) <span style="color:#f92672">*</span> <span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Second</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">facts</span> <span style="color:#f92672">:=</span> []<span style="color:#66d9ef">string</span>{}
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">for</span> <span style="color:#a6e22e">i</span> <span style="color:#f92672">:=</span> <span style="color:#ae81ff">0</span>; <span style="color:#a6e22e">i</span> &lt; <span style="color:#f92672">*</span><span style="color:#a6e22e">factAmt</span>; <span style="color:#a6e22e">i</span><span style="color:#f92672">++</span> {
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">fact</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">cnClient</span>.<span style="color:#a6e22e">Fetch</span>(<span style="color:#f92672">*</span><span style="color:#a6e22e">category</span>)
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+</span></span><span style="display:flex;"><span>			<span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">err</span>)
+</span></span><span style="display:flex;"><span>		}
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">facts</span> = append(<span style="color:#a6e22e">facts</span>, <span style="color:#e6db74">&#34;&gt; &#34;</span><span style="color:#f92672">+</span><span style="color:#a6e22e">fact</span>.<span style="color:#a6e22e">Value</span>)
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;%s\n&#34;</span>, <span style="color:#a6e22e">strings</span>.<span style="color:#a6e22e">Join</span>(<span style="color:#a6e22e">facts</span>, <span style="color:#e6db74">&#34;\n&#34;</span>))
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><blockquote>
+<p>That&rsquo;t it.</p>
+</blockquote>
+
+      </div></div>
+
+  
+    
+<div class="pagination">
+    <div class="pagination__title">
+        <span class="pagination__title-h">Read other posts</span>
+        <hr />
+    </div>
+    <div class="pagination__buttons">
+        
+        <span class="button previous">
+            <a href="/posts/waybackmachine/">
+                <span class="button__icon">←</span>
+                <span class="button__text">Wayback Machine</span>
+            </a>
+        </span>
+        
+        
+        <span class="button next">
+            <a href="/posts/githubwebhooks/">
+                <span class="button__text">Github Webhooks</span>
+                <span class="button__icon">→</span>
+            </a>
+        </span>
+        
+    </div>
+</div>
+
+  
+
+  
+    
+
+  
+</article>
+
+  </div>
+
+  
+    <footer class="footer">
+  <div class="footer__inner">
+    
+      <div class="copyright">
+        <span>© 2023 ngaih.tech </a></span>
+    
+        <span>:: Theme made by <a href="https://twitter.com/panr">panr</a></span>
+      </div>
+  </div>
+</footer>
+
+
+
+
+
+
+<script type="text/javascript" src="/bundle.min.js"></script>
+
+
+
+
+
+  
+</div>
+
+</body>
+</html>

@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Categories on ngaih.tech</title>
+    <link>/categories/</link>
+    <description>Recent content in Categories on ngaih.tech</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Tue, 28 Mar 2023 00:00:00 +0000</lastBuildDate><atom:link href="/categories/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>cloud</title>
+      <link>/categories/cloud/</link>
+      <pubDate>Tue, 28 Mar 2023 00:00:00 +0000</pubDate>
+      
+      <guid>/categories/cloud/</guid>
+      <description></description>
+      <content></content>
+    </item>
+    
+    <item>
+      <title>hacking</title>
+      <link>/categories/hacking/</link>
+      <pubDate>Thu, 23 Mar 2023 00:00:00 +0000</pubDate>
+      
+      <guid>/categories/hacking/</guid>
+      <description></description>
+      <content></content>
+    </item>
+    
+    <item>
+      <title>hackathon</title>
+      <link>/categories/hackathon/</link>
+      <pubDate>Wed, 22 Feb 2023 00:00:00 +0000</pubDate>
+      
+      <guid>/categories/hackathon/</guid>
+      <description></description>
+      <content></content>
+    </item>
+    
+    <item>
+      <title>webapps</title>
+      <link>/categories/webapps/</link>
+      <pubDate>Fri, 13 Jan 2023 00:00:00 +0000</pubDate>
+      
+      <guid>/categories/webapps/</guid>
+      <description></description>
+      <content></content>
+    </item>
+    
+    <item>
+      <title>project</title>
+      <link>/categories/project/</link>
+      <pubDate>Tue, 10 Jan 2023 00:00:00 +0000</pubDate>
+      
+      <guid>/categories/project/</guid>
+      <description></description>
+      <content></content>
+    </item>
+    
+    <item>
+      <title>devops</title>
+      <link>/categories/devops/</link>
+      <pubDate>Fri, 06 Jan 2023 00:00:00 +0000</pubDate>
+      
+      <guid>/categories/devops/</guid>
+      <description></description>
+      <content></content>
+    </item>
+    
+    <item>
+      <title>software</title>
+      <link>/categories/software/</link>
+      <pubDate>Sat, 31 Dec 2022 18:00:04 +1100</pubDate>
+      
+      <guid>/categories/software/</guid>
+      <description></description>
+      <content></content>
+    </item>
+    
+    <item>
+      <title>AI</title>
+      <link>/categories/ai/</link>
+      <pubDate>Fri, 30 Dec 2022 00:00:00 +0000</pubDate>
+      
+      <guid>/categories/ai/</guid>
+      <description></description>
+      <content></content>
+    </item>
+    
+  </channel>
+</rss>

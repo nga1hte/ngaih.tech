@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  
+    <title>Hosting a static site in AWS S3 bucket :: ngaih.tech</title>
+  
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Static Site A static site refers to a website that is made up of static HTML, CSS, and JavaScript files, which are delivered to the user&amp;rsquo;s web browser exactly as they are stored on the web server. In other words, the content of a static site is fixed and does not change dynamically in response to user input or other external factors.
+Unlike dynamic websites, which rely on server-side processing to generate content on the fly, static sites are pre-built and require no server-side scripting or database access." />
+<meta name="keywords" content="" />
+<meta name="robots" content="noodp" />
+<link rel="canonical" href="/posts/statics3/" />
+
+
+
+
+
+
+  
+  
+  
+  
+  
+  <link rel="stylesheet" href="/styles.css">
+
+
+
+
+
+
+
+  <link rel="shortcut icon" href="/android-chrome-512x512.png">
+
+
+
+<meta name="twitter:card" content="summary" />
+
+  
+    <meta name="twitter:site" content="ngaih.tech" />
+  
+    <meta name="twitter:creator" content="" />
+
+
+
+<meta property="og:locale" content="en" />
+<meta property="og:type" content="article" />
+<meta property="og:title" content="Hosting a static site in AWS S3 bucket">
+<meta property="og:description" content="Static Site A static site refers to a website that is made up of static HTML, CSS, and JavaScript files, which are delivered to the user&amp;rsquo;s web browser exactly as they are stored on the web server. In other words, the content of a static site is fixed and does not change dynamically in response to user input or other external factors.
+Unlike dynamic websites, which rely on server-side processing to generate content on the fly, static sites are pre-built and require no server-side scripting or database access." />
+<meta property="og:url" content="/posts/statics3/" />
+<meta property="og:site_name" content="ngaih.tech" />
+
+  
+    <meta property="og:image" content="/android-chrome-512x512.png">
+  
+
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="627">
+
+  <meta property="article:section" content="cloud" />
+
+
+  <meta property="article:published_time" content="2023-03-28 00:00:00 &#43;0000 UTC" />
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+<body class="green">
+
+
+<div class="container center headings--one-size">
+
+  <header class="header">
+  <div class="header__inner">
+    <div class="header__logo">
+      <a href="/">
+  <div class="logo">
+    ngaih.tech
+  </div>
+</a>
+
+    </div>
+    
+      <ul class="menu menu--mobile">
+  <li class="menu__trigger">Menu&nbsp;▾</li>
+  <li>
+    <ul class="menu__dropdown">
+      
+        
+          <li><a href="/">Home</a></li>
+        
+      
+        
+          <li><a href="/about">About</a></li>
+        
+      
+        
+          <li><a href="/categories">Categories</a></li>
+        
+      
+      
+    </ul>
+  </li>
+</ul>
+
+    
+    
+  </div>
+  
+    <nav class="navigation-menu">
+  <ul class="navigation-menu__inner menu--desktop">
+    
+      
+        
+          <li><a href="/">Home</a></li>
+        
+      
+        
+          <li><a href="/about">About</a></li>
+        
+      
+        
+          <li><a href="/categories">Categories</a></li>
+        
+      
+    
+  </ul>
+</nav>
+
+  
+</header>
+
+
+  <div class="content">
+    
+<article class="post">
+  <h1 class="post-title">
+    <a href="/posts/statics3/">Hosting a static site in AWS S3 bucket</a>
+  </h1>
+  <div class="post-meta">
+    
+      <time class="post-date">
+        2023-03-28 ::
+        
+      </time>
+    
+    
+    
+  </div>
+
+  
+    <span class="post-tags">
+      
+      #<a href="/tags/aws/">aws</a>&nbsp;
+      
+      #<a href="/tags/s3/">s3</a>&nbsp;
+      
+      #<a href="/tags/static/">static</a>&nbsp;
+      
+      #<a href="/tags/cloud/">cloud</a>&nbsp;
+      
+    </span>
+  
+  
+
+
+  
+
+  <div class="post-content"><div>
+        <h2 id="static-site">Static Site<a href="#static-site" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h2>
+<p>A static site refers to a website that is made up of static HTML, CSS, and JavaScript files, which are delivered to the user&rsquo;s web browser exactly as they are stored on the web server. In other words, the content of a static site is fixed and does not change dynamically in response to user input or other external factors.</p>
+<p>Unlike dynamic websites, which rely on server-side processing to generate content on the fly, static sites are pre-built and require no server-side scripting or database access. This makes them faster, more secure, and less resource-intensive than dynamic sites, which can be more complex to build and maintain.</p>
+<p>Static sites are typically used for simple websites that don&rsquo;t require advanced functionality or frequent updates, such as blogs, personal portfolios, or brochure-style websites. They can be hosted on any web server that supports static file hosting, including popular platforms like GitHub Pages, Netlify, or Amazon S3.</p>
+<h2 id="amazon-s3">Amazon S3<a href="#amazon-s3" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h2>
+<p>Amazon S3 (Simple Storage Service) is a cloud-based object storage service provided by Amazon Web Services (AWS). It allows users to store and retrieve large amounts of data from anywhere on the internet.</p>
+<p>Amazon S3 provides a simple interface that can be used to store and retrieve any amount of data, at any time, from anywhere on the web. It is designed to be highly scalable, secure, and reliable. S3 is often used as a backend storage service for web and mobile applications, for data backup and archival purposes, and for hosting static websites.</p>
+<h2 id="hugo">Hugo<a href="#hugo" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h2>
+<p>Hugo is an open-source static site generator written in the Go programming language (Golang). It is designed to be simple, fast, and flexible, allowing users to create static websites quickly and easily.</p>
+<p>Hugo takes Markdown files, templates, and a configuration file, and generates a static website in HTML, CSS, and JavaScript. It is based on a powerful template engine that allows users to customize the appearance and layout of their websites without having to write complex code.</p>
+<h3 id="hosting-this-blog-in-aws-s3">Hosting this blog in AWS S3<a href="#hosting-this-blog-in-aws-s3" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h3>
+<p>Since this site is just a blog which requires no dynamic content, it is a static site generated using hugo. While this site technically use Amazon Web Services it does not utilise the simple storage service (S3). In this blog post let us migrate the site to S3 bucket.</p>
+<p>You can migrate any static site to s3 bucket provided that you maintain the same directory structure inside the buckets. This is the directory and file structure of my blog and to host it on the <code>S3</code> bucket, I just have to upload the files exactly in the same structure.</p>
+<p><img src="/images/statics3/files.png" alt="img"></p>
+<p>First let us login to our aws management console, search <code>S3</code> bucket among the services and then create a s3 bucket. We can leave most of the default options, but create a bucket name, choose the appropriate region for your site (closest to you probably), but make sure to disable <code>block all public access</code>, but make sure to disable <code>block all public access</code> and tick the acknowledgement. You can then create the bucket.</p>
+<p><img src="/images/statics3/createbucket.png" alt="img">
+<img src="/images/statics3/disableblock.png" alt="img"></p>
+<p>After getting redireted to the bucket dashboard click on the newly created bucket.</p>
+<p><img src="/images/statics3/bucket.png" alt="img"></p>
+<p>Now click upload and upload all the files, you can upload multiple files too.</p>
+<p><img src="/images/statics3/addfiles.png" alt="img"></p>
+<p>Wait for all files to be uploaded. I have slow internet speed so took me quite a while.</p>
+<p><img src="/images/statics3/uploading.png" alt="img"></p>
+<p>Now that all the files have been uploaded go to the properties tab.</p>
+<p>Enable static website hosting.</p>
+<p><img src="/images/statics3/enablestatic.png" alt="img"></p>
+<p>Enter the index document and error document if present in your static site files and save changes.</p>
+<p><img src="/images/statics3/enterindex.png" alt="img"></p>
+<p>Now go to the permissions tab to edit a bucket policy. A bucket policy allows us to enable permissions so that our <code>S3</code> bucket files can be accessed by the public.</p>
+<p>Add the following lines of json configuration to the policy and save it.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;Version&#34;</span>: <span style="color:#e6db74">&#34;2012-10-17&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;Statement&#34;</span>: [
+</span></span><span style="display:flex;"><span>        {
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">&#34;Sid&#34;</span>: <span style="color:#e6db74">&#34;AllowPublicAccess&#34;</span>,
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">&#34;Effect&#34;</span>: <span style="color:#e6db74">&#34;Allow&#34;</span>,
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">&#34;Principal&#34;</span>: <span style="color:#e6db74">&#34;*&#34;</span>,
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">&#34;Action&#34;</span>: <span style="color:#e6db74">&#34;s3:GetObject&#34;</span>,
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">&#34;Resource&#34;</span>: <span style="color:#e6db74">&#34;arn:aws:s3:::ngaihtech/*&#34;</span>
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    ]
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><ul>
+<li>sid: Way to identify your policy.</li>
+<li>Effect: It is either Allow or Deny.</li>
+<li>Principal: &ldquo;*&rdquo; is a wildcard to allow everyone.</li>
+<li>Action: &ldquo;s3:GetObject&rdquo; is a verb that allows to read the files from the s3 bucket.</li>
+<li>Resource: this is a way to identify your bucket, adding &ldquo;/*&rdquo; means giving access to all files inside the bucket.</li>
+</ul>
+<p><img src="/images/statics3/editpolicy.png" alt="img"></p>
+<p>Now that we have given public access to the bucket files. Let us find the url of our bucket to access our hosted static site. Navigate to properties and scroll all the way to the bottom.</p>
+<p><img src="/images/statics3/properties.png" alt="img"></p>
+<p>Copy that and you can access your hosted static site in s3 using the url.</p>
+<p><img src="/images/statics3/web.png" alt="img"></p>
+<blockquote>
+<p><a href="http://ngaihtech.s3-website.eu-central-1.amazonaws.com">http://ngaihtech.s3-website.eu-central-1.amazonaws.com</a></p>
+</blockquote>
+<p>The link won&rsquo;t probably work anymore.</p>
+<blockquote>
+<p>Now that we have hosted our static site, we can also purchase a domain name and make it point to the url of our s3 bucket.</p>
+</blockquote>
+
+      </div></div>
+
+  
+    
+<div class="pagination">
+    <div class="pagination__title">
+        <span class="pagination__title-h">Read other posts</span>
+        <hr />
+    </div>
+    <div class="pagination__buttons">
+        
+        
+        <span class="button next">
+            <a href="/posts/didactic/">
+                <span class="button__text">[HTB] Didactic Octo Paddles</span>
+                <span class="button__icon">→</span>
+            </a>
+        </span>
+        
+    </div>
+</div>
+
+  
+
+  
+    
+
+  
+</article>
+
+  </div>
+
+  
+    <footer class="footer">
+  <div class="footer__inner">
+    
+      <div class="copyright">
+        <span>© 2023 ngaih.tech </a></span>
+    
+        <span>:: Theme made by <a href="https://twitter.com/panr">panr</a></span>
+      </div>
+  </div>
+</footer>
+
+
+
+
+
+
+<script type="text/javascript" src="/bundle.min.js"></script>
+
+
+
+
+
+  
+</div>
+
+</body>
+</html>

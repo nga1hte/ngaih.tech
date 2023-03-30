@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  
+    <title>[HTB] misDIRection writeup :: ngaih.tech</title>
+  
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="This is my writeup for misDIRection, which is a miscellaneous challenge in hackthebox. The challenge seems fairly simple and involves a zip file that contains directories and files in a specific order. Upon inspection, the files are empty and probably why the title of the challenge is misdirection.
+Steps for finding the flag Unzipping the file yields a directory with the name .secret, which is hidden in unix based systems." />
+<meta name="keywords" content="" />
+<meta name="robots" content="noodp" />
+<link rel="canonical" href="/posts/misdirection/" />
+
+
+
+
+
+
+  
+  
+  
+  
+  
+  <link rel="stylesheet" href="/styles.css">
+
+
+
+
+
+
+
+  <link rel="shortcut icon" href="/android-chrome-512x512.png">
+
+
+
+<meta name="twitter:card" content="summary" />
+
+  
+    <meta name="twitter:site" content="ngaih.tech" />
+  
+    <meta name="twitter:creator" content="" />
+
+
+
+<meta property="og:locale" content="en" />
+<meta property="og:type" content="article" />
+<meta property="og:title" content="[HTB] misDIRection writeup">
+<meta property="og:description" content="This is my writeup for misDIRection, which is a miscellaneous challenge in hackthebox. The challenge seems fairly simple and involves a zip file that contains directories and files in a specific order. Upon inspection, the files are empty and probably why the title of the challenge is misdirection.
+Steps for finding the flag Unzipping the file yields a directory with the name .secret, which is hidden in unix based systems." />
+<meta property="og:url" content="/posts/misdirection/" />
+<meta property="og:site_name" content="ngaih.tech" />
+
+  
+    <meta property="og:image" content="/android-chrome-512x512.png">
+  
+
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="627">
+
+  <meta property="article:section" content="hacking" />
+
+
+  <meta property="article:published_time" content="2022-12-31 00:00:00 &#43;0000 UTC" />
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+<body class="green">
+
+
+<div class="container center headings--one-size">
+
+  <header class="header">
+  <div class="header__inner">
+    <div class="header__logo">
+      <a href="/">
+  <div class="logo">
+    ngaih.tech
+  </div>
+</a>
+
+    </div>
+    
+      <ul class="menu menu--mobile">
+  <li class="menu__trigger">Menu&nbsp;▾</li>
+  <li>
+    <ul class="menu__dropdown">
+      
+        
+          <li><a href="/">Home</a></li>
+        
+      
+        
+          <li><a href="/about">About</a></li>
+        
+      
+        
+          <li><a href="/categories">Categories</a></li>
+        
+      
+      
+    </ul>
+  </li>
+</ul>
+
+    
+    
+  </div>
+  
+    <nav class="navigation-menu">
+  <ul class="navigation-menu__inner menu--desktop">
+    
+      
+        
+          <li><a href="/">Home</a></li>
+        
+      
+        
+          <li><a href="/about">About</a></li>
+        
+      
+        
+          <li><a href="/categories">Categories</a></li>
+        
+      
+    
+  </ul>
+</nav>
+
+  
+</header>
+
+
+  <div class="content">
+    
+<article class="post">
+  <h1 class="post-title">
+    <a href="/posts/misdirection/">[HTB] misDIRection writeup</a>
+  </h1>
+  <div class="post-meta">
+    
+      <time class="post-date">
+        2022-12-31 ::
+        
+      </time>
+    
+    
+    
+  </div>
+
+  
+    <span class="post-tags">
+      
+      #<a href="/tags/ctf/">ctf</a>&nbsp;
+      
+      #<a href="/tags/write-up/">write up</a>&nbsp;
+      
+      #<a href="/tags/hack-the-box/">hack the box</a>&nbsp;
+      
+    </span>
+  
+  
+
+
+  
+
+  <div class="post-content"><div>
+        <p>This is my writeup for misDIRection, which is a miscellaneous challenge in hackthebox. The challenge seems fairly simple and involves a zip file that contains directories and files in a specific order. Upon inspection, the files are empty and probably why the title of the challenge is misdirection.</p>
+<h2 id="steps-for-finding-the-flag">Steps for finding the flag<a href="#steps-for-finding-the-flag" class="hanchor" ariaLabel="Anchor">&#8983;</a> </h2>
+<p>Unzipping the file yields a directory with the name <code>.secret</code>, which is hidden in unix based systems.</p>
+<pre tabindex="0"><code>$ unzip misDIRection.zip -d misDIRection &amp; ls -a misDIRection
+. .. .secret
+</code></pre><p>Checking the <code>.secret</code> directory we get a bunch of directories with empty file contents.</p>
+<pre tabindex="0"><code>$ ls -a
+0 2 4 6 8 a b c d e f g h i j k l m n o p q r s t u v w x y z
+1 3 5 7 9 A B C D E F G H I J K L M N O P Q R S T U V W X Y Z
+</code></pre><p>At this point we can use <code>tree</code> to display all the files and subdirectories.</p>
+<pre tabindex="0"><code>tree
+</code></pre><p>Checking the content of the files, we find that they are empty files. On another observation since the files are all numbered and distinct it can be assumed that they are keys and since the directory names are all alphanumeric they can be assumed as values and hence forming a {key, value} pair.
+Sorting the file names and taking the directory names as values we might be find the flag to our challenge.</p>
+<p>We use tree prune to list only directories that are not empty, thereby eliminating values without keys</p>
+<pre tabindex="0"><code>$ tree --prune -afi
+.
+./0
+./0/6
+./1
+...
+</code></pre><p>We pipe the output of the tree and cut each row between “/” and take only the second and third values and put space beween them using the cut tool. Refer to the man pages of each tool to know more.</p>
+<pre tabindex="0"><code>$ tree --prune -afi | cut -s -d &#34;/&#34; -f 2,3 --output-delimiter=&#34; &#34; | sort -k 2n
+0
+1
+2
+5
+9
+...
+...
+S 1
+F 2
+R 3
+...
+</code></pre><p>Since there are still some directories without keys lingering in our output, we will remove them using <code>sed</code> which will remove all rows without space.</p>
+<pre tabindex="0"><code>$ tree --prune -afi | cut -s -d &#34;/&#34; -f 2,3 --output-delimiter=&#34; &#34; | sort -k 2n | sed &#39;/ /!d&#39;
+S
+F
+R
+C
+...
+</code></pre><p>For printing all the values, lets use <code>tr</code> a to remove newlines form all the rows.</p>
+<pre tabindex="0"><code>$ tree --prune -afi | cut -s -d &#34;/&#34; -f 2,3 --output-delimiter=&#34; &#34; | sort -k 2n | sed &#39;/ /!d&#39; | cut -d &#34; &#34; -f 1 | tr -d &#39;\n&#39;
+SFRCe0RJUjNjdEx5XzFuX1BsNDFuX1NpN2V9
+</code></pre><p>The output values look fairly similar to base64 encoding, so let us pipe our output one more time to “base64” tool to decode it.</p>
+<pre tabindex="0"><code>$ tree --prune -afi | cut -s -d &#34;/&#34; -f 2,3 --output-delimiter=&#34; &#34; | sort -k 2n | sed &#39;/ /!d&#39; | cut -d &#34; &#34; -f 1 | tr -d &#39;\n&#39; | base64 --decode
+HTB{D********e}
+</code></pre><blockquote>
+<p>That&rsquo;s it! You have the flag.</p>
+</blockquote>
+
+      </div></div>
+
+  
+    
+<div class="pagination">
+    <div class="pagination__title">
+        <span class="pagination__title-h">Read other posts</span>
+        <hr />
+    </div>
+    <div class="pagination__buttons">
+        
+        <span class="button previous">
+            <a href="/posts/photopea/">
+                <span class="button__icon">←</span>
+                <span class="button__text">Photopea - A photoshop alternative</span>
+            </a>
+        </span>
+        
+        
+        <span class="button next">
+            <a href="/posts/chatgpt/">
+                <span class="button__text">chatGPT</span>
+                <span class="button__icon">→</span>
+            </a>
+        </span>
+        
+    </div>
+</div>
+
+  
+
+  
+    
+
+  
+</article>
+
+  </div>
+
+  
+    <footer class="footer">
+  <div class="footer__inner">
+    
+      <div class="copyright">
+        <span>© 2023 ngaih.tech </a></span>
+    
+        <span>:: Theme made by <a href="https://twitter.com/panr">panr</a></span>
+      </div>
+  </div>
+</footer>
+
+
+
+
+
+
+<script type="text/javascript" src="/bundle.min.js"></script>
+
+
+
+
+
+  
+</div>
+
+</body>
+</html>
