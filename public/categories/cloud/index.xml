@@ -6,7 +6,115 @@
     <description>Recent content in cloud on ngaih.tech</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 28 Mar 2023 00:00:00 +0000</lastBuildDate><atom:link href="/categories/cloud/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Thu, 30 Mar 2023 00:00:00 +0000</lastBuildDate><atom:link href="/categories/cloud/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Using AWS Elastic Load Balancer and AutoScaling Group for high Scalability and Availability</title>
+      <link>/posts/scalability/</link>
+      <pubDate>Thu, 30 Mar 2023 00:00:00 +0000</pubDate>
+      
+      <guid>/posts/scalability/</guid>
+      <description>In this blog post today, we will be implementing scalability and availabilty principles to this blog. We will use AWS Services, namely the AWS Elastic Load Balancer (ELB) and Auto Scaling Group to achieve our goal. This blog is powered by nginx and running on a single EC2 instance, so it is a perfect candidate for scaling and increasing its availability. Let us understand some key terms first, before we proceed:</description>
+      <content>&lt;p&gt;In this blog post today, we will be implementing scalability and availabilty principles to this blog. We will use AWS Services, namely the &lt;code&gt;AWS Elastic Load Balancer (ELB)&lt;/code&gt; and &lt;code&gt;Auto Scaling Group&lt;/code&gt; to achieve our goal. This blog is powered by &lt;code&gt;nginx&lt;/code&gt; and running on a single &lt;code&gt;EC2&lt;/code&gt; instance, so it is a perfect candidate for scaling and increasing its availability. Let us understand some key terms first, before we proceed:&lt;/p&gt;
+&lt;h4 id=&#34;availability&#34;&gt;Availability&lt;/h4&gt;
+&lt;p&gt;Availabilty is the ability to provide continued access to a service to its end users while remaining operational. We can achieve availability in our services by running the services in two or more locations and being isolated from each other failures.&lt;/p&gt;
+&lt;h4 id=&#34;scalability&#34;&gt;Scalability&lt;/h4&gt;
+&lt;p&gt;Scalability refers to the abilty of the service to keep up with demand on its resources by adapting to the workload. This can be achieved by either scaling up vertically or horizontally. Vertical Scaling in context of servers, is the act of increasing the size of the resources like processor, memory or storage. In the same context, horizontal scaling is adding more servers and distributing workload among the servers.&lt;/p&gt;
+&lt;h4 id=&#34;scaling-ngaihtech&#34;&gt;Scaling ngaih.tech&lt;/h4&gt;
+&lt;p&gt;Since &lt;a href=&#34;http://ngaih.tech&#34;&gt;ngaih.tech&lt;/a&gt; is a static site running on nginx and the static site code is available on my &lt;a href=&#34;https://github.com/nga1hte/ngaih.tech&#34;&gt;repo&lt;/a&gt; we can easily replicate the running ec2 instance with very little effort and scale it.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/images/scaling/overview.png&#34; alt=&#34;img&#34;&gt;&lt;/p&gt;
+&lt;p&gt;img: overview of what our infrastructure will look like.&lt;/p&gt;
+&lt;p&gt;Since we are going to create a template to launch our &lt;code&gt;EC2&lt;/code&gt; instances with configurations and userdata, let us first create a security group that will allow only http traffic to our &lt;code&gt;EC2&lt;/code&gt; instances and name it httpOnly.&lt;/p&gt;
+&lt;p&gt;We will create a template with &lt;code&gt;Amazon Linux Image&lt;/code&gt; for our OS and use t.2 micro with default settings.
+We use the following script in our userdata, which will basically clone &lt;a href=&#34;https://github.com/nga1hte/ngaih.tech&#34;&gt;ngaih.tech&lt;/a&gt; repository to our machine, install apache web server and then move our static site to the apache folder.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#!/bin/bash
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;yum update -y
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;yum install httpd git -y
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;systemctl enable httpd
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;systemctl start httpd
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;cd /tmp &lt;span style=&#34;color:#f92672&#34;&gt;&amp;amp;&amp;amp;&lt;/span&gt; git clone https://github.com/nga1hte/ngaih.tech.git
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;sudo mv ./ngaih.tech/public/* /var/www/html/
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;rm -r /tmp/*
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Now that our lauch template is ready, let us create an &lt;code&gt;Auto Scaling Group&lt;/code&gt;. Auto Scaling Group enables us to automatically scale using some rules by using the launch template that we have just created.&lt;/p&gt;
+&lt;p&gt;We create the group name and select the launch template we have just created.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/images/scaling/autoscaling.png&#34; alt=&#34;img&#34;&gt;&lt;/p&gt;
+&lt;p&gt;To support for availability I have selected two availability zones in my region of aws.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/images/scaling/availability.png&#34; alt=&#34;img&#34;&gt;&lt;/p&gt;
+&lt;p&gt;We will skip the next part of the setup, since we have not created a load balancer yet. We will come back later and attach a load balancer.&lt;/p&gt;
+&lt;p&gt;Next we enter the number of instances that will run, and the amount of instances that we can scale up to.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Desired: The amount of instances that will run.&lt;/li&gt;
+&lt;li&gt;Minimum: The minimum amount of instances that can run.&lt;/li&gt;
+&lt;li&gt;Maximum: The amount of instances that we can scale to.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Our desired capacity must be between the min-max range.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/images/scaling/scaling-min-max.png&#34; alt=&#34;img&#34;&gt;&lt;/p&gt;
+&lt;p&gt;In scaling, we will use the default Target Tracking Policy and metric of Average CPU utilisaton set to 50%.
+This means that if the cpu use of all our instances cross 50% then we will add more instances to help with the load.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/images/scaling/scaling-policy.png&#34; alt=&#34;img&#34;&gt;&lt;/p&gt;
+&lt;p&gt;We can proceed to the next page and skip to step 7 since we are not going to use SNS and tags in this example.
+After reviewing, let us create the scaling group.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/images/scaling/auto-scaling-group.png&#34; alt=&#34;img&#34;&gt;&lt;/p&gt;
+&lt;p&gt;We can also observe that the autoscaling group has created two instances from the template that we have created. We can enter the public IP of the instances to verify that our userdata script works.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/images/scaling/instances.png&#34; alt=&#34;img&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/images/scaling/site.png&#34; alt=&#34;img&#34;&gt;&lt;/p&gt;
+&lt;p&gt;The &lt;code&gt;Auto Scaling Group&lt;/code&gt; will make sure that we always have two instances running and depending upon the CPU usage, will create more instances when average CPU usage is greater than 50%.&lt;/p&gt;
+&lt;p&gt;We can enter also check the activity of the auto scaling group and see the activity history. In our activity history we can see the launching of two new instances.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/images/scaling/activity.png&#34; alt=&#34;img&#34;&gt;&lt;/p&gt;
+&lt;p&gt;We can also go to monitoring and observe the various metrics, like cpu usage, network in and out etc.&lt;/p&gt;
+&lt;p&gt;Now that we have our instances ready it is now time to set up our load balancer. Go to the navigation pane and select &lt;code&gt;Load Balancers&lt;/code&gt; and create load balancer. Since we are handling http traffic we will use the &lt;code&gt;Application Load Balancer&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;Create a name for the load balancer and leave the default settings, since our load balancer is going to be used on the internet traffic.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/images/scaling/loadBalancer.png&#34; alt=&#34;img&#34;&gt;&lt;/p&gt;
+&lt;p&gt;Next, we select the availability zones where our ec2 instances resides in, and make sure to create a httpOnly security group for the load balancer since we are going to expose only the website to the public.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/images/scaling/load-securityGroup.png&#34; alt=&#34;img&#34;&gt;&lt;/p&gt;
+&lt;p&gt;Next we have to create listeners and routing for our load balancers.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Listener: Protocol and Port which the load balancer will listen.&lt;/li&gt;
+&lt;li&gt;Routing: Where the packets are going to be forwarded.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;img src=&#34;/images/scaling/listener.png&#34; alt=&#34;img&#34;&gt;&lt;/p&gt;
+&lt;p&gt;We have to create a target group. Target group is where the traffic is going to be forwarded to, and in our case, the target group must consists of the ec2 instances that we have created in the autoscaling group.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/images/scaling/load-securityGroup.png&#34; alt=&#34;img&#34;&gt;&lt;/p&gt;
+&lt;p&gt;Click on the create target group to create one for our instances. On the first page, you can just input the target group name and proceed to the next page. It is also worth mentioning that the health check route is what the load balancer will use to check if the instance is down and we need to terminate the instance to spring up another instance.&lt;/p&gt;
+&lt;p&gt;On the next page, select our instances that are running and then click on &lt;code&gt;include as pending below&lt;/code&gt; to add our instances.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/images/scaling/pending-below.png&#34; alt=&#34;img&#34;&gt;&lt;/p&gt;
+&lt;p&gt;Then click on create. Now go to the previous load balancer page and select the target group we have just created.&lt;/p&gt;
+&lt;p&gt;We can now click on create load balancer.
+Our load balancer has now been created.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/images/scaling/successfully-created.png&#34; alt=&#34;img&#34;&gt;&lt;/p&gt;
+&lt;p&gt;Here is the details of our load balancer.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/images/scaling/details-load-balancer.png&#34; alt=&#34;img&#34;&gt;&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Our load balancer has a dns name and that dns name is the endpoint that is exposed to the public. Any traffic that is send to the dns name will get routed and distributed to the instances that are in our auto scaling group and depending on the utilisation of the cpu of the instances, we will scale up and down. Since the instances are in two availability zones, we have also improved the availability of our website.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;blockquote&gt;
+&lt;p&gt;DNS name: &lt;a href=&#34;http://balancerrr-1903341826.ap-south-1.elb.amazonaws.com/&#34;&gt;http://balancerrr-1903341826.ap-south-1.elb.amazonaws.com/&lt;/a&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;Now that we have created our load balancer, we also have to attach our autoscaling group with our load balancer so that new instances can be connected to the load balancer target group automatically.&lt;/p&gt;
+&lt;p&gt;Go to our scaling group and then go to load balancing, edit and attach the target group we have created and update.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/images/scaling/load-balance-edit.png&#34; alt=&#34;img&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/images/scaling/load-select-group.png&#34; alt=&#34;img&#34;&gt;&lt;/p&gt;
+&lt;p&gt;The security group of our ec2 instances are configured in such a way that they are still exposed to the internet and anyone who have the public ip address can connect to the individual instances. So let us modify the security group of the instances to allow only http traffic from the load balancer. Make sure to make the type http and port to 80.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/images/scaling/change-security-group.png&#34; alt=&#34;img&#34;&gt;&lt;/p&gt;
+&lt;p&gt;We just have to reference the security group of the load balancer in the source.
+Now our ec2 instances can only be accessed through the load balancer.&lt;/p&gt;
+&lt;p&gt;To check that our auto scaling group is working properly, I will enable ssh on our ec2 instances and perform a stress test.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/images/scaling/stress.png&#34; alt=&#34;img&#34;&gt;&lt;/p&gt;
+&lt;p&gt;Stressing both the running instances let us check the monitoring from the the auto scaling group.
+There is a spike in cpu utilisation above 50%&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/images/scaling/spike.png&#34; alt=&#34;img&#34;&gt;&lt;/p&gt;
+&lt;p&gt;We can see two new activity in the history&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/images/scaling/activities.png&#34; alt=&#34;img&#34;&gt;&lt;/p&gt;
+&lt;p&gt;And there are now four running instances in our scaling group.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/images/scaling/maxinstances.png&#34; alt=&#34;img&#34;&gt;&lt;/p&gt;
+&lt;p&gt;Now let me stop the stress test to see what happens when cpu usage goes down.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/images/scaling/termination.png&#34; alt=&#34;img&#34;&gt;&lt;/p&gt;
+&lt;p&gt;We can see that our servers scale down, to terminate the two instances since they are no longer needed.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;There are other topics that we can go through like sticky sessions, other scaling polices, creating certificates for ssl for our load balancer to enable https and using our own domain for the load balancer but those are for another time.&lt;/p&gt;
+&lt;/blockquote&gt;
+</content>
+    </item>
+    
     <item>
       <title>Hosting a static site in AWS S3 bucket</title>
       <link>/posts/statics3/</link>
