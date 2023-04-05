@@ -1,0 +1,50 @@
+name: Build and Deploy Hugo site to S3 and Cloudfront
+
+on:
+  push:
+    branches: 
+      - master
+  
+jobs:
+  build-and-deploy:
+    name: Build and Deploy
+    runs-on: ubuntu-22.04
+    env: 
+      BUCKET: ngaihtech
+      REGION: ap-south-1
+      DIST_ID: EUQDVJREMG6MT
+
+    concurrency:
+      group: ${{ github.workflow }}-${{ github.ref }}
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          submodules: true  # Fetch Hugo themes (true OR recursive)
+          fetch-depth: 0    # Fetch all history for .GitInfo and .Lastmod
+
+      - name: Setup Hugo
+        uses: peaceiris/actions-hugo@v2
+        with:
+          hugo-version: 'latest'
+          # extended: true
+
+      - name: Build
+        run: hugo
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.REGION }}
+      
+      - name: Copy files to production S3
+        run: |
+          aws s3 sync build/ s3://${{ env.BUCKET }} --delete
+      
+      - name: Invalidate cache
+        run: |
+          aws cloudfront create-invalidation \
+          --distribution-id ${{ env.DIST_ID }} \
+          --paths "/*
+
