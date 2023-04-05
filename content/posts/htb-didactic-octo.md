@@ -15,7 +15,7 @@ tags:
   - JWT attack
 ---
 
-This year I participated in Cyber Apocalypse, a CTF organised my hackthebox and managed to solve a few web challenges. Here is my writeup for didactic octo paddles, a medium difficulty web challenge. In this challenge, we are given the luxury of going through the source code of the web application, so it becomes easier to find vulnerabilities in logic errors. Looking at the source code, the web app is written in ```javascript``` and utilise ```nodejs``` in the backend. 
+This year I participated in Cyber Apocalypse, a CTF organised by hackthebox and managed to solve a few web challenges. Here is my writeup for didactic octo paddles, a medium difficulty web challenge. In this challenge, we are given the luxury of going through the source code of the web application, so it becomes easier to find vulnerabilities in logic errors. Looking at the source code, the web app is written in ```javascript``` and utilise ```nodejs``` in the backend. 
 
 Navigating to the ip address of the challenge web server we are greeted with a login page, but there is no sight of any other button to click or navigate to. 
 
