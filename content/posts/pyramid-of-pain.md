@@ -13,7 +13,7 @@ tags:
 
 A pyramid which represents how much pain we can cause to an adversary by detecting indicators of their attacks.
 
-![pyaramid](/images/pyaramidofpain/pyramid-of-pain.png)
+![pyramid](/images/pop/pop.png)
 
 img: [SOCRadar](https://socradar.io/re-examining-the-pyramid-of-pain-to-use-cyber-threat-intelligence-more-effectively/)
 
