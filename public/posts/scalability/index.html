@@ -103,6 +103,10 @@
         
       
         
+          <li><a href="/projects">Projects</a></li>
+        
+      
+        
           <li><a href="/categories">Categories</a></li>
         
       
@@ -125,6 +129,10 @@
       
         
           <li><a href="/about">About</a></li>
+        
+      
+        
+          <li><a href="/projects">Projects</a></li>
         
       
         
@@ -171,7 +179,6 @@
   
   
 
-
   
 
   <div class="post-content"><div>
@@ -187,15 +194,15 @@
 <p>Since we are going to create a template to launch our <code>EC2</code> instances with configurations and userdata, let us first create a security group that will allow only http traffic to our <code>EC2</code> instances and name it httpOnly.</p>
 <p>We will create a template with <code>Amazon Linux Image</code> for our OS and use t.2 micro with default settings.
 We use the following script in our userdata, which will basically clone <a href="https://github.com/nga1hte/ngaih.tech">ngaih.tech</a> repository to our machine, install apache web server and then move our static site to the apache folder.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e">#!/bin/bash
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>yum update -y
-</span></span><span style="display:flex;"><span>yum install httpd git -y
-</span></span><span style="display:flex;"><span>systemctl enable httpd
-</span></span><span style="display:flex;"><span>systemctl start httpd
-</span></span><span style="display:flex;"><span>cd /tmp <span style="color:#f92672">&amp;&amp;</span> git clone https://github.com/nga1hte/ngaih.tech.git
-</span></span><span style="display:flex;"><span>sudo mv ./ngaih.tech/public/* /var/www/html/
-</span></span><span style="display:flex;"><span>rm -r /tmp/*
-</span></span></code></pre></div><p>Now that our lauch template is ready, let us create an <code>Auto Scaling Group</code>. Auto Scaling Group enables us to automatically scale using some rules by using the launch template that we have just created.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#75715e">#!/bin/bash
+</span><span style="color:#75715e"></span>yum update -y
+yum install httpd git -y
+systemctl enable httpd
+systemctl start httpd
+cd /tmp <span style="color:#f92672">&amp;&amp;</span> git clone https://github.com/nga1hte/ngaih.tech.git
+sudo mv ./ngaih.tech/public/* /var/www/html/
+rm -r /tmp/*
+</code></pre></div><p>Now that our lauch template is ready, let us create an <code>Auto Scaling Group</code>. Auto Scaling Group enables us to automatically scale using some rules by using the launch template that we have just created.</p>
 <p>We create the group name and select the launch template we have just created.</p>
 <p><img src="/images/scaling/autoscaling.png" alt="img"></p>
 <p>To support for availability I have selected two availability zones in my region of aws.</p>
@@ -284,6 +291,13 @@ There is a spike in cpu utilisation above 50%</p>
         <hr />
     </div>
     <div class="pagination__buttons">
+        
+        <span class="button previous">
+            <a href="/posts/cloudfront/">
+                <span class="button__icon">←</span>
+                <span class="button__text">Adding a content delivery network and github actions to our static site</span>
+            </a>
+        </span>
         
         
         <span class="button next">

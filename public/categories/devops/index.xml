@@ -6,7 +6,201 @@
     <description>Recent content in devops on ngaih.tech</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Fri, 06 Jan 2023 00:00:00 +0000</lastBuildDate><atom:link href="/categories/devops/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sat, 08 Apr 2023 00:00:00 +0000</lastBuildDate><atom:link href="/categories/devops/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Creating a development environment in VSCode using Terraform and AWS</title>
+      <link>/posts/terraform-aws-vscode/</link>
+      <pubDate>Sat, 08 Apr 2023 00:00:00 +0000</pubDate>
+      
+      <guid>/posts/terraform-aws-vscode/</guid>
+      <description>In this blog post today we will use Terraform by Hashicorp which is a an infrastructure provisioning tool. It basically allows us to define the infrastructure that we want to use such as virtual machines, network devices and rules to the system. Terraform is a handy tool to provision services in the cloud and we can define what we want using Hashicorp Configuration Language (HCL). It is one of the most popular Infrastructure as Code (IaC) tool right now and is similar to AWS propriety tool CloudFormation.</description>
+      <content>&lt;p&gt;In this blog post today we will use Terraform by Hashicorp which is a an infrastructure provisioning tool. It basically allows us to define the infrastructure that we want to use such as virtual machines, network devices and rules to the system. Terraform is a handy tool to provision services in the cloud and we can define what we want using Hashicorp Configuration Language (HCL). It is one of the most popular &lt;code&gt;Infrastructure as Code (IaC)&lt;/code&gt; tool right now and is similar to AWS propriety tool CloudFormation.&lt;/p&gt;
+&lt;h3 id=&#34;resources&#34;&gt;Resources&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/nga1hte/terraform-aws-dev-env&#34;&gt;Github&lt;/a&gt; repository for all the configurations files.&lt;/li&gt;
+&lt;li&gt;[Youtube] tutorial by &lt;a href=&#34;https://morethancertified.com&#34;&gt;morethancertified.com&lt;/a&gt;.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;design-for-our-development-environment&#34;&gt;Design for our Development Environment&lt;/h2&gt;
+&lt;p&gt;&lt;img src=&#34;/images/terraform/dev.png&#34; alt=&#34;dev&#34;&gt;&lt;/p&gt;
+&lt;h3 id=&#34;aws-services-used&#34;&gt;AWS services used&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;VPC&lt;/li&gt;
+&lt;li&gt;Subnet&lt;/li&gt;
+&lt;li&gt;Route Table&lt;/li&gt;
+&lt;li&gt;Security Group&lt;/li&gt;
+&lt;li&gt;Internet Gateway&lt;/li&gt;
+&lt;li&gt;EC2 Instance&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;vscode-extensions&#34;&gt;VSCode extensions&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;RemoteSSH&lt;/li&gt;
+&lt;/ul&gt;
+&lt;blockquote&gt;
+&lt;p&gt;This extension from vscode allows us to connect to our EC2 instance that we have deployed through ssh and open a vscode instance in the instance.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;&lt;img src=&#34;/images/terraform/vscode.png&#34; alt=&#34;vscode&#34;&gt;&lt;/p&gt;
+&lt;h3 id=&#34;terraform&#34;&gt;Terraform&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;Data sources allow you to retrieve information from an external system that Terraform can use to provision resources. Data sources represent read-only information that Terraform can use to configure resources.&lt;/li&gt;
+&lt;li&gt;In datasources.tf we get the amazon machine image dynamically, i.e latest version of it.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-hcl&#34; data-lang=&#34;hcl&#34;&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;data&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;aws_ami&amp;#34; &amp;#34;server_ami&amp;#34;&lt;/span&gt; {
+  most_recent &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;true&lt;/span&gt;
+  owners      &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; [&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;099720109477&amp;#34;&lt;/span&gt;]
+
+  &lt;span style=&#34;color:#66d9ef&#34;&gt;filter&lt;/span&gt; {
+    name   &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;name&amp;#34;&lt;/span&gt;
+    values &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; [&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;ubuntu/images/hvm-ssd/ubuntu-jammy-22.04-amd64-server-*&amp;#34;&lt;/span&gt;]
+  }
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;ul&gt;
+&lt;li&gt;In linux-ssh-config.tpl we define the file that will be used by remoteSSH (VSCode extension) to connect to our machine.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;cat &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;lt;&amp;lt; EOF &amp;gt;&amp;gt; ~/.ssh/config
+&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;
+&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;Host ${hostname}
+&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;    HostName ${hostname}
+&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;    User ${user}
+&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;    IdentityFile ${identityfile}
+&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;EOF&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;ul&gt;
+&lt;li&gt;In main.tf, we list all the services to be provisioned in AWS along with their configurations and rules associated with it.&lt;/li&gt;
+&lt;li&gt;We also make use of local provisioner to create our config file for remoteSSH in our local machine, which vscode will use for connection.&lt;/li&gt;
+&lt;li&gt;Some variables and conditional are also involved, they are used for choosing the development environment OS.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-hcl&#34; data-lang=&#34;hcl&#34;&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;resource&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;aws_vpc&amp;#34; &amp;#34;dev_env&amp;#34;&lt;/span&gt; {
+  cidr_block           &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;10.10.0.0/16&amp;#34;&lt;/span&gt;
+  enable_dns_hostnames &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;true&lt;/span&gt;
+  enable_dns_support   &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;true&lt;/span&gt;
+
+  tags &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; {
+    Name &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;dev&amp;#34;&lt;/span&gt;
+  }
+}
+
+&lt;span style=&#34;color:#66d9ef&#34;&gt;resource&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;aws_subnet&amp;#34; &amp;#34;dev_public_subnet&amp;#34;&lt;/span&gt; {
+  vpc_id                  &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;aws_vpc&lt;/span&gt;.&lt;span style=&#34;color:#66d9ef&#34;&gt;dev_env&lt;/span&gt;.&lt;span style=&#34;color:#66d9ef&#34;&gt;id&lt;/span&gt;
+  cidr_block              &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;10.10.1.0/24&amp;#34;&lt;/span&gt;
+  map_public_ip_on_launch &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;true&lt;/span&gt;
+  availability_zone       &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;ap-south-1a&amp;#34;&lt;/span&gt;
+
+  tags &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; {
+    Name &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;dev-subnet-public&amp;#34;&lt;/span&gt;
+  }
+
+}
+
+&lt;span style=&#34;color:#66d9ef&#34;&gt;resource&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;aws_internet_gateway&amp;#34; &amp;#34;dev_internet_gateway&amp;#34;&lt;/span&gt; {
+  vpc_id &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;aws_vpc&lt;/span&gt;.&lt;span style=&#34;color:#66d9ef&#34;&gt;dev_env&lt;/span&gt;.&lt;span style=&#34;color:#66d9ef&#34;&gt;id&lt;/span&gt;
+
+  tags &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; {
+    Name &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;dev-igw&amp;#34;&lt;/span&gt;
+  }
+}
+
+&lt;span style=&#34;color:#66d9ef&#34;&gt;resource&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;aws_route_table&amp;#34; &amp;#34;dev_public_rt&amp;#34;&lt;/span&gt; {
+  vpc_id &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;aws_vpc&lt;/span&gt;.&lt;span style=&#34;color:#66d9ef&#34;&gt;dev_env&lt;/span&gt;.&lt;span style=&#34;color:#66d9ef&#34;&gt;id&lt;/span&gt;
+  tags &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; {
+    Name &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;dev_public_rt&amp;#34;&lt;/span&gt;
+  }
+}
+
+&lt;span style=&#34;color:#66d9ef&#34;&gt;resource&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;aws_route&amp;#34; &amp;#34;default_route&amp;#34;&lt;/span&gt; {
+  route_table_id         &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;aws_route_table&lt;/span&gt;.&lt;span style=&#34;color:#66d9ef&#34;&gt;dev_public_rt&lt;/span&gt;.&lt;span style=&#34;color:#66d9ef&#34;&gt;id&lt;/span&gt;
+  destination_cidr_block &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;0.0.0.0/0&amp;#34;&lt;/span&gt;
+  gateway_id             &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;aws_internet_gateway&lt;/span&gt;.&lt;span style=&#34;color:#66d9ef&#34;&gt;dev_internet_gateway&lt;/span&gt;.&lt;span style=&#34;color:#66d9ef&#34;&gt;id&lt;/span&gt;
+}
+
+&lt;span style=&#34;color:#66d9ef&#34;&gt;resource&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;aws_route_table_association&amp;#34; &amp;#34;dev_public_access&amp;#34;&lt;/span&gt; {
+  subnet_id      &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;aws_subnet&lt;/span&gt;.&lt;span style=&#34;color:#66d9ef&#34;&gt;dev_public_subnet&lt;/span&gt;.&lt;span style=&#34;color:#66d9ef&#34;&gt;id&lt;/span&gt;
+  route_table_id &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;aws_route_table&lt;/span&gt;.&lt;span style=&#34;color:#66d9ef&#34;&gt;dev_public_rt&lt;/span&gt;.&lt;span style=&#34;color:#66d9ef&#34;&gt;id&lt;/span&gt;
+}
+
+&lt;span style=&#34;color:#66d9ef&#34;&gt;resource&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;aws_security_group&amp;#34; &amp;#34;dev_sg&amp;#34;&lt;/span&gt; {
+  name        &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;dev_sg&amp;#34;&lt;/span&gt;
+  description &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;dev security group&amp;#34;&lt;/span&gt;
+  vpc_id      &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;aws_vpc&lt;/span&gt;.&lt;span style=&#34;color:#66d9ef&#34;&gt;dev_env&lt;/span&gt;.&lt;span style=&#34;color:#66d9ef&#34;&gt;id&lt;/span&gt;
+
+  &lt;span style=&#34;color:#66d9ef&#34;&gt;ingress&lt;/span&gt; {
+    from_port   &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;
+    to_port     &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;
+    protocol    &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;-1&amp;#34;&lt;/span&gt;
+    cidr_blocks &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; [&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;0.0.0.0/0&amp;#34;] // replace this with your ip -&amp;gt; eg: &amp;#34;142.12.3.1/32&amp;#34;&lt;/span&gt;
+  }
+
+  &lt;span style=&#34;color:#66d9ef&#34;&gt;egress&lt;/span&gt; {
+    from_port   &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;
+    to_port     &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;
+    protocol    &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;-1&amp;#34;&lt;/span&gt;
+    cidr_blocks &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; [&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;0.0.0.0/0&amp;#34;&lt;/span&gt;]
+  }
+}
+
+&lt;span style=&#34;color:#66d9ef&#34;&gt;resource&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;aws_key_pair&amp;#34; &amp;#34;dev_auth&amp;#34;&lt;/span&gt; {
+  key_name   &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;dev_key&amp;#34;&lt;/span&gt;
+  public_key &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;file&lt;/span&gt;(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;~/.ssh/dev_key.pub&amp;#34;&lt;/span&gt;)
+}
+
+&lt;span style=&#34;color:#66d9ef&#34;&gt;resource&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;aws_instance&amp;#34; &amp;#34;dev_node&amp;#34;&lt;/span&gt; {
+  instance_type          &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;t2.micro&amp;#34;&lt;/span&gt;
+  ami                    &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;data&lt;/span&gt;.&lt;span style=&#34;color:#66d9ef&#34;&gt;aws_ami&lt;/span&gt;.&lt;span style=&#34;color:#66d9ef&#34;&gt;server_ami&lt;/span&gt;.&lt;span style=&#34;color:#66d9ef&#34;&gt;id&lt;/span&gt;
+  key_name               &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;aws_key_pair&lt;/span&gt;.&lt;span style=&#34;color:#66d9ef&#34;&gt;dev_auth&lt;/span&gt;.&lt;span style=&#34;color:#66d9ef&#34;&gt;id&lt;/span&gt;
+  vpc_security_group_ids &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; [&lt;span style=&#34;color:#66d9ef&#34;&gt;aws_security_group&lt;/span&gt;.&lt;span style=&#34;color:#66d9ef&#34;&gt;dev_sg&lt;/span&gt;.&lt;span style=&#34;color:#66d9ef&#34;&gt;id&lt;/span&gt;]
+  subnet_id              &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;aws_subnet&lt;/span&gt;.&lt;span style=&#34;color:#66d9ef&#34;&gt;dev_public_subnet&lt;/span&gt;.&lt;span style=&#34;color:#66d9ef&#34;&gt;id&lt;/span&gt;
+  user_data              &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;file&lt;/span&gt;(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;userdata.tpl&amp;#34;&lt;/span&gt;)
+
+  &lt;span style=&#34;color:#66d9ef&#34;&gt;root_block_device&lt;/span&gt; {
+    volume_size &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;10&lt;/span&gt;
+  }
+
+  tags &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; {
+    Name &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;dev-node&amp;#34;&lt;/span&gt;
+  }
+
+  &lt;span style=&#34;color:#66d9ef&#34;&gt;provisioner&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;local-exec&amp;#34;&lt;/span&gt; {
+    command &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;templatefile&lt;/span&gt;(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;${var.host_os}-ssh-config.tpl&amp;#34;&lt;/span&gt;,{
+        hostname &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;self&lt;/span&gt;.&lt;span style=&#34;color:#66d9ef&#34;&gt;public_ip&lt;/span&gt;
+        user &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;ubuntu&amp;#34;&lt;/span&gt;,
+        identityfile &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;~/.ssh/dev_key&amp;#34;&lt;/span&gt;
+    })
+    interpreter &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; var.host_os &lt;span style=&#34;color:#f92672&#34;&gt;==&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;linux&amp;#34; ? [&amp;#34;bash&amp;#34;, &amp;#34;-c&amp;#34;] : [&amp;#34;Powershell&amp;#34;, &amp;#34;-Command&amp;#34;&lt;/span&gt;]
+  }
+
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;ul&gt;
+&lt;li&gt;In output.tf, we show the value of the public ip.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-hcl&#34; data-lang=&#34;hcl&#34;&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;output&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;dev_ip&amp;#34;&lt;/span&gt; {
+    value &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;aws_instance&lt;/span&gt;.&lt;span style=&#34;color:#66d9ef&#34;&gt;dev_node&lt;/span&gt;.&lt;span style=&#34;color:#66d9ef&#34;&gt;public_ip&lt;/span&gt;
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;ul&gt;
+&lt;li&gt;We use providers.tf to select our default region, and aws credentials to connect to our aws account.&lt;/li&gt;
+&lt;li&gt;We must keep our access_id and access_key for aws in the credentials file.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-hcl&#34; data-lang=&#34;hcl&#34;&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;terraform&lt;/span&gt; {
+  &lt;span style=&#34;color:#66d9ef&#34;&gt;required_providers&lt;/span&gt; {
+    aws &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; {
+      source &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;hashicorp/aws&amp;#34;&lt;/span&gt;
+    }
+  }
+}
+
+&lt;span style=&#34;color:#66d9ef&#34;&gt;provider&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;aws&amp;#34;&lt;/span&gt; {
+  region                   &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;ap-south-1&amp;#34;&lt;/span&gt;
+  shared_credentials_files &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; [&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;~/.aws/credentials&amp;#34;&lt;/span&gt;]
+  profile                  &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;terraform&amp;#34;&lt;/span&gt;
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;ul&gt;
+&lt;li&gt;In variables.tf, we define default os&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-hcl&#34; data-lang=&#34;hcl&#34;&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;variable&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;host_os&amp;#34;&lt;/span&gt; {
+    type &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;string&lt;/span&gt;
+    default &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;linux&amp;#34;&lt;/span&gt;
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;We can use the terraform.tfvars file to overwrite our default variables.&lt;/p&gt;
+</content>
+    </item>
+    
     <item>
       <title>Github Webhooks</title>
       <link>/posts/githubwebhooks/</link>

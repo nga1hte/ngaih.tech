@@ -6,7 +6,7 @@
   
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="This year I participated in Cyber Apocalypse, a CTF organised my hackthebox and managed to solve a few web challenges. Here is my writeup for didactic octo paddles, a medium difficulty web challenge. In this challenge, we are given the luxury of going through the source code of the web application, so it becomes easier to find vulnerabilities in logic errors. Looking at the source code, the web app is written in javascript and utilise nodejs in the backend." />
+<meta name="description" content="This year I participated in Cyber Apocalypse, a CTF organised by hackthebox and managed to solve a few web challenges. Here is my writeup for didactic octo paddles, a medium difficulty web challenge. In this challenge, we are given the luxury of going through the source code of the web application, so it becomes easier to find vulnerabilities in logic errors. Looking at the source code, the web app is written in javascript and utilise nodejs in the backend." />
 <meta name="keywords" content="" />
 <meta name="robots" content="noodp" />
 <link rel="canonical" href="/posts/didactic/" />
@@ -45,7 +45,7 @@
 <meta property="og:locale" content="en" />
 <meta property="og:type" content="article" />
 <meta property="og:title" content="[HTB] Didactic Octo Paddles">
-<meta property="og:description" content="This year I participated in Cyber Apocalypse, a CTF organised my hackthebox and managed to solve a few web challenges. Here is my writeup for didactic octo paddles, a medium difficulty web challenge. In this challenge, we are given the luxury of going through the source code of the web application, so it becomes easier to find vulnerabilities in logic errors. Looking at the source code, the web app is written in javascript and utilise nodejs in the backend." />
+<meta property="og:description" content="This year I participated in Cyber Apocalypse, a CTF organised by hackthebox and managed to solve a few web challenges. Here is my writeup for didactic octo paddles, a medium difficulty web challenge. In this challenge, we are given the luxury of going through the source code of the web application, so it becomes easier to find vulnerabilities in logic errors. Looking at the source code, the web app is written in javascript and utilise nodejs in the backend." />
 <meta property="og:url" content="/posts/didactic/" />
 <meta property="og:site_name" content="ngaih.tech" />
 
@@ -103,6 +103,10 @@
         
       
         
+          <li><a href="/projects">Projects</a></li>
+        
+      
+        
           <li><a href="/categories">Categories</a></li>
         
       
@@ -125,6 +129,10 @@
       
         
           <li><a href="/about">About</a></li>
+        
+      
+        
+          <li><a href="/projects">Projects</a></li>
         
       
         
@@ -175,98 +183,97 @@
   
   
 
-
   
 
   <div class="post-content"><div>
-        <p>This year I participated in Cyber Apocalypse, a CTF organised my hackthebox and managed to solve a few web challenges. Here is my writeup for didactic octo paddles, a medium difficulty web challenge. In this challenge, we are given the luxury of going through the source code of the web application, so it becomes easier to find vulnerabilities in logic errors. Looking at the source code, the web app is written in <code>javascript</code> and utilise <code>nodejs</code> in the backend.</p>
+        <p>This year I participated in Cyber Apocalypse, a CTF organised by hackthebox and managed to solve a few web challenges. Here is my writeup for didactic octo paddles, a medium difficulty web challenge. In this challenge, we are given the luxury of going through the source code of the web application, so it becomes easier to find vulnerabilities in logic errors. Looking at the source code, the web app is written in <code>javascript</code> and utilise <code>nodejs</code> in the backend.</p>
 <p>Navigating to the ip address of the challenge web server we are greeted with a login page, but there is no sight of any other button to click or navigate to.</p>
 <p><img src="/images/didactic/pic1.png" alt="img"></p>
 <p>Since we have access to the source code, we can see all the routes available in the application and it can be seen that there is a <code>register</code> route present in the web app. The <code>json</code> data sent during registering and login is similar with just <code>username</code> and <code>password</code> sent in the <code>json</code>.
 So we can easily capture the login request in a proxy like <code>burp</code> and send the data to the <code>/register</code> route and create an account for use.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span> <span style="color:#a6e22e">router</span>.<span style="color:#a6e22e">get</span>(<span style="color:#e6db74">&#34;/register&#34;</span>, <span style="color:#66d9ef">async</span> (<span style="color:#a6e22e">req</span>, <span style="color:#a6e22e">res</span>) =&gt; {
-</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">res</span>.<span style="color:#a6e22e">render</span>(<span style="color:#e6db74">&#34;register&#34;</span>);
-</span></span><span style="display:flex;"><span>    });
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">router</span>.<span style="color:#a6e22e">post</span>(<span style="color:#e6db74">&#34;/register&#34;</span>, <span style="color:#66d9ef">async</span> (<span style="color:#a6e22e">req</span>, <span style="color:#a6e22e">res</span>) =&gt; {
-</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">try</span> {
-</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">username</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">req</span>.<span style="color:#a6e22e">body</span>.<span style="color:#a6e22e">username</span>;
-</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">password</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">req</span>.<span style="color:#a6e22e">body</span>.<span style="color:#a6e22e">password</span>;
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">if</span> (<span style="color:#f92672">!</span><span style="color:#a6e22e">username</span> <span style="color:#f92672">||</span> <span style="color:#f92672">!</span><span style="color:#a6e22e">password</span>) {
-</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">res</span>
-</span></span><span style="display:flex;"><span>                    .<span style="color:#a6e22e">status</span>(<span style="color:#ae81ff">400</span>)
-</span></span><span style="display:flex;"><span>                    .<span style="color:#a6e22e">send</span>(<span style="color:#a6e22e">response</span>(<span style="color:#e6db74">&#34;Username and password are required&#34;</span>));
-</span></span><span style="display:flex;"><span>            }
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">existingUser</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">await</span> <span style="color:#a6e22e">db</span>.<span style="color:#a6e22e">Users</span>.<span style="color:#a6e22e">findOne</span>({
-</span></span><span style="display:flex;"><span>                <span style="color:#a6e22e">where</span><span style="color:#f92672">:</span> { <span style="color:#a6e22e">username</span><span style="color:#f92672">:</span> <span style="color:#a6e22e">username</span> },
-</span></span><span style="display:flex;"><span>            });
-</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">if</span> (<span style="color:#a6e22e">existingUser</span>) {
-</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">res</span>
-</span></span><span style="display:flex;"><span>                    .<span style="color:#a6e22e">status</span>(<span style="color:#ae81ff">400</span>)
-</span></span><span style="display:flex;"><span>                    .<span style="color:#a6e22e">send</span>(<span style="color:#a6e22e">response</span>(<span style="color:#e6db74">&#34;Username already exists&#34;</span>));
-</span></span><span style="display:flex;"><span>            }
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">await</span> <span style="color:#a6e22e">db</span>.<span style="color:#a6e22e">Users</span>.<span style="color:#a6e22e">create</span>({
-</span></span><span style="display:flex;"><span>                <span style="color:#a6e22e">username</span><span style="color:#f92672">:</span> <span style="color:#a6e22e">username</span>,
-</span></span><span style="display:flex;"><span>                <span style="color:#a6e22e">password</span><span style="color:#f92672">:</span> <span style="color:#a6e22e">bcrypt</span>.<span style="color:#a6e22e">hashSync</span>(<span style="color:#a6e22e">password</span>),
-</span></span><span style="display:flex;"><span>            }).<span style="color:#a6e22e">then</span>(() =&gt; {
-</span></span><span style="display:flex;"><span>                <span style="color:#a6e22e">res</span>.<span style="color:#a6e22e">send</span>(<span style="color:#a6e22e">response</span>(<span style="color:#e6db74">&#34;User registered succesfully&#34;</span>));
-</span></span><span style="display:flex;"><span>            });
-</span></span><span style="display:flex;"><span>        } <span style="color:#66d9ef">catch</span> (<span style="color:#a6e22e">error</span>) {
-</span></span><span style="display:flex;"><span>            <span style="color:#a6e22e">console</span>.<span style="color:#a6e22e">error</span>(<span style="color:#a6e22e">error</span>);
-</span></span><span style="display:flex;"><span>            <span style="color:#a6e22e">res</span>.<span style="color:#a6e22e">status</span>(<span style="color:#ae81ff">500</span>).<span style="color:#a6e22e">send</span>({
-</span></span><span style="display:flex;"><span>                <span style="color:#a6e22e">error</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;Something went wrong!&#34;</span>,
-</span></span><span style="display:flex;"><span>            });
-</span></span><span style="display:flex;"><span>        }
-</span></span><span style="display:flex;"><span>    });
-</span></span></code></pre></div><p><img src="/images/didactic/pic2.png" alt="img"></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"> <span style="color:#a6e22e">router</span>.<span style="color:#a6e22e">get</span>(<span style="color:#e6db74">&#34;/register&#34;</span>, <span style="color:#66d9ef">async</span> (<span style="color:#a6e22e">req</span>, <span style="color:#a6e22e">res</span>) =&gt; {
+        <span style="color:#a6e22e">res</span>.<span style="color:#a6e22e">render</span>(<span style="color:#e6db74">&#34;register&#34;</span>);
+    });
+
+    <span style="color:#a6e22e">router</span>.<span style="color:#a6e22e">post</span>(<span style="color:#e6db74">&#34;/register&#34;</span>, <span style="color:#66d9ef">async</span> (<span style="color:#a6e22e">req</span>, <span style="color:#a6e22e">res</span>) =&gt; {
+        <span style="color:#66d9ef">try</span> {
+            <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">username</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">req</span>.<span style="color:#a6e22e">body</span>.<span style="color:#a6e22e">username</span>;
+            <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">password</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">req</span>.<span style="color:#a6e22e">body</span>.<span style="color:#a6e22e">password</span>;
+
+            <span style="color:#66d9ef">if</span> (<span style="color:#f92672">!</span><span style="color:#a6e22e">username</span> <span style="color:#f92672">||</span> <span style="color:#f92672">!</span><span style="color:#a6e22e">password</span>) {
+                <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">res</span>
+                    .<span style="color:#a6e22e">status</span>(<span style="color:#ae81ff">400</span>)
+                    .<span style="color:#a6e22e">send</span>(<span style="color:#a6e22e">response</span>(<span style="color:#e6db74">&#34;Username and password are required&#34;</span>));
+            }
+
+            <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">existingUser</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">await</span> <span style="color:#a6e22e">db</span>.<span style="color:#a6e22e">Users</span>.<span style="color:#a6e22e">findOne</span>({
+                <span style="color:#a6e22e">where</span><span style="color:#f92672">:</span> { <span style="color:#a6e22e">username</span><span style="color:#f92672">:</span> <span style="color:#a6e22e">username</span> },
+            });
+            <span style="color:#66d9ef">if</span> (<span style="color:#a6e22e">existingUser</span>) {
+                <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">res</span>
+                    .<span style="color:#a6e22e">status</span>(<span style="color:#ae81ff">400</span>)
+                    .<span style="color:#a6e22e">send</span>(<span style="color:#a6e22e">response</span>(<span style="color:#e6db74">&#34;Username already exists&#34;</span>));
+            }
+
+            <span style="color:#66d9ef">await</span> <span style="color:#a6e22e">db</span>.<span style="color:#a6e22e">Users</span>.<span style="color:#a6e22e">create</span>({
+                <span style="color:#a6e22e">username</span><span style="color:#f92672">:</span> <span style="color:#a6e22e">username</span>,
+                <span style="color:#a6e22e">password</span><span style="color:#f92672">:</span> <span style="color:#a6e22e">bcrypt</span>.<span style="color:#a6e22e">hashSync</span>(<span style="color:#a6e22e">password</span>),
+            }).<span style="color:#a6e22e">then</span>(() =&gt; {
+                <span style="color:#a6e22e">res</span>.<span style="color:#a6e22e">send</span>(<span style="color:#a6e22e">response</span>(<span style="color:#e6db74">&#34;User registered succesfully&#34;</span>));
+            });
+        } <span style="color:#66d9ef">catch</span> (<span style="color:#a6e22e">error</span>) {
+            <span style="color:#a6e22e">console</span>.<span style="color:#a6e22e">error</span>(<span style="color:#a6e22e">error</span>);
+            <span style="color:#a6e22e">res</span>.<span style="color:#a6e22e">status</span>(<span style="color:#ae81ff">500</span>).<span style="color:#a6e22e">send</span>({
+                <span style="color:#a6e22e">error</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;Something went wrong!&#34;</span>,
+            });
+        }
+    });
+</code></pre></div><p><img src="/images/didactic/pic2.png" alt="img"></p>
 <p>Now let us login with the user account we have created.
 Username: <code>test</code> Password: <code>test</code>.  We are greeted with a page that contains a bunch of paddles which can be added to cart.
 We could spend time and explore all the functionalities of the web app, but since we have access to the source code, we can save a lot of time and not get stuck in any rabbit hole. Observing the code we can see that there is a middleware that handles <code>auth</code> and <code>admin</code>. Taking a look at the snippet of code in the <code>admin</code> middleware.</p>
 <p><img src="/images/didactic/pic3.png" alt="img"></p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span><span style="color:#66d9ef">const</span> <span style="color:#a6e22e">AdminMiddleware</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">async</span> (<span style="color:#a6e22e">req</span>, <span style="color:#a6e22e">res</span>, <span style="color:#a6e22e">next</span>) =&gt; {
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">try</span> {
-</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">sessionCookie</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">req</span>.<span style="color:#a6e22e">cookies</span>.<span style="color:#a6e22e">session</span>;
-</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> (<span style="color:#f92672">!</span><span style="color:#a6e22e">sessionCookie</span>) {
-</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">res</span>.<span style="color:#a6e22e">redirect</span>(<span style="color:#e6db74">&#34;/login&#34;</span>);
-</span></span><span style="display:flex;"><span>        }
-</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">decoded</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">jwt</span>.<span style="color:#a6e22e">decode</span>(<span style="color:#a6e22e">sessionCookie</span>, { <span style="color:#a6e22e">complete</span><span style="color:#f92672">:</span> <span style="color:#66d9ef">true</span> });
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> (<span style="color:#a6e22e">decoded</span>.<span style="color:#a6e22e">header</span>.<span style="color:#a6e22e">alg</span> <span style="color:#f92672">==</span> <span style="color:#e6db74">&#39;none&#39;</span>) {
-</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">res</span>.<span style="color:#a6e22e">redirect</span>(<span style="color:#e6db74">&#34;/login&#34;</span>);
-</span></span><span style="display:flex;"><span>        } <span style="color:#66d9ef">else</span> <span style="color:#66d9ef">if</span> (<span style="color:#a6e22e">decoded</span>.<span style="color:#a6e22e">header</span>.<span style="color:#a6e22e">alg</span> <span style="color:#f92672">==</span> <span style="color:#e6db74">&#34;HS256&#34;</span>) {
-</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">user</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">jwt</span>.<span style="color:#a6e22e">verify</span>(<span style="color:#a6e22e">sessionCookie</span>, <span style="color:#a6e22e">tokenKey</span>, {
-</span></span><span style="display:flex;"><span>                <span style="color:#a6e22e">algorithms</span><span style="color:#f92672">:</span> [<span style="color:#a6e22e">decoded</span>.<span style="color:#a6e22e">header</span>.<span style="color:#a6e22e">alg</span>],
-</span></span><span style="display:flex;"><span>            });
-</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">if</span> (
-</span></span><span style="display:flex;"><span>                <span style="color:#f92672">!</span>(<span style="color:#66d9ef">await</span> <span style="color:#a6e22e">db</span>.<span style="color:#a6e22e">Users</span>.<span style="color:#a6e22e">findOne</span>({
-</span></span><span style="display:flex;"><span>                    <span style="color:#a6e22e">where</span><span style="color:#f92672">:</span> { <span style="color:#a6e22e">id</span><span style="color:#f92672">:</span> <span style="color:#a6e22e">user</span>.<span style="color:#a6e22e">id</span>, <span style="color:#a6e22e">username</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;admin&#34;</span> },
-</span></span><span style="display:flex;"><span>                }))
-</span></span><span style="display:flex;"><span>            ) {
-</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">res</span>.<span style="color:#a6e22e">status</span>(<span style="color:#ae81ff">403</span>).<span style="color:#a6e22e">send</span>(<span style="color:#e6db74">&#34;You are not an admin&#34;</span>);
-</span></span><span style="display:flex;"><span>            }
-</span></span><span style="display:flex;"><span>        } <span style="color:#66d9ef">else</span> {
-</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">user</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">jwt</span>.<span style="color:#a6e22e">verify</span>(<span style="color:#a6e22e">sessionCookie</span>, <span style="color:#66d9ef">null</span>, {
-</span></span><span style="display:flex;"><span>                <span style="color:#a6e22e">algorithms</span><span style="color:#f92672">:</span> [<span style="color:#a6e22e">decoded</span>.<span style="color:#a6e22e">header</span>.<span style="color:#a6e22e">alg</span>],
-</span></span><span style="display:flex;"><span>            });
-</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">if</span> (
-</span></span><span style="display:flex;"><span>                <span style="color:#f92672">!</span>(<span style="color:#66d9ef">await</span> <span style="color:#a6e22e">db</span>.<span style="color:#a6e22e">Users</span>.<span style="color:#a6e22e">findOne</span>({
-</span></span><span style="display:flex;"><span>                    <span style="color:#a6e22e">where</span><span style="color:#f92672">:</span> { <span style="color:#a6e22e">id</span><span style="color:#f92672">:</span> <span style="color:#a6e22e">user</span>.<span style="color:#a6e22e">id</span>, <span style="color:#a6e22e">username</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;admin&#34;</span> },
-</span></span><span style="display:flex;"><span>                }))
-</span></span><span style="display:flex;"><span>            ) {
-</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">res</span>
-</span></span><span style="display:flex;"><span>                    .<span style="color:#a6e22e">status</span>(<span style="color:#ae81ff">403</span>)
-</span></span><span style="display:flex;"><span>                    .<span style="color:#a6e22e">send</span>({ <span style="color:#a6e22e">message</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;You are not an admin&#34;</span> });
-</span></span><span style="display:flex;"><span>            }
-</span></span><span style="display:flex;"><span>        }
-</span></span><span style="display:flex;"><span>    } <span style="color:#66d9ef">catch</span> (<span style="color:#a6e22e">err</span>) {
-</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">res</span>.<span style="color:#a6e22e">redirect</span>(<span style="color:#e6db74">&#34;/login&#34;</span>);
-</span></span><span style="display:flex;"><span>    }
-</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">next</span>();
-</span></span><span style="display:flex;"><span>};
-</span></span></code></pre></div><p>We can see that the webapp uses <code>JWT</code> for authentication and it uses <code>HS256</code> algorithm for encrypting the <code>payload</code>.
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="color:#66d9ef">const</span> <span style="color:#a6e22e">AdminMiddleware</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">async</span> (<span style="color:#a6e22e">req</span>, <span style="color:#a6e22e">res</span>, <span style="color:#a6e22e">next</span>) =&gt; {
+    <span style="color:#66d9ef">try</span> {
+        <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">sessionCookie</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">req</span>.<span style="color:#a6e22e">cookies</span>.<span style="color:#a6e22e">session</span>;
+        <span style="color:#66d9ef">if</span> (<span style="color:#f92672">!</span><span style="color:#a6e22e">sessionCookie</span>) {
+            <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">res</span>.<span style="color:#a6e22e">redirect</span>(<span style="color:#e6db74">&#34;/login&#34;</span>);
+        }
+        <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">decoded</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">jwt</span>.<span style="color:#a6e22e">decode</span>(<span style="color:#a6e22e">sessionCookie</span>, { <span style="color:#a6e22e">complete</span><span style="color:#f92672">:</span> <span style="color:#66d9ef">true</span> });
+
+        <span style="color:#66d9ef">if</span> (<span style="color:#a6e22e">decoded</span>.<span style="color:#a6e22e">header</span>.<span style="color:#a6e22e">alg</span> <span style="color:#f92672">==</span> <span style="color:#e6db74">&#39;none&#39;</span>) {
+            <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">res</span>.<span style="color:#a6e22e">redirect</span>(<span style="color:#e6db74">&#34;/login&#34;</span>);
+        } <span style="color:#66d9ef">else</span> <span style="color:#66d9ef">if</span> (<span style="color:#a6e22e">decoded</span>.<span style="color:#a6e22e">header</span>.<span style="color:#a6e22e">alg</span> <span style="color:#f92672">==</span> <span style="color:#e6db74">&#34;HS256&#34;</span>) {
+            <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">user</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">jwt</span>.<span style="color:#a6e22e">verify</span>(<span style="color:#a6e22e">sessionCookie</span>, <span style="color:#a6e22e">tokenKey</span>, {
+                <span style="color:#a6e22e">algorithms</span><span style="color:#f92672">:</span> [<span style="color:#a6e22e">decoded</span>.<span style="color:#a6e22e">header</span>.<span style="color:#a6e22e">alg</span>],
+            });
+            <span style="color:#66d9ef">if</span> (
+                <span style="color:#f92672">!</span>(<span style="color:#66d9ef">await</span> <span style="color:#a6e22e">db</span>.<span style="color:#a6e22e">Users</span>.<span style="color:#a6e22e">findOne</span>({
+                    <span style="color:#a6e22e">where</span><span style="color:#f92672">:</span> { <span style="color:#a6e22e">id</span><span style="color:#f92672">:</span> <span style="color:#a6e22e">user</span>.<span style="color:#a6e22e">id</span>, <span style="color:#a6e22e">username</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;admin&#34;</span> },
+                }))
+            ) {
+                <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">res</span>.<span style="color:#a6e22e">status</span>(<span style="color:#ae81ff">403</span>).<span style="color:#a6e22e">send</span>(<span style="color:#e6db74">&#34;You are not an admin&#34;</span>);
+            }
+        } <span style="color:#66d9ef">else</span> {
+            <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">user</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">jwt</span>.<span style="color:#a6e22e">verify</span>(<span style="color:#a6e22e">sessionCookie</span>, <span style="color:#66d9ef">null</span>, {
+                <span style="color:#a6e22e">algorithms</span><span style="color:#f92672">:</span> [<span style="color:#a6e22e">decoded</span>.<span style="color:#a6e22e">header</span>.<span style="color:#a6e22e">alg</span>],
+            });
+            <span style="color:#66d9ef">if</span> (
+                <span style="color:#f92672">!</span>(<span style="color:#66d9ef">await</span> <span style="color:#a6e22e">db</span>.<span style="color:#a6e22e">Users</span>.<span style="color:#a6e22e">findOne</span>({
+                    <span style="color:#a6e22e">where</span><span style="color:#f92672">:</span> { <span style="color:#a6e22e">id</span><span style="color:#f92672">:</span> <span style="color:#a6e22e">user</span>.<span style="color:#a6e22e">id</span>, <span style="color:#a6e22e">username</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;admin&#34;</span> },
+                }))
+            ) {
+                <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">res</span>
+                    .<span style="color:#a6e22e">status</span>(<span style="color:#ae81ff">403</span>)
+                    .<span style="color:#a6e22e">send</span>({ <span style="color:#a6e22e">message</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;You are not an admin&#34;</span> });
+            }
+        }
+    } <span style="color:#66d9ef">catch</span> (<span style="color:#a6e22e">err</span>) {
+        <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">res</span>.<span style="color:#a6e22e">redirect</span>(<span style="color:#e6db74">&#34;/login&#34;</span>);
+    }
+    <span style="color:#a6e22e">next</span>();
+};
+</code></pre></div><p>We can see that the webapp uses <code>JWT</code> for authentication and it uses <code>HS256</code> algorithm for encrypting the <code>payload</code>.
 We can also observe that there is a conditional that handles <code>none</code> in the <code>JWT</code> header but it does not account for other text like <code>None</code>, <code>NONE</code> so we can easily bypass this and perform a JWT header attack and change the payload.</p>
 <p><img src="/images/didactic/pic4.png" alt="img"></p>
 <p>My current session <code>JWT</code> has <code>id=2</code> so <code>admin</code> user must have <code>id=1</code>. Modifying the <code>JWT</code> header to <code>None</code> and payload with <code>id=1</code>. We now have access to admin session.</p>
@@ -274,34 +281,34 @@ We can also observe that there is a conditional that handles <code>none</code> i
 Site use for generating the token <a href="https://www.gavinjl.me/edit-jwt-online-alg-none/">JWT</a></p>
 <p><img src="/images/didactic/pic5.png" alt="img"></p>
 <p>Now that we have admin dashboard we have a list of users that are registered in the web app. Now lets us find our next vulnerability in the web app through the source code.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span><span style="color:#a6e22e">router</span>.<span style="color:#a6e22e">get</span>(<span style="color:#e6db74">&#34;/admin&#34;</span>, <span style="color:#a6e22e">AdminMiddleware</span>, <span style="color:#66d9ef">async</span> (<span style="color:#a6e22e">req</span>, <span style="color:#a6e22e">res</span>) =&gt; {
-</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">try</span> {
-</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">users</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">await</span> <span style="color:#a6e22e">db</span>.<span style="color:#a6e22e">Users</span>.<span style="color:#a6e22e">findAll</span>();
-</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">usernames</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">users</span>.<span style="color:#a6e22e">map</span>((<span style="color:#a6e22e">user</span>) =&gt; <span style="color:#a6e22e">user</span>.<span style="color:#a6e22e">username</span>);
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>            <span style="color:#a6e22e">res</span>.<span style="color:#a6e22e">render</span>(<span style="color:#e6db74">&#34;admin&#34;</span>, {
-</span></span><span style="display:flex;"><span>                <span style="color:#a6e22e">users</span><span style="color:#f92672">:</span> <span style="color:#a6e22e">jsrender</span>.<span style="color:#a6e22e">templates</span>(<span style="color:#e6db74">`</span><span style="color:#e6db74">${</span><span style="color:#a6e22e">usernames</span><span style="color:#e6db74">}</span><span style="color:#e6db74">`</span>).<span style="color:#a6e22e">render</span>(),
-</span></span><span style="display:flex;"><span>            });
-</span></span><span style="display:flex;"><span>        } <span style="color:#66d9ef">catch</span> (<span style="color:#a6e22e">error</span>) {
-</span></span><span style="display:flex;"><span>            <span style="color:#a6e22e">console</span>.<span style="color:#a6e22e">error</span>(<span style="color:#a6e22e">error</span>);
-</span></span><span style="display:flex;"><span>            <span style="color:#a6e22e">res</span>.<span style="color:#a6e22e">status</span>(<span style="color:#ae81ff">500</span>).<span style="color:#a6e22e">send</span>(<span style="color:#e6db74">&#34;Something went wrong!&#34;</span>);
-</span></span><span style="display:flex;"><span>        }
-</span></span><span style="display:flex;"><span>    });
-</span></span></code></pre></div><p>We can see that the username is used directly without any sanitisation or check and rendered in the admin dashboard.
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="color:#a6e22e">router</span>.<span style="color:#a6e22e">get</span>(<span style="color:#e6db74">&#34;/admin&#34;</span>, <span style="color:#a6e22e">AdminMiddleware</span>, <span style="color:#66d9ef">async</span> (<span style="color:#a6e22e">req</span>, <span style="color:#a6e22e">res</span>) =&gt; {
+        <span style="color:#66d9ef">try</span> {
+            <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">users</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">await</span> <span style="color:#a6e22e">db</span>.<span style="color:#a6e22e">Users</span>.<span style="color:#a6e22e">findAll</span>();
+            <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">usernames</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">users</span>.<span style="color:#a6e22e">map</span>((<span style="color:#a6e22e">user</span>) =&gt; <span style="color:#a6e22e">user</span>.<span style="color:#a6e22e">username</span>);
+
+            <span style="color:#a6e22e">res</span>.<span style="color:#a6e22e">render</span>(<span style="color:#e6db74">&#34;admin&#34;</span>, {
+                <span style="color:#a6e22e">users</span><span style="color:#f92672">:</span> <span style="color:#a6e22e">jsrender</span>.<span style="color:#a6e22e">templates</span>(<span style="color:#e6db74">`</span><span style="color:#e6db74">${</span><span style="color:#a6e22e">usernames</span><span style="color:#e6db74">}</span><span style="color:#e6db74">`</span>).<span style="color:#a6e22e">render</span>(),
+            });
+        } <span style="color:#66d9ef">catch</span> (<span style="color:#a6e22e">error</span>) {
+            <span style="color:#a6e22e">console</span>.<span style="color:#a6e22e">error</span>(<span style="color:#a6e22e">error</span>);
+            <span style="color:#a6e22e">res</span>.<span style="color:#a6e22e">status</span>(<span style="color:#ae81ff">500</span>).<span style="color:#a6e22e">send</span>(<span style="color:#e6db74">&#34;Something went wrong!&#34;</span>);
+        }
+    });
+</code></pre></div><p>We can see that the username is used directly without any sanitisation or check and rendered in the admin dashboard.
 And here is the <code>admin.jsrender</code> template.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span><span style="color:#f92672">&lt;</span><span style="color:#a6e22e">body</span><span style="color:#f92672">&gt;</span>
-</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&lt;</span><span style="color:#a6e22e">div</span> <span style="color:#66d9ef">class</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;d-flex justify-content-center align-items-center flex-column&#34;</span> <span style="color:#a6e22e">style</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;height: 100vh;&#34;</span><span style="color:#f92672">&gt;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&lt;</span><span style="color:#a6e22e">h1</span><span style="color:#f92672">&gt;</span><span style="color:#a6e22e">Active</span> <span style="color:#a6e22e">Users</span><span style="color:#f92672">&lt;</span><span style="color:#960050;background-color:#1e0010">/h1&gt;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&lt;</span><span style="color:#a6e22e">ul</span> <span style="color:#66d9ef">class</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;list-group small-list&#34;</span><span style="color:#f92672">&gt;</span>
-</span></span><span style="display:flex;"><span>      {{<span style="color:#66d9ef">for</span> <span style="color:#a6e22e">users</span>.<span style="color:#a6e22e">split</span>(<span style="color:#e6db74">&#39;,&#39;</span>)}}
-</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&lt;</span><span style="color:#a6e22e">li</span> <span style="color:#66d9ef">class</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;list-group-item d-flex justify-content-between align-items-center &#34;</span><span style="color:#f92672">&gt;</span>
-</span></span><span style="display:flex;"><span>          <span style="color:#f92672">&lt;</span><span style="color:#a6e22e">span</span><span style="color:#f92672">&gt;</span>{{<span style="color:#f92672">&gt;</span>}}<span style="color:#f92672">&lt;</span><span style="color:#960050;background-color:#1e0010">/span&gt;</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&lt;</span><span style="color:#960050;background-color:#1e0010">/li&gt;</span>
-</span></span><span style="display:flex;"><span>      {{<span style="color:#960050;background-color:#1e0010">/for}}</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&lt;</span><span style="color:#960050;background-color:#1e0010">/ul&gt;</span>
-</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&lt;</span><span style="color:#960050;background-color:#1e0010">/div&gt;</span>
-</span></span><span style="display:flex;"><span><span style="color:#f92672">&lt;</span><span style="color:#960050;background-color:#1e0010">/body&gt;</span>
-</span></span></code></pre></div><p>So our vulnerability is probably server side template injection.
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="color:#f92672">&lt;</span><span style="color:#a6e22e">body</span><span style="color:#f92672">&gt;</span>
+  <span style="color:#f92672">&lt;</span><span style="color:#a6e22e">div</span> <span style="color:#66d9ef">class</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;d-flex justify-content-center align-items-center flex-column&#34;</span> <span style="color:#a6e22e">style</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;height: 100vh;&#34;</span><span style="color:#f92672">&gt;</span>
+    <span style="color:#f92672">&lt;</span><span style="color:#a6e22e">h1</span><span style="color:#f92672">&gt;</span><span style="color:#a6e22e">Active</span> <span style="color:#a6e22e">Users</span><span style="color:#f92672">&lt;</span><span style="color:#960050;background-color:#1e0010">/h1&gt;</span>
+    <span style="color:#f92672">&lt;</span><span style="color:#a6e22e">ul</span> <span style="color:#66d9ef">class</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;list-group small-list&#34;</span><span style="color:#f92672">&gt;</span>
+      {{<span style="color:#66d9ef">for</span> <span style="color:#a6e22e">users</span>.<span style="color:#a6e22e">split</span>(<span style="color:#e6db74">&#39;,&#39;</span>)}}
+        <span style="color:#f92672">&lt;</span><span style="color:#a6e22e">li</span> <span style="color:#66d9ef">class</span><span style="color:#f92672">=</span><span style="color:#e6db74">&#34;list-group-item d-flex justify-content-between align-items-center &#34;</span><span style="color:#f92672">&gt;</span>
+          <span style="color:#f92672">&lt;</span><span style="color:#a6e22e">span</span><span style="color:#f92672">&gt;</span>{{<span style="color:#f92672">&gt;</span>}}<span style="color:#f92672">&lt;</span><span style="color:#960050;background-color:#1e0010">/span&gt;</span>
+        <span style="color:#f92672">&lt;</span><span style="color:#960050;background-color:#1e0010">/li&gt;</span>
+      {{<span style="color:#960050;background-color:#1e0010">/for}}</span>
+    <span style="color:#f92672">&lt;</span><span style="color:#960050;background-color:#1e0010">/ul&gt;</span>
+  <span style="color:#f92672">&lt;</span><span style="color:#960050;background-color:#1e0010">/div&gt;</span>
+<span style="color:#f92672">&lt;</span><span style="color:#960050;background-color:#1e0010">/body&gt;</span>
+</code></pre></div><p>So our vulnerability is probably server side template injection.
 Let us use our trusty google to find a valid ssti for this webapp and its templating engine jsrender.</p>
 <ul>
 <li>

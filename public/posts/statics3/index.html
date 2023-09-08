@@ -105,6 +105,10 @@ Unlike dynamic websites, which rely on server-side processing to generate conten
         
       
         
+          <li><a href="/projects">Projects</a></li>
+        
+      
+        
           <li><a href="/categories">Categories</a></li>
         
       
@@ -127,6 +131,10 @@ Unlike dynamic websites, which rely on server-side processing to generate conten
       
         
           <li><a href="/about">About</a></li>
+        
+      
+        
+          <li><a href="/projects">Projects</a></li>
         
       
         
@@ -173,7 +181,6 @@ Unlike dynamic websites, which rely on server-side processing to generate conten
   
   
 
-
   
 
   <div class="post-content"><div>
@@ -207,19 +214,19 @@ Unlike dynamic websites, which rely on server-side processing to generate conten
 <p><img src="/images/statics3/enterindex.png" alt="img"></p>
 <p>Now go to the permissions tab to edit a bucket policy. A bucket policy allows us to enable permissions so that our <code>S3</code> bucket files can be accessed by the public.</p>
 <p>Add the following lines of json configuration to the policy and save it.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
-</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;Version&#34;</span>: <span style="color:#e6db74">&#34;2012-10-17&#34;</span>,
-</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;Statement&#34;</span>: [
-</span></span><span style="display:flex;"><span>        {
-</span></span><span style="display:flex;"><span>            <span style="color:#f92672">&#34;Sid&#34;</span>: <span style="color:#e6db74">&#34;AllowPublicAccess&#34;</span>,
-</span></span><span style="display:flex;"><span>            <span style="color:#f92672">&#34;Effect&#34;</span>: <span style="color:#e6db74">&#34;Allow&#34;</span>,
-</span></span><span style="display:flex;"><span>            <span style="color:#f92672">&#34;Principal&#34;</span>: <span style="color:#e6db74">&#34;*&#34;</span>,
-</span></span><span style="display:flex;"><span>            <span style="color:#f92672">&#34;Action&#34;</span>: <span style="color:#e6db74">&#34;s3:GetObject&#34;</span>,
-</span></span><span style="display:flex;"><span>            <span style="color:#f92672">&#34;Resource&#34;</span>: <span style="color:#e6db74">&#34;arn:aws:s3:::ngaihtech/*&#34;</span>
-</span></span><span style="display:flex;"><span>        }
-</span></span><span style="display:flex;"><span>    ]
-</span></span><span style="display:flex;"><span>}
-</span></span></code></pre></div><ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-json" data-lang="json">{
+    <span style="color:#f92672">&#34;Version&#34;</span>: <span style="color:#e6db74">&#34;2012-10-17&#34;</span>,
+    <span style="color:#f92672">&#34;Statement&#34;</span>: [
+        {
+            <span style="color:#f92672">&#34;Sid&#34;</span>: <span style="color:#e6db74">&#34;AllowPublicAccess&#34;</span>,
+            <span style="color:#f92672">&#34;Effect&#34;</span>: <span style="color:#e6db74">&#34;Allow&#34;</span>,
+            <span style="color:#f92672">&#34;Principal&#34;</span>: <span style="color:#e6db74">&#34;*&#34;</span>,
+            <span style="color:#f92672">&#34;Action&#34;</span>: <span style="color:#e6db74">&#34;s3:GetObject&#34;</span>,
+            <span style="color:#f92672">&#34;Resource&#34;</span>: <span style="color:#e6db74">&#34;arn:aws:s3:::ngaihtech/*&#34;</span>
+        }
+    ]
+}
+</code></pre></div><ul>
 <li>sid: Way to identify your policy.</li>
 <li>Effect: It is either Allow or Deny.</li>
 <li>Principal: &ldquo;*&rdquo; is a wildcard to allow everyone.</li>

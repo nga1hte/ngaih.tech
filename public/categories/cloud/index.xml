@@ -6,7 +6,148 @@
     <description>Recent content in cloud on ngaih.tech</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 30 Mar 2023 00:00:00 +0000</lastBuildDate><atom:link href="/categories/cloud/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Wed, 05 Apr 2023 00:00:00 +0000</lastBuildDate><atom:link href="/categories/cloud/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Adding a content delivery network and github actions to our static site</title>
+      <link>/posts/cloudfront/</link>
+      <pubDate>Wed, 05 Apr 2023 00:00:00 +0000</pubDate>
+      
+      <guid>/posts/cloudfront/</guid>
+      <description>In this blog post let us further improve our static site hosted on S3 bucket in AWS by using a content delivery network. We will also implement a continuous deployment feature for our site using github actions.
+Content Delivery Network A CDN, or Content Delivery Network, is a network of servers distributed across different geographic locations that work together to provide fast and reliable delivery of internet content, such as images, videos, and web pages, to end-users.</description>
+      <content>&lt;p&gt;In this blog post let us further improve our static site hosted on &lt;code&gt;S3 bucket&lt;/code&gt; in AWS by using a content delivery network. We will also implement a continuous deployment feature for our site using github actions.&lt;/p&gt;
+&lt;h2 id=&#34;content-delivery-network&#34;&gt;Content Delivery Network&lt;/h2&gt;
+&lt;p&gt;A CDN, or Content Delivery Network, is a network of servers distributed across different geographic locations that work together to provide fast and reliable delivery of internet content, such as images, videos, and web pages, to end-users.&lt;/p&gt;
+&lt;p&gt;When a user requests a piece of content, the CDN automatically determines the best server to deliver the content from based on factors like geographic proximity, server load, and network availability. The content is then delivered to the user from the server that can provide the fastest and most reliable connection, which helps to reduce latency and improve overall website performance.&lt;/p&gt;
+&lt;p&gt;Amazon CloudFront is a cdn offered by AWS and Cloudflare is also a popular cdn used by many sites.&lt;/p&gt;
+&lt;h3 id=&#34;what-we-will-be-using&#34;&gt;What we will be using:&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;Route53: Domain Name Service of AWS&lt;/li&gt;
+&lt;li&gt;CloudFront: Content Delivery Network of AWS&lt;/li&gt;
+&lt;li&gt;Github Actions: Automation services provided by Github&lt;/li&gt;
+&lt;li&gt;Certificate Manager: Generating certificates offered by AWS&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;certificate-manager&#34;&gt;Certificate Manager&lt;/h3&gt;
+&lt;p&gt;Let us first create a SSL certificate for our domain so that we can use https when accessing our static files.
+Since it&amp;rsquo;s fairly simple, we won&amp;rsquo;t go through steps by steps.
+We just to click on request, enter the domain name that we will generate the certificate for, select a validation type, and since we use route53 we can click on create records in route53 for validating that we own the domain.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/images/cdn/certificate.png&#34; alt=&#34;img&#34;&gt;&lt;/p&gt;
+&lt;p&gt;After validation, we will get certificate like the one above.&lt;/p&gt;
+&lt;h2 id=&#34;cloudfront&#34;&gt;CloudFront&lt;/h2&gt;
+&lt;p&gt;Go to cloudfront services in AWS. Click on &lt;code&gt;create distribution&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/images/cdn/cloudfrontCreate.png&#34; alt=&#34;img&#34;&gt;&lt;/p&gt;
+&lt;p&gt;In the origin domain, enter the s3 static site domain. We get this information from the previous s3 bucket where we created our site. We can leave most of the default settings, but since I want to use https, I will check the redirect http to https in the viewer protocol policy.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/images/cdn/cloudfrontCreate1.png&#34; alt=&#34;img&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/images/cdn/cloudfrontCreate2.png&#34; alt=&#34;img&#34;&gt;&lt;/p&gt;
+&lt;p&gt;In alternate domain name, we will enter our domain and select the certificate we have created before.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/images/cdn/cloudfrontCreate3.png&#34; alt=&#34;img&#34;&gt;&lt;/p&gt;
+&lt;p&gt;Then &lt;code&gt;create distribution&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/images/cdn/cloudfrontCreate4.png&#34; alt=&#34;img&#34;&gt;&lt;/p&gt;
+&lt;p&gt;Let us make note of the ID, this will be required later when we set up github actions.&lt;/p&gt;
+&lt;p&gt;Click the ID of the distribution and in details we can see the distribution domain name, also make note of this so that we can point our domain name to the cloud front distribution.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/images/cdn/cloudfrontCreate5.png&#34; alt=&#34;img&#34;&gt;&lt;/p&gt;
+&lt;p&gt;After the distribution has been deployed, we can enter the distribution domain name and it will fetch our static site from the s3 bucket and cache them in the edge locations. We have now deployed our static site using a cdn and have improve the latency as well as reach of our site.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Next step, is to point our domain name to the cloud front distribution domain.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h3 id=&#34;route-53&#34;&gt;Route 53&lt;/h3&gt;
+&lt;p&gt;We have hosted our domain name in a hosted zone in route53, due to its seamless integration with other aws services and to make use of alias feature.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Using alias for pointing to a cloudfront endpoint is native to AWS so it won&amp;rsquo;t work if you are using other DNS service providers like godaddy, namecheap etc.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;Go to the hosted zone, click on our domain and &lt;code&gt;create record&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/images/cdn/route53.png&#34; alt=&#34;img&#34;&gt;&lt;/p&gt;
+&lt;p&gt;Now create an A record, turn on alias and route traffic to cloudfront distribution and also enter the cloudfront domain.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;/images/cdn/route531.png&#34; alt=&#34;img&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;Create records&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;Allow for the changes to propagate, after a few minutes, we can enter our url &lt;a href=&#34;https://ngaih.tech&#34;&gt;https://ngaih.tech&lt;/a&gt; and we will directed to our domain that is hosted in a cdn of cloudfront.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;To update our site we have to upload new files to the s3 bucket and then since the old versions are probably cached in the cloud front distributions, we have to invalidate the cache so that the site will be refreshed when people visit the domain. Since our site is created using hugo and the code and static files are hosted on github, we can automate the process of deployment using github actions.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2 id=&#34;continuous-deployment&#34;&gt;Continuous Deployment&lt;/h2&gt;
+&lt;p&gt;Since this part of the content is mostly unique to hugo and this blog, we will speed run through the steps since the reader is assumed to be more of expert level.&lt;/p&gt;
+&lt;p&gt;Create a policy in aws and give it access to s3 objects and ability to invalidate cache.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-json&#34; data-lang=&#34;json&#34;&gt;{
+    &lt;span style=&#34;color:#f92672&#34;&gt;&amp;#34;Version&amp;#34;&lt;/span&gt;: &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;2012-10-17&amp;#34;&lt;/span&gt;,
+    &lt;span style=&#34;color:#f92672&#34;&gt;&amp;#34;Statement&amp;#34;&lt;/span&gt;: [
+        {
+            &lt;span style=&#34;color:#f92672&#34;&gt;&amp;#34;Sid&amp;#34;&lt;/span&gt;: &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;ListObjectsInBucket&amp;#34;&lt;/span&gt;,
+            &lt;span style=&#34;color:#f92672&#34;&gt;&amp;#34;Effect&amp;#34;&lt;/span&gt;: &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Allow&amp;#34;&lt;/span&gt;,
+            &lt;span style=&#34;color:#f92672&#34;&gt;&amp;#34;Action&amp;#34;&lt;/span&gt;: &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;s3:ListBucket&amp;#34;&lt;/span&gt;,
+            &lt;span style=&#34;color:#f92672&#34;&gt;&amp;#34;Resource&amp;#34;&lt;/span&gt;: &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;arn:aws:s3:::ngaih&amp;#34;&lt;/span&gt;
+        },
+        {
+            &lt;span style=&#34;color:#f92672&#34;&gt;&amp;#34;Sid&amp;#34;&lt;/span&gt;: &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;AllObjectActions&amp;#34;&lt;/span&gt;,
+            &lt;span style=&#34;color:#f92672&#34;&gt;&amp;#34;Effect&amp;#34;&lt;/span&gt;: &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Allow&amp;#34;&lt;/span&gt;,
+            &lt;span style=&#34;color:#f92672&#34;&gt;&amp;#34;Action&amp;#34;&lt;/span&gt;: &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;s3:*Object&amp;#34;&lt;/span&gt;,
+            &lt;span style=&#34;color:#f92672&#34;&gt;&amp;#34;Resource&amp;#34;&lt;/span&gt;: &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;arn:aws:s3:::ngaih/*&amp;#34;&lt;/span&gt;
+        },
+        {
+            &lt;span style=&#34;color:#f92672&#34;&gt;&amp;#34;Sid&amp;#34;&lt;/span&gt;: &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;InvalidateCache&amp;#34;&lt;/span&gt;,
+            &lt;span style=&#34;color:#f92672&#34;&gt;&amp;#34;Effect&amp;#34;&lt;/span&gt;: &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Allow&amp;#34;&lt;/span&gt;,
+            &lt;span style=&#34;color:#f92672&#34;&gt;&amp;#34;Action&amp;#34;&lt;/span&gt;: &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;cloudfront:CreateInvalidation&amp;#34;&lt;/span&gt;,
+            &lt;span style=&#34;color:#f92672&#34;&gt;&amp;#34;Resource&amp;#34;&lt;/span&gt;: &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;*&amp;#34;&lt;/span&gt;
+        }
+    ]
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Tie this policy to a user and generate access keys for programmatic accesss. We will use this user for github actions so that it can connect to our s3 bucket to perform uploads of files and invalidate cache.&lt;/p&gt;
+&lt;p&gt;Enter the secret like AWS ACCESS KEY ID and AWS ACCESS KEY in the github actions secrets.&lt;/p&gt;
+&lt;p&gt;Now create a github workflow&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-yaml&#34; data-lang=&#34;yaml&#34;&gt;&lt;span style=&#34;color:#f92672&#34;&gt;name&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;Build and Deploy Hugo site to S3 and Cloudfront&lt;/span&gt;
+
+&lt;span style=&#34;color:#f92672&#34;&gt;on&lt;/span&gt;:
+  &lt;span style=&#34;color:#f92672&#34;&gt;push&lt;/span&gt;:
+    &lt;span style=&#34;color:#f92672&#34;&gt;branches&lt;/span&gt;: 
+      - &lt;span style=&#34;color:#ae81ff&#34;&gt;master&lt;/span&gt;
+  
+&lt;span style=&#34;color:#f92672&#34;&gt;jobs&lt;/span&gt;:
+  &lt;span style=&#34;color:#f92672&#34;&gt;build-and-deploy&lt;/span&gt;:
+    &lt;span style=&#34;color:#f92672&#34;&gt;name&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;Build and Deploy&lt;/span&gt;
+    &lt;span style=&#34;color:#f92672&#34;&gt;runs-on&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;ubuntu-22.04&lt;/span&gt;
+    &lt;span style=&#34;color:#f92672&#34;&gt;env&lt;/span&gt;: 
+      &lt;span style=&#34;color:#f92672&#34;&gt;BUCKET&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;ngaih&lt;/span&gt; &lt;span style=&#34;color:#75715e&#34;&gt;#bucket name&lt;/span&gt;
+      &lt;span style=&#34;color:#f92672&#34;&gt;REGION&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;ap-south-1&lt;/span&gt;
+      &lt;span style=&#34;color:#f92672&#34;&gt;DIST_ID&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;&amp;lt;distribution ID&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#75715e&#34;&gt;#replace&lt;/span&gt;
+
+    &lt;span style=&#34;color:#f92672&#34;&gt;concurrency&lt;/span&gt;:
+      &lt;span style=&#34;color:#f92672&#34;&gt;group&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;${{ github.workflow }}-${{ github.ref }}&lt;/span&gt;
+    &lt;span style=&#34;color:#f92672&#34;&gt;steps&lt;/span&gt;:
+      - &lt;span style=&#34;color:#f92672&#34;&gt;uses&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;actions/checkout@v3&lt;/span&gt;
+        &lt;span style=&#34;color:#f92672&#34;&gt;with&lt;/span&gt;:
+          &lt;span style=&#34;color:#f92672&#34;&gt;submodules&lt;/span&gt;: &lt;span style=&#34;color:#66d9ef&#34;&gt;true&lt;/span&gt;  &lt;span style=&#34;color:#75715e&#34;&gt;# Fetch Hugo themes (true OR recursive)&lt;/span&gt;
+          &lt;span style=&#34;color:#f92672&#34;&gt;fetch-depth&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;    &lt;span style=&#34;color:#75715e&#34;&gt;# Fetch all history for .GitInfo and .Lastmod&lt;/span&gt;
+
+      - &lt;span style=&#34;color:#f92672&#34;&gt;name&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;Setup Hugo&lt;/span&gt;
+        &lt;span style=&#34;color:#f92672&#34;&gt;uses&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;peaceiris/actions-hugo@v2&lt;/span&gt;
+        &lt;span style=&#34;color:#f92672&#34;&gt;with&lt;/span&gt;:
+          &lt;span style=&#34;color:#f92672&#34;&gt;hugo-version&lt;/span&gt;: &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;latest&amp;#39;&lt;/span&gt;
+          &lt;span style=&#34;color:#75715e&#34;&gt;# extended: true&lt;/span&gt;
+
+      - &lt;span style=&#34;color:#f92672&#34;&gt;name&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;Build&lt;/span&gt;
+        &lt;span style=&#34;color:#f92672&#34;&gt;run&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;hugo&lt;/span&gt;
+
+      - &lt;span style=&#34;color:#f92672&#34;&gt;name&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;Configure AWS Credentials&lt;/span&gt;
+        &lt;span style=&#34;color:#f92672&#34;&gt;uses&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;aws-actions/configure-aws-credentials@v2&lt;/span&gt;
+        &lt;span style=&#34;color:#f92672&#34;&gt;with&lt;/span&gt;:
+          &lt;span style=&#34;color:#f92672&#34;&gt;aws-access-key-id&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;${{ secrets.AWS_ACCESS_KEY_ID }}&lt;/span&gt;
+          &lt;span style=&#34;color:#f92672&#34;&gt;aws-secret-access-key&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;${{ secrets.AWS_SECRET_ACCESS_KEY }}&lt;/span&gt;
+          &lt;span style=&#34;color:#f92672&#34;&gt;aws-region&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;${{ env.REGION }}&lt;/span&gt;
+      
+      - &lt;span style=&#34;color:#f92672&#34;&gt;name&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;Copy files to production S3&lt;/span&gt;
+        &lt;span style=&#34;color:#f92672&#34;&gt;run&lt;/span&gt;: |&lt;span style=&#34;color:#e6db74&#34;&gt;
+&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;          &lt;/span&gt;          &lt;span style=&#34;color:#ae81ff&#34;&gt;aws s3 sync public/ s3://${{ env.BUCKET }} --delete&lt;/span&gt;
+      
+      - &lt;span style=&#34;color:#f92672&#34;&gt;name&lt;/span&gt;: &lt;span style=&#34;color:#ae81ff&#34;&gt;Invalidate cache&lt;/span&gt;
+        &lt;span style=&#34;color:#f92672&#34;&gt;run&lt;/span&gt;: |&lt;span style=&#34;color:#e6db74&#34;&gt;
+&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;          aws cloudfront create-invalidation \
+&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;          --distribution-id ${{ env.DIST_ID }} \
+&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;          --paths &amp;#34;/*&amp;#34;&lt;/span&gt;          
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;blockquote&gt;
+&lt;p&gt;We have basically a Continuous Deployment for our website and we will get automatic content update whenever we push our site to github.&lt;/p&gt;
+&lt;/blockquote&gt;
+</content>
+    </item>
+    
     <item>
       <title>Using AWS Elastic Load Balancer and AutoScaling Group for high Scalability and Availability</title>
       <link>/posts/scalability/</link>
@@ -26,15 +167,15 @@
 &lt;p&gt;Since we are going to create a template to launch our &lt;code&gt;EC2&lt;/code&gt; instances with configurations and userdata, let us first create a security group that will allow only http traffic to our &lt;code&gt;EC2&lt;/code&gt; instances and name it httpOnly.&lt;/p&gt;
 &lt;p&gt;We will create a template with &lt;code&gt;Amazon Linux Image&lt;/code&gt; for our OS and use t.2 micro with default settings.
 We use the following script in our userdata, which will basically clone &lt;a href=&#34;https://github.com/nga1hte/ngaih.tech&#34;&gt;ngaih.tech&lt;/a&gt; repository to our machine, install apache web server and then move our static site to the apache folder.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#!/bin/bash
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;yum update -y
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;yum install httpd git -y
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;systemctl enable httpd
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;systemctl start httpd
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;cd /tmp &lt;span style=&#34;color:#f92672&#34;&gt;&amp;amp;&amp;amp;&lt;/span&gt; git clone https://github.com/nga1hte/ngaih.tech.git
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;sudo mv ./ngaih.tech/public/* /var/www/html/
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;rm -r /tmp/*
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Now that our lauch template is ready, let us create an &lt;code&gt;Auto Scaling Group&lt;/code&gt;. Auto Scaling Group enables us to automatically scale using some rules by using the launch template that we have just created.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#!/bin/bash
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;yum update -y
+yum install httpd git -y
+systemctl enable httpd
+systemctl start httpd
+cd /tmp &lt;span style=&#34;color:#f92672&#34;&gt;&amp;amp;&amp;amp;&lt;/span&gt; git clone https://github.com/nga1hte/ngaih.tech.git
+sudo mv ./ngaih.tech/public/* /var/www/html/
+rm -r /tmp/*
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Now that our lauch template is ready, let us create an &lt;code&gt;Auto Scaling Group&lt;/code&gt;. Auto Scaling Group enables us to automatically scale using some rules by using the launch template that we have just created.&lt;/p&gt;
 &lt;p&gt;We create the group name and select the launch template we have just created.&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;/images/scaling/autoscaling.png&#34; alt=&#34;img&#34;&gt;&lt;/p&gt;
 &lt;p&gt;To support for availability I have selected two availability zones in my region of aws.&lt;/p&gt;
@@ -153,19 +294,19 @@ Unlike dynamic websites, which rely on server-side processing to generate conten
 &lt;p&gt;&lt;img src=&#34;/images/statics3/enterindex.png&#34; alt=&#34;img&#34;&gt;&lt;/p&gt;
 &lt;p&gt;Now go to the permissions tab to edit a bucket policy. A bucket policy allows us to enable permissions so that our &lt;code&gt;S3&lt;/code&gt; bucket files can be accessed by the public.&lt;/p&gt;
 &lt;p&gt;Add the following lines of json configuration to the policy and save it.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-json&#34; data-lang=&#34;json&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;{
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#f92672&#34;&gt;&amp;#34;Version&amp;#34;&lt;/span&gt;: &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;2012-10-17&amp;#34;&lt;/span&gt;,
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#f92672&#34;&gt;&amp;#34;Statement&amp;#34;&lt;/span&gt;: [
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        {
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            &lt;span style=&#34;color:#f92672&#34;&gt;&amp;#34;Sid&amp;#34;&lt;/span&gt;: &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;AllowPublicAccess&amp;#34;&lt;/span&gt;,
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            &lt;span style=&#34;color:#f92672&#34;&gt;&amp;#34;Effect&amp;#34;&lt;/span&gt;: &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Allow&amp;#34;&lt;/span&gt;,
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            &lt;span style=&#34;color:#f92672&#34;&gt;&amp;#34;Principal&amp;#34;&lt;/span&gt;: &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;*&amp;#34;&lt;/span&gt;,
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            &lt;span style=&#34;color:#f92672&#34;&gt;&amp;#34;Action&amp;#34;&lt;/span&gt;: &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;s3:GetObject&amp;#34;&lt;/span&gt;,
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            &lt;span style=&#34;color:#f92672&#34;&gt;&amp;#34;Resource&amp;#34;&lt;/span&gt;: &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;arn:aws:s3:::ngaihtech/*&amp;#34;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        }
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    ]
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-json&#34; data-lang=&#34;json&#34;&gt;{
+    &lt;span style=&#34;color:#f92672&#34;&gt;&amp;#34;Version&amp;#34;&lt;/span&gt;: &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;2012-10-17&amp;#34;&lt;/span&gt;,
+    &lt;span style=&#34;color:#f92672&#34;&gt;&amp;#34;Statement&amp;#34;&lt;/span&gt;: [
+        {
+            &lt;span style=&#34;color:#f92672&#34;&gt;&amp;#34;Sid&amp;#34;&lt;/span&gt;: &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;AllowPublicAccess&amp;#34;&lt;/span&gt;,
+            &lt;span style=&#34;color:#f92672&#34;&gt;&amp;#34;Effect&amp;#34;&lt;/span&gt;: &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Allow&amp;#34;&lt;/span&gt;,
+            &lt;span style=&#34;color:#f92672&#34;&gt;&amp;#34;Principal&amp;#34;&lt;/span&gt;: &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;*&amp;#34;&lt;/span&gt;,
+            &lt;span style=&#34;color:#f92672&#34;&gt;&amp;#34;Action&amp;#34;&lt;/span&gt;: &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;s3:GetObject&amp;#34;&lt;/span&gt;,
+            &lt;span style=&#34;color:#f92672&#34;&gt;&amp;#34;Resource&amp;#34;&lt;/span&gt;: &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;arn:aws:s3:::ngaihtech/*&amp;#34;&lt;/span&gt;
+        }
+    ]
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;ul&gt;
 &lt;li&gt;sid: Way to identify your policy.&lt;/li&gt;
 &lt;li&gt;Effect: It is either Allow or Deny.&lt;/li&gt;
 &lt;li&gt;Principal: &amp;ldquo;*&amp;rdquo; is a wildcard to allow everyone.&lt;/li&gt;

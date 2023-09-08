@@ -1,7 +1,7 @@
 {
 	"version": 3,
 	"file": "styles.css",
-	"sourceRoot": "/home/nga1hte/go/src/github.com/nga1hte/ngaih.tech",
+	"sourceRoot": "/home/ngaihte/go/src/github.com/nga1hte/ngaih.tech",
 	"sources": [
 		"css/base.scss",
 		"themes/terminal/assets/css/variables.scss",

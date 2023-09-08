@@ -105,6 +105,10 @@ Steps for finding the flag Unzipping the file yields a directory with the name .
         
       
         
+          <li><a href="/projects">Projects</a></li>
+        
+      
+        
           <li><a href="/categories">Categories</a></li>
         
       
@@ -127,6 +131,10 @@ Steps for finding the flag Unzipping the file yields a directory with the name .
       
         
           <li><a href="/about">About</a></li>
+        
+      
+        
+          <li><a href="/projects">Projects</a></li>
         
       
         
@@ -171,7 +179,6 @@ Steps for finding the flag Unzipping the file yields a directory with the name .
   
   
 
-
   
 
   <div class="post-content"><div>
@@ -196,7 +203,7 @@ Sorting the file names and taking the directory names as values we might be find
 ./1
 ...
 </code></pre><p>We pipe the output of the tree and cut each row between “/” and take only the second and third values and put space beween them using the cut tool. Refer to the man pages of each tool to know more.</p>
-<pre tabindex="0"><code>$ tree --prune -afi | cut -s -d &#34;/&#34; -f 2,3 --output-delimiter=&#34; &#34; | sort -k 2n
+<pre tabindex="0"><code>$ tree --prune -afi | cut -s -d &quot;/&quot; -f 2,3 --output-delimiter=&quot; &quot; | sort -k 2n
 0
 1
 2
@@ -209,17 +216,17 @@ F 2
 R 3
 ...
 </code></pre><p>Since there are still some directories without keys lingering in our output, we will remove them using <code>sed</code> which will remove all rows without space.</p>
-<pre tabindex="0"><code>$ tree --prune -afi | cut -s -d &#34;/&#34; -f 2,3 --output-delimiter=&#34; &#34; | sort -k 2n | sed &#39;/ /!d&#39;
+<pre tabindex="0"><code>$ tree --prune -afi | cut -s -d &quot;/&quot; -f 2,3 --output-delimiter=&quot; &quot; | sort -k 2n | sed '/ /!d'
 S
 F
 R
 C
 ...
 </code></pre><p>For printing all the values, lets use <code>tr</code> a to remove newlines form all the rows.</p>
-<pre tabindex="0"><code>$ tree --prune -afi | cut -s -d &#34;/&#34; -f 2,3 --output-delimiter=&#34; &#34; | sort -k 2n | sed &#39;/ /!d&#39; | cut -d &#34; &#34; -f 1 | tr -d &#39;\n&#39;
+<pre tabindex="0"><code>$ tree --prune -afi | cut -s -d &quot;/&quot; -f 2,3 --output-delimiter=&quot; &quot; | sort -k 2n | sed '/ /!d' | cut -d &quot; &quot; -f 1 | tr -d '\n'
 SFRCe0RJUjNjdEx5XzFuX1BsNDFuX1NpN2V9
 </code></pre><p>The output values look fairly similar to base64 encoding, so let us pipe our output one more time to “base64” tool to decode it.</p>
-<pre tabindex="0"><code>$ tree --prune -afi | cut -s -d &#34;/&#34; -f 2,3 --output-delimiter=&#34; &#34; | sort -k 2n | sed &#39;/ /!d&#39; | cut -d &#34; &#34; -f 1 | tr -d &#39;\n&#39; | base64 --decode
+<pre tabindex="0"><code>$ tree --prune -afi | cut -s -d &quot;/&quot; -f 2,3 --output-delimiter=&quot; &quot; | sort -k 2n | sed '/ /!d' | cut -d &quot; &quot; -f 1 | tr -d '\n' | base64 --decode
 HTB{D********e}
 </code></pre><blockquote>
 <p>That&rsquo;s it! You have the flag.</p>
