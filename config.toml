@@ -1,6 +1,6 @@
 baseURL = "/"
 languageCode = "en-us"
-title = "ngaih.tech"
+title = "ngaihte.com"
 theme = "terminal"
 paginate = 10
 preserveTaxonomyNames = true
@@ -40,11 +40,11 @@ preserveTaxonomyNames = true
 
 [params.twitter]
     creator = "nga1hte"
-    site = "ngaih.tech"
+    site = "ngaihte.com"
 
 [languages]
   [languages.en]
-    title = "ngaih.tech"
+    title = "ngaihte.com"
     subtitle = "A blog about code and hacking"
     keywords = ""
     copyright = ""
@@ -53,7 +53,7 @@ preserveTaxonomyNames = true
     readOtherPosts = "Read other posts"
 
     [languages.en.params.logo]
-      logoText = "ngaih.tech"
+      logoText = "ngaihte.com"
       logoHomeLink = "/"
 
     [languages.en.menu]
