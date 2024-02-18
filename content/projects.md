@@ -3,6 +3,7 @@ title: "Projects"
 date: "2022-02-06"
 ---
 
+- An interpreter implemented using golang. [github](https://github.com/nga1hte/paite-khawl-laimal)
 - A quadruped robot using arduino nano. [github](https://github.com/nga1hte/quadruped-robot)
 - Development environment using Terraform and AWS. [github](https://github.com/nga1hte/terraform-aws-dev-env) [blog](https://ngaihte.com/posts/terraform-aws-vscode/)
 - A CLI program to fetch Chuck Norris Facts. [github](https://github.com/nga1hte/go-chuck-facts) [blog](https://ngaihte.com/posts/gochuckfacts/)
