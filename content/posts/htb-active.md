@@ -138,7 +138,7 @@ smb: \> get active.htb/Policies/{31B2F340-016D-11D2-945F-00C04FB984F9}/MACHINE/P
 </Groups>
 ```
 
-We have user `SVC_TGS` and encrypted password in Group Policy`edBSHOwhZLTjt/QS9FeIcJ83mjWA98gw9guKOhJOdcqh+ZGMeXOsQbCpZ3xUjTLfCuNH8pG5aSVYdYw/NglVmQ`.
+We have user `SVC_TGS` and encrypted password in Group Policy.
 
 Let's decrypt the encrypted password using a tool. [gpp-decrypt](https://github.com/t0thkr1s/gpp-decrypt)
 ```bash
