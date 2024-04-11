@@ -6,6 +6,7 @@ date: "2024-02-18"
 comments: false
 categories:
   - programming
+  - project
 tags:
   - paite
   - programming language
