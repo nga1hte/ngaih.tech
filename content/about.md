@@ -1,12 +1,16 @@
 ---
 title: "About"
-date: "2022-02-06"
+date: "2024-07-11"
 author: "ngaihte"
 ---
 
 Hi, I'm ngaihte.
 
 Welcome to my blog. I plan to share the knowledge and insights that I have gained during my continuous journey of navigating the vast expanse of technology. Every thing I post is my own opinion and should be taken with a grain of salt.
+
+#### Badges I have acquired
+
+![badges](/images/about/badges_collected.png)
 
 I am a student of computer science with a passion for hacking, devops and cloud. On this blog, I will be sharing my thoughts, experiences, and insights on all things computer science, with a focus on hacking, cybersecurity, devops principles and the cloud.
 
