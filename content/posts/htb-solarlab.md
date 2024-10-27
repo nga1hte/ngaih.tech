@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "[HTB] SolarLab"
+title: "[HTB] SolarLab Writeup"
 slug: "solarlab"
 date: "2024-10-04"
 comments: false

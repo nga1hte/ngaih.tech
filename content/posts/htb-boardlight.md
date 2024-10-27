@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "[HTB] Boardlight"
+title: "[HTB] Boardlight Writeup"
 slug: "boardlight"
 date: "2024-10-04"
 comments: false
