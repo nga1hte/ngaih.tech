@@ -16,12 +16,12 @@ tags:
   - crlf
 ---
 
-This is easy web challenge from [hackthebox.com] Cyber Apocalypse 2026 Tales from Eldoria. In this challenge we are provided with an `ip:port` and `source code` of the web app.
+This is an easy web challenge from [hackthebox](https://ctf.hackthebox.com) Cyber Apocalypse 2026 Tales from Eldoria. In this challenge we are provided with an `ip:port` and `source code` of the web app.
 
 Navigating to the web app we are greeted with this page.
 ![index](/images/cyberAttack/index.png)
 
-We have functionality to attack a `domain` and `ip` but only `domain` is enabled when we enter inputs.
+We have functionality to attack a `domain` and `ip` but only `domain` is enabled when we enter values.
 ![domain_test](/images/cyberAttack/attack_domain_test.com.png)
 
 We can only input valid domain names with TLD, and entry of `localhost` doesn't work.
