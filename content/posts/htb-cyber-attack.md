@@ -134,7 +134,6 @@ We can see that when an error is triggered, the `name` parameter is also returne
 ![header_error](/images/cyberAttack/header_error.png)
 
 So we can try other vulnerabilities. 
-- [x] reflected xss
 
 We can try `crlf` to inject additional headers.
 ![injected_headers](/images/cyberAttack/injected_headers.png)
@@ -169,7 +168,7 @@ try:
 
 After some digging around on the `ip_address()` in python, we can see that in ipv6 we can insert zone id using `%` character.  So `::1%test` is also a valid ipv6 entry.
 
-![[bypass_ipAddress.png
+![bypass](/images/cyberAttack/bypass_ipAddress.png)
 We are able to bypass the check get code execution.
 
 Let's proceeds further.
