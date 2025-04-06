@@ -2,7 +2,7 @@
 layout: post
 title: "Pentathon 2025 Challenges Writeup"
 slug: "pentathon2025"
-date: "2025-04-07"
+date: "2025-04-06"
 comments: false
 categories:
   - hacking
