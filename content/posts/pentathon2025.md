@@ -367,7 +367,9 @@ else:
     print("[-] Failed: m^e > N, or padding used.")
 
 ```
+
 ## Forensics
+
 ### Last Transmission
 We are give a `pcap` fiele and upon analysis.
 ![last](/images/pentathon2025/last_transmission_forensics_udp.png)
@@ -427,7 +429,7 @@ print("[+] PNG image saved as 'output.png'")
 ![output](/images/pentathon2025/output.png)
 
 ### Hidden Source
-After opening the `.ad1` file in `ftk imager` we go through the files and got powershell history.
+After opening the `.ad1` file in `ftk imager` we go through the files and got powershell history located at `Users/brock/AppData/Roaming/Microsoft/Powershell`.
 ![ftk](/images/pentathon2025/ftk_psReadline.png)
 
 After decoding the `base64` encoded string we get part of the flag.
@@ -451,5 +453,5 @@ flag: _4r0und_0mg_0x3457}
 
 Two other `png` challenges where we have to edit the `headers`,`IDAT`,`CRC` were also present but couldn't complete those challenges in time. GG
 
-Team Ranking
+Our Team Ranking
 ![rank](/images/pentathon2025/rank.png)
