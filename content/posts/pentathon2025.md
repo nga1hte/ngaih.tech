@@ -64,9 +64,7 @@ name={% set b = request.application[['__glo','bals__'] | join][['__buil','tins__
 
 Read more about it at [ssti-onesecurity](https://www.onsecurity.io/blog/server-side-template-injection-with-jinja2/)
 
-### New_Perhaps
-Web Hard challenge.
-Due to this being the last challenge I solved I didn't get to capture a lot of screenshots.
+### New_Perhaps [Hard]
 
 We register a new user and login using it.
 ![register](/images/pentathon2025/web_register.png)
@@ -370,8 +368,8 @@ else:
 
 ## Forensics
 
-### Last Transmission
-We are give a `pcap` fiele and upon analysis.
+### Last Transmission [easy]
+We are give a `pcap` file and upon analysis.
 ![last](/images/pentathon2025/last_transmission_forensics_udp.png)
 
 Decrypting the `base64` encoded values we get a key and another string.
@@ -428,7 +426,7 @@ print("[+] PNG image saved as 'output.png'")
 
 ![output](/images/pentathon2025/output.png)
 
-### Hidden Source
+### Hidden Source [medium]
 After opening the `.ad1` file in `ftk imager` we go through the files and got powershell history located at `Users/brock/AppData/Roaming/Microsoft/Powershell`.
 ![ftk](/images/pentathon2025/ftk_psReadline.png)
 
@@ -453,5 +451,6 @@ flag: _4r0und_0mg_0x3457}
 
 Two other `png` challenges where we have to edit the `headers`,`IDAT`,`CRC` were also present but couldn't complete those challenges in time. GG
 
-Our Team Ranking
+### Our Team Ranking
+
 ![rank](/images/pentathon2025/rank.png)
